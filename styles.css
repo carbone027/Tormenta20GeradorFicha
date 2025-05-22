@@ -16,7 +16,7 @@ body {
 
 /* Container principal */
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -47,7 +47,7 @@ header p {
 .character-sheet {
     display: grid;
     gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 }
 
 /* Seções */
@@ -117,10 +117,10 @@ input::placeholder {
     color: rgba(255, 255, 255, 0.6);
 }
 
-/* Atributos */
+/* Atributos - Layout expandido */
 .attributes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 15px;
 }
 
@@ -132,42 +132,66 @@ input::placeholder {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
 }
 
 .attribute label {
     font-weight: bold;
     margin-bottom: 8px;
     color: #87ceeb;
+    text-align: center;
 }
 
 .attribute input {
-    width: 60px;
+    width: 70px;
     text-align: center;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.base-value {
+    font-size: 0.8rem;
+    color: #cccccc;
+    margin-bottom: 2px;
+}
+
+.final-value {
+    font-size: 0.9rem;
+    color: #90ee90;
+    font-weight: bold;
     margin-bottom: 5px;
 }
 
 .modifier {
     font-weight: bold;
-    font-size: 0.9rem;
-    color: #90ee90;
-    background: rgba(144, 238, 144, 0.2);
-    padding: 2px 8px;
-    border-radius: 12px;
+    font-size: 1.1rem;
+    color: #ffd700;
+    background: rgba(255, 215, 0, 0.2);
+    padding: 4px 10px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
 .points-remaining {
     text-align: center;
     margin-top: 15px;
-    font-size: 1.1rem;
-    color: #ffd700;
+    font-size: 1.2rem;
     font-weight: bold;
+}
+
+.points-remaining span {
+    padding: 5px 15px;
+    border-radius: 20px;
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
 /* Perícias */
 .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
 }
 
 .skill-item {
@@ -178,38 +202,51 @@ input::placeholder {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.skill-item:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .skill-name {
     font-weight: 500;
+    flex: 1;
 }
 
 .skill-bonus {
     font-weight: bold;
-    color: #90ee90;
+    font-size: 0.9rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 40px;
+    text-align: center;
 }
 
 .skill-trained {
+    background: rgba(255, 215, 0, 0.3);
     color: #ffd700;
-    font-weight: bold;
+    border: 1px solid rgba(255, 215, 0, 0.5);
 }
 
 .skill-untrained {
+    background: rgba(255, 255, 255, 0.1);
     color: #cccccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Estatísticas calculadas */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
 }
 
 .stat {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px;
+    padding: 15px 10px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -220,12 +257,17 @@ input::placeholder {
     margin-bottom: 8px;
     color: #87ceeb;
     text-align: center;
+    font-size: 0.9rem;
 }
 
 .stat span {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: bold;
     color: #90ee90;
+    padding: 5px 10px;
+    background: rgba(144, 238, 144, 0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(144, 238, 144, 0.3);
 }
 
 /* Painéis de detalhes */
@@ -235,11 +277,20 @@ input::placeholder {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     border-left: 4px solid #ffd700;
+    animation: fadeIn 0.3s ease;
 }
 
 .details-panel h4 {
     color: #ffd700;
     margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.details-panel h5 {
+    color: #87ceeb;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 1rem;
 }
 
 .details-panel p {
@@ -254,6 +305,10 @@ input::placeholder {
 
 .details-panel li {
     margin-bottom: 4px;
+}
+
+.details-panel strong {
+    color: #ffd700;
 }
 
 /* Subseções */
@@ -272,35 +327,62 @@ input::placeholder {
 
 .spell-circle {
     margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .spell-circle h3 {
     color: #ffd700;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    padding-bottom: 5px;
 }
 
 .spells-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 10px;
 }
 
 .spell-item {
-    padding: 10px;
+    padding: 12px;
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
+    border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
 .spell-item:hover {
     background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .spell-item.selected {
     background: rgba(255, 215, 0, 0.2);
     border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.spell-item strong {
+    color: #87ceeb;
+    font-size: 1rem;
+}
+
+.spell-item small {
+    color: #cccccc;
+    font-size: 0.85rem;
+}
+
+.spell-item em {
+    color: #90ee90;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 /* Resumo do personagem */
@@ -318,13 +400,52 @@ input::placeholder {
 .summary-content h4 {
     color: #ffd700;
     margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.summary-content h5 {
+    color: #87ceeb;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
 }
 
 .summary-content p {
     margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.summary-content ul {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.summary-content li {
+    margin-bottom: 3px;
+}
+
+/* Estados especiais para atributos */
+.attribute.racial-bonus input {
+    border-color: #90ee90;
+    background: rgba(144, 238, 144, 0.1);
+}
+
+.attribute.racial-penalty input {
+    border-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
 }
 
 /* Responsividade */
+@media (max-width: 1024px) {
+    .character-sheet {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    
+    .spells-list {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
 @media (max-width: 768px) {
     .character-sheet {
         grid-template-columns: 1fr;
@@ -340,6 +461,14 @@ input::placeholder {
     
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .spells-list {
+        grid-template-columns: 1fr;
     }
     
     header h1 {
@@ -377,8 +506,32 @@ input::placeholder {
     }
 }
 
-.details-panel {
-    animation: fadeIn 0.3s ease;
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.points-remaining.negative span {
+    background: rgba(255, 107, 107, 0.3);
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    animation: pulse 1s infinite;
+}
+
+.points-remaining.zero span {
+    background: rgba(144, 238, 144, 0.3);
+    border-color: #90ee90;
+    color: #90ee90;
+}
+
+.points-remaining.positive span {
+    background: rgba(255, 215, 0, 0.3);
+    border-color: #ffd700;
+    color: #ffd700;
 }
 
 /* Scrollbar personalizada */
@@ -398,4 +551,23 @@ input::placeholder {
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 215, 0, 0.7);
+}
+
+/* Estados de hover para elementos interativos */
+input:hover, select:hover {
+    border-color: rgba(255, 215, 0, 0.5);
+}
+
+.spell-item:not(.selected):hover {
+    border-color: rgba(135, 206, 235, 0.5);
+}
+
+/* Efeitos visuais para seleções */
+option {
+    background: #1a1a2e;
+    color: #ffffff;
+}
+
+select option:checked {
+    background: rgba(255, 215, 0, 0.2);
 }
