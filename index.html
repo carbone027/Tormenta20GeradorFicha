@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Fichas Tormenta20</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎲 Gerador de Fichas Tormenta20</h1>
+            <p>Crie seu personagem para o universo de Arton</p>
+        </header>
+
+        <div class="character-sheet">
+            <!-- Seção de Informações Básicas -->
+            <section class="basic-info">
+                <h2>Informações Básicas</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="characterName">Nome do Personagem:</label>
+                        <input type="text" id="characterName" placeholder="Digite o nome do seu herói">
+                    </div>
+                    <div class="form-group">
+                        <label for="level">Nível:</label>
+                        <select id="level">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Raça -->
+            <section class="race-section">
+                <h2>Raça</h2>
+                <select id="race">
+                    <option value="">Selecione uma raça</option>
+                    <option value="humano">Humano</option>
+                    <option value="anao">Anão</option>
+                    <option value="elfo">Elfo</option>
+                    <option value="halfling">Halfling</option>
+                    <option value="qareen">Qareen</option>
+                    <option value="goblin">Goblin</option>
+                    <option value="minotauro">Minotauro</option>
+                    <option value="lefou">Lefou</option>
+                    <option value="medusa">Medusa</option>
+                    <option value="osteon">Osteon</option>
+                    <option value="sereia">Sereia</option>
+                    <option value="suraggel">Suraggel</option>
+                    <option value="trog">Trog</option>
+                    <option value="kliren">Kliren</option>
+                    <option value="aggelus">Aggelus</option>
+                    <option value="golem">Golem</option>
+                    <option value="sprite">Sprite</option>
+                </select>
+                <div id="raceDetails" class="details-panel"></div>
+            </section>
+
+            <!-- Seção de Classe -->
+            <section class="class-section">
+                <h2>Classe</h2>
+                <select id="class">
+                    <option value="">Selecione uma classe</option>
+                    <option value="arcanista">Arcanista</option>
+                    <option value="barbaro">Bárbaro</option>
+                    <option value="bardo">Bardo</option>
+                    <option value="bucaneiro">Bucaneiro</option>
+                    <option value="cavaleiro">Cavaleiro</option>
+                    <option value="clerigo">Clérigo</option>
+                    <option value="druida">Druida</option>
+                    <option value="guerreiro">Guerreiro</option>
+                    <option value="inventor">Inventor</option>
+                    <option value="ladino">Ladino</option>
+                    <option value="lutador">Lutador</option>
+                    <option value="nobre">Nobre</option>
+                    <option value="paladino">Paladino</option>
+                    <option value="ranger">Ranger</option>
+                </select>
+                <div id="classDetails" class="details-panel"></div>
+                
+                <!-- Caminho do Arcanista -->
+                <div id="arcanistPath" class="subclass-section" style="display: none;">
+                    <h3>Caminho do Arcanista</h3>
+                    <select id="arcanistPathSelect">
+                        <option value="">Selecione um caminho</option>
+                        <option value="bruxo">Bruxo</option>
+                        <option value="feiticeiro">Feiticeiro</option>
+                        <option value="mago">Mago</option>
+                    </select>
+                    <div id="arcanistPathDetails" class="details-panel"></div>
+                </div>
+
+                <!-- Linhagem do Feiticeiro -->
+                <div id="sorcererLineage" class="subclass-section" style="display: none;">
+                    <h3>Linhagem do Feiticeiro</h3>
+                    <select id="sorcererLineageSelect">
+                        <option value="">Selecione uma linhagem</option>
+                        <option value="draconica">Dracônica</option>
+                        <option value="rubia">Rúbia</option>
+                        <option value="feerica">Feérica</option>
+                    </select>
+                    <div id="sorcererLineageDetails" class="details-panel"></div>
+                </div>
+            </section>
+
+            <!-- Seção de Origem -->
+            <section class="origin-section">
+                <h2>Origem</h2>
+                <select id="origin">
+                    <option value="">Selecione uma origem</option>
+                    <option value="acolito">Acólito</option>
+                    <option value="artesao">Artesão</option>
+                    <option value="assistente">Assistente de Laboratório</option>
+                    <option value="batedor">Batedor</option>
+                    <option value="capanga">Capanga</option>
+                    <option value="charlatao">Charlatão</option>
+                    <option value="criminoso">Criminoso</option>
+                    <option value="curandeiro">Curandeiro</option>
+                    <option value="eremita">Eremita</option>
+                    <option value="escravo">Escravo</option>
+                    <option value="estudioso">Estudioso</option>
+                    <option value="forasteiro">Forasteiro</option>
+                    <option value="gladiador">Gladiador</option>
+                    <option value="guarda">Guarda</option>
+                    <option value="herdeiro">Herdeiro</option>
+                    <option value="marujo">Marujo</option>
+                    <option value="mateiro">Mateiro</option>
+                    <option value="membro_guilda">Membro de Guilda</option>
+                    <option value="mercador">Mercador</option>
+                    <option value="militar">Militar</option>
+                    <option value="minerador">Minerador</option>
+                    <option value="nobre">Nobre</option>
+                    <option value="pivete">Pivete</option>
+                    <option value="refugiado">Refugiado</option>
+                    <option value="selvagem">Selvagem</option>
+                    <option value="soldado">Soldado</option>
+                    <option value="taverneiro">Taverneiro</option>
+                    <option value="trabalhador">Trabalhador</option>
+                </select>
+                <div id="originDetails" class="details-panel"></div>
+            </section>
+
+            <!-- Seção de Deus -->
+            <section class="deity-section">
+                <h2>Devoção</h2>
+                <select id="deity">
+                    <option value="">Sem devoção / Selecione um deus</option>
+                    <option value="aharadak">Aharadak (Deus da Tormenta)</option>
+                    <option value="allihanna">Allihanna (Deusa da Natureza)</option>
+                    <option value="arsenal">Arsenal (Deus da Guerra)</option>
+                    <option value="azgher">Azgher (Deus do Sol)</option>
+                    <option value="hyninn">Hyninn (Deus da Trapaça)</option>
+                    <option value="kally">Kally (Deusa da Morte)</option>
+                    <option value="khalmyr">Khalmyr (Deus da Justiça)</option>
+                    <option value="lena">Lena (Deusa da Cura)</option>
+                    <option value="lin_wu">Lin-Wu (Deus do Conhecimento)</option>
+                    <option value="marah">Marah (Deusa dos Mares)</option>
+                    <option value="megalokk">Megalokk (Deus dos Monstros)</option>
+                    <option value="nimb">Nimb (Deus da Tecnologia)</option>
+                    <option value="oceano">Oceano (Deus dos Elfos do Mar)</option>
+                    <option value="sszzaas">Sszzaas (Deus das Serpentes)</option>
+                    <option value="tanna_toh">Tanna-Toh (Deusa da Música)</option>
+                    <option value="tenebra">Tenebra (Deusa das Trevas)</option>
+                    <option value="thwor_ironfist">Thwor Ironfist (Deus dos Anões)</option>
+                    <option value="thyatis">Thyatis (Deusa da Ambição)</option>
+                    <option value="valkaria">Valkaria (Deusa da Humanidade)</option>
+                    <option value="wynna">Wynna (Deusa da Magia)</option>
+                </select>
+                <div id="deityDetails" class="details-panel"></div>
+            </section>
+
+            <!-- Seção de Atributos -->
+            <section class="attributes-section">
+                <h2>Atributos</h2>
+                <div class="attributes-grid">
+                    <div class="attribute">
+                        <label for="strength">Força</label>
+                        <input type="number" id="strength" min="8" max="18" value="10">
+                        <span class="modifier" id="strengthMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="dexterity">Destreza</label>
+                        <input type="number" id="dexterity" min="8" max="18" value="10">
+                        <span class="modifier" id="dexterityMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="constitution">Constituição</label>
+                        <input type="number" id="constitution" min="8" max="18" value="10">
+                        <span class="modifier" id="constitutionMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="intelligence">Inteligência</label>
+                        <input type="number" id="intelligence" min="8" max="18" value="10">
+                        <span class="modifier" id="intelligenceMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="wisdom">Sabedoria</label>
+                        <input type="number" id="wisdom" min="8" max="18" value="10">
+                        <span class="modifier" id="wisdomMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="charisma">Carisma</label>
+                        <input type="number" id="charisma" min="8" max="18" value="10">
+                        <span class="modifier" id="charismaMod">+0</span>
+                    </div>
+                </div>
+                <div class="points-remaining">
+                    <p>Pontos restantes: <span id="pointsRemaining">27</span></p>
+                </div>
+            </section>
+
+            <!-- Seção de Perícias -->
+            <section class="skills-section">
+                <h2>Perícias</h2>
+                <div id="skillsList" class="skills-grid"></div>
+            </section>
+
+            <!-- Seção de Magias (para conjuradores) -->
+            <section id="spellsSection" class="spells-section" style="display: none;">
+                <h2>Magias</h2>
+                <div id="spellsContent"></div>
+            </section>
+
+            <!-- Seção de Estatísticas Calculadas -->
+            <section class="calculated-stats">
+                <h2>Estatísticas</h2>
+                <div class="stats-grid">
+                    <div class="stat">
+                        <label>Pontos de Vida (PV)</label>
+                        <span id="hitPoints">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Pontos de Mana (PM)</label>
+                        <span id="manaPoints">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Defesa</label>
+                        <span id="defense">10</span>
+                    </div>
+                    <div class="stat">
+                        <label>Luta</label>
+                        <span id="fightSkill">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Pontaria</label>
+                        <span id="shootingSkill">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Fortitude</label>
+                        <span id="fortitudeSkill">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Reflexos</label>
+                        <span id="reflexesSkill">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Vontade</label>
+                        <span id="willSkill">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Resumo -->
+            <section class="summary-section">
+                <h2>Resumo do Personagem</h2>
+                <div id="characterSummary" class="summary-content">
+                    <p>Configure seu personagem nas seções acima para ver o resumo completo.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+        <div class="character-sheet">
+            <!-- Seção de Informações Básicas -->
+            <section class="basic-info">
+                <h2>Informações Básicas</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="characterName">Nome do Personagem:</label>
+                        <input type="text" id="characterName" placeholder="Digite o nome do seu herói">
+                    </div>
+                    <div class="form-group">
+                        <label for="level">Nível:</label>
+                        <select id="level">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Raça -->
+            <section class="race-section">
+                <h2>Raça</h2>
+                <select id="race">
+                    <option value="">Selecione uma raça</option>
+                    <option value="humano">Humano</option>
+                    <option value="anao">Anão</option>
+                    <option value="elfo">Elfo</option>
+                    <option value="halfling">Halfling</option>
+                    <option value="qareen">Qareen</option>
+                    <option value="goblin">Goblin</option>
+                    <option value="minotauro">Minotauro</option>
+                    <option value="lefou">Lefou</option>
+                    <option value="medusa">Medusa</option>
+                    <option value="osteon">Osteon</option>
+                    <option value="sereia">Sereia</option>
+                    <option value="suraggel">Suraggel</option>
+                    <option value="trog">Trog</option>
+                    <option value="kliren">Kliren</option>
+                    <option value="aggelus">Aggelus</option>
+                    <option value="golem">Golem</option>
+                    <option value="sprite">Sprite</option>
+                </select>
+                <div id="raceDetails" class="details-panel"></div>
+            </section>
+
+            <!-- Seção de Classe -->
+            <section class="class-section">
+                <h2>Classe</h2>
+                <select id="class">
+                    <option value="">Selecione uma classe</option>
+                    <option value="arcanista">Arcanista</option>
+                    <option value="barbaro">Bárbaro</option>
+                    <option value="bardo">Bardo</option>
+                    <option value="bucaneiro">Bucaneiro</option>
+                    <option value="cavaleiro">Cavaleiro</option>
+                    <option value="clerigo">Clérigo</option>
+                    <option value="druida">Druida</option>
+                    <option value="guerreiro">Guerreiro</option>
+                    <option value="inventor">Inventor</option>
+                    <option value="ladino">Ladino</option>
+                    <option value="lutador">Lutador</option>
+                    <option value="nobre">Nobre</option>
+                    <option value="paladino">Paladino</option>
+                    <option value="ranger">Ranger</option>
+                </select>
+                <div id="classDetails" class="details-panel"></div>
+                
+                <!-- Caminho do Arcanista -->
+                <div id="arcanistPath" class="subclass-section" style="display: none;">
+                    <h3>Caminho do Arcanista</h3>
+                    <select id="arcanistPathSelect">
+                        <option value="">Selecione um caminho</option>
+                        <option value="bruxo">Bruxo</option>
+                        <option value="feiticeiro">Feiticeiro</option>
+                        <option value="mago">Mago</option>
+                    </select>
+                    <div id="arcanistPathDetails" class="details-panel"></div>
+                </div>
+
+                <!-- Linhagem do Feiticeiro -->
+                <div id="sorcererLineage" class="subclass-section" style="display: none;">
+                    <h3>Linhagem do Feiticeiro</h3>
+                    <select id="sorcererLineageSelect">
+                        <option value="">Selecione uma linhagem</option>
+                        <option value="draconica">Dracônica</option>
+                        <option value="rubia">Rúbia</option>
+                        <option value="feerica">Feérica</option>
+                    </select>
+                    <div id="sorcererLineageDetails" class="details-panel"></div>
+                </div>
+            </section>
+
+            <!-- Seção de Origem -->
+            <section class="origin-section">
+                <h2>Origem</h2>
+                <select id="origin">
+                    <option value="">Selecione uma origem</option>
+                    <option value="acolito">Acólito</option>
+                    <option value="artesao">Artesão</option>
+                    <option value="assistente">Assistente de Laboratório</option>
+                    <option value="batedor">Batedor</option>
+                    <option value="capanga">Capanga</option>
+                    <option value="charlatao">Charlatão</option>
+                    <option value="criminoso">Criminoso</option>
+                    <option value="curandeiro">Curandeiro</option>
+                    <option value="eremita">Eremita</option>
+                    <option value="escravo">Escravo</option>
+                    <option value="estudioso">Estudioso</option>
+                    <option value="forasteiro">Forasteiro</option>
+                    <option value="gladiador">Gladiador</option>
+                    <option value="guarda">Guarda</option>
+                    <option value="herdeiro">Herdeiro</option>
+                    <option value="marujo">Marujo</option>
+                    <option value="mateiro">Mateiro</option>
+                    <option value="membro_guilda">Membro de Guilda</option>
+                    <option value="mercador">Mercador</option>
+                    <option value="militar">Militar</option>
+                    <option value="minerador">Minerador</option>
+                    <option value="nobre">Nobre</option>
+                    <option value="pivete">Pivete</option>
+                    <option value="refugiado">Refugiado</option>
+                    <option value="selvagem">Selvagem</option>
+                    <option value="soldado">Soldado</option>
+                    <option value="taverneiro">Taverneiro</option>
+                    <option value="trabalhador">Trabalhador</option>
+                </select>
+                <div id="originDetails" class="details-panel"></div>
+            </section>
+
+            <!-- Seção de Deus -->
+            <section class="deity-section">
+                <h2>Devoção</h2>
+                <select id="deity">
+                    <option value="">Sem devoção / Selecione um deus</option>
+                    <option value="aharadak">Aharadak (Deus da Tormenta)</option>
+                    <option value="allihanna">Allihanna (Deusa da Natureza)</option>
+                    <option value="arsenal">Arsenal (Deus da Guerra)</option>
+                    <option value="azgher">Azgher (Deus do Sol)</option>
+                    <option value="hyninn">Hyninn (Deus da Trapaça)</option>
+                    <option value="kally">Kally (Deusa da Morte)</option>
+                    <option value="khalmyr">Khalmyr (Deus da Justiça)</option>
+                    <option value="lena">Lena (Deusa da Cura)</option>
+                    <option value="lin_wu">Lin-Wu (Deus do Conhecimento)</option>
+                    <option value="marah">Marah (Deusa dos Mares)</option>
+                    <option value="megalokk">Megalokk (Deus dos Monstros)</option>
+                    <option value="nimb">Nimb (Deus da Tecnologia)</option>
+                    <option value="oceano">Oceano (Deus dos Elfos do Mar)</option>
+                    <option value="sszzaas">Sszzaas (Deus das Serpentes)</option>
+                    <option value="tanna_toh">Tanna-Toh (Deusa da Música)</option>
+                    <option value="tenebra">Tenebra (Deusa das Trevas)</option>
+                    <option value="thwor_ironfist">Thwor Ironfist (Deus dos Anões)</option>
+                    <option value="thyatis">Thyatis (Deusa da Ambição)</option>
+                    <option value="valkaria">Valkaria (Deusa da Humanidade)</option>
+                    <option value="wynna">Wynna (Deusa da Magia)</option>
+                </select>
+                <div id="deityDetails" class="details-panel"></div>
+            </section>
+
+            <!-- Seção de Atributos -->
+            <section class="attributes-section">
+                <h2>Atributos</h2>
+                <div class="attributes-grid">
+                    <div class="attribute">
+                        <label for="strength">Força</label>
+                        <input type="number" id="strength" min="8" max="18" value="10">
+                        <span class="modifier" id="strengthMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="dexterity">Destreza</label>
+                        <input type="number" id="dexterity" min="8" max="18" value="10">
+                        <span class="modifier" id="dexterityMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="constitution">Constituição</label>
+                        <input type="number" id="constitution" min="8" max="18" value="10">
+                        <span class="modifier" id="constitutionMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="intelligence">Inteligência</label>
+                        <input type="number" id="intelligence" min="8" max="18" value="10">
+                        <span class="modifier" id="intelligenceMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="wisdom">Sabedoria</label>
+                        <input type="number" id="wisdom" min="8" max="18" value="10">
+                        <span class="modifier" id="wisdomMod">+0</span>
+                    </div>
+                    <div class="attribute">
+                        <label for="charisma">Carisma</label>
+                        <input type="number" id="charisma" min="8" max="18" value="10">
+                        <span class="modifier" id="charismaMod">+0</span>
+                    </div>
+                </div>
+                <div class="points-remaining">
+                    <p>Pontos restantes: <span id="pointsRemaining">27</span></p>
+                </div>
+            </section>
+
+            <!-- Seção de Perícias -->
+            <section class="skills-section">
+                <h2>Perícias</h2>
+                <div id="skillsList" class="skills-grid"></div>
+            </section>
+
+            <!-- Seção de Magias (para conjuradores) -->
+            <section id="spellsSection" class="spells-section" style="display: none;">
+                <h2>Magias</h2>
+                <div id="spellsContent"></div>
+            </section>
+
+            <!-- Seção de Estatísticas Calculadas -->
+            <section class="calculated-stats">
+                <h2>Estatísticas</h2>
+                <div class="stats-grid">
+                    <div class="stat">
+                        <label>Pontos de Vida (PV)</label>
+                        <span id="hitPoints">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Pontos de Mana (PM)</label>
+                        <span id="manaPoints">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Defesa</label>
+                        <span id="defense">10</span>
+                    </div>
+                    <div class="stat">
+                        <label>Luta</label>
+                        <span id="fightSkill">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Pontaria</label>
+                        <span id="shootingSkill">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Fortitude</label>
+                        <span id="fortitudeSkill">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Reflexos</label>
+                        <span id="reflexesSkill">0</span>
+                    </div>
+                    <div class="stat">
+                        <label>Vontade</label>
+                        <span id="willSkill">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Resumo -->
+            <section class="summary-section">
+                <h2>Resumo do Personagem</h2>
+                <div id="characterSummary" class="summary-content">
+                    <p>Configure seu personagem nas seções acima para ver o resumo completo.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+// Base de dados do sistema Tormenta20
+const T20Data = {
+    races: {
+        humano: {
+            name: "Humano",
+            attributeBonus: { any: 2 }, // +2 em qualquer atributo
+            size: "Médio",
+            displacement: 9,
+            traits: [
+                "Versátil: +1 perícia treinada adicional",
+                "Ambição: +2 em testes de perícia (1x por cena)",
+                "Potencial Humano: Recebe um poder geral adicional no 1º nível"
+            ],
+            skillBonus: 1,
+            languages: ["Comum"]
+        },
+        anao: {
+            name: "Anão",
+            attributeBonus: { constitution: 2, wisdom: 1 },
+            size: "Médio",
+            displacement: 6,
+            traits: [
+                "Tradição: Conhecimento e Ofício são perícias de classe",
+                "Teimosia: +2 em testes de Vontade",
+                "Conhecimento das Pedras: +2 em Percepção para armadilhas e passagens secretas"
+            ],
+            languages: ["Comum", "Anão"],
+            resistance: "veneno"
+        },
+        elfo: {
+            name: "Elfo",
+            attributeBonus: { dexterity: 2, intelligence: 1 },
+            size: "Médio",
+            displacement: 9,
+            traits: [
+                "Sentidos Aguçados: +2 em testes de Percepção",
+                "Herança Mágica: Pode lançar magias arcanas de 1º círculo",
+                "Transe: Só precisa meditar 4 horas para descansar"
+            ],
+            languages: ["Comum", "Élfico"],
+            vision: "penumbra"
+        },
+        halfling: {
+            name: "Halfling",
+            attributeBonus: { dexterity: 2, charisma: 1 },
+            size: "Pequeno",
+            displacement: 6,
+            traits: [
+                "Sortudo: Role novamente 1s naturais",
+                "Pés Ligeiros: +2 em testes de Furtividade",
+                "Coragem: +2 em testes de resistência contra medo"
+            ],
+            languages: ["Comum", "Halfling"]
+        },
+        goblin: {
+            name: "Goblin",
+            attributeBonus: { dexterity: 2, intelligence: 1 },
+            size: "Pequeno",
+            displacement: 6,
+            traits: [
+                "Engenhosidade: +2 em testes de Reflexos e Máquinas",
+                "Peste: +2 em testes de Enganação e Furtividade",
+                "Instinto de Sobrevivência: +1 em CA quando adjacente a aliados"
+            ],
+            languages: ["Comum", "Goblin"]
+        },
+        minotauro: {
+            name: "Minotauro",
+            attributeBonus: { strength: 2, constitution: 1 },
+            size: "Médio",
+            displacement: 9,
+            traits: [
+                "Ataque com Chifres: 1d6 de dano",
+                "Coração Bravo: +2 em testes contra medo",
+                "Faro: +2 em testes de Percepção para rastrear"
+            ],
+            languages: ["Comum", "Minotauro"]
+        },
+        qareen: {
+            name: "Qareen",
+            attributeBonus: { intelligence: 2, charisma: 1 },
+            size: "Médio",
+            displacement: 9,
+            traits: [
+                "Herança Elemental: Resistência a um tipo de dano elemental",
+                "Rajada Elemental: Ataque à distância elemental",
+                "Levitação: Pode levitar por curtos períodos"
+            ],
+            languages: ["Comum", "Qareen"]
+        },
+        lefou: {
+            name: "Lefou",
+            attributeBonus: { constitution: 2, any: 1 },
+            size: "Médio",
+            displacement: 9,
+            traits: [
+                "Cicatrização: Regenera 1 PV por dia",
+                "Fortitude Amaldiçoada: +2 em Fortitude",
+                "Maldição Menor: Sofre uma maldição menor aleatória"
+            ],
+            languages: ["Comum"]
+        },
+        osteon: {
+            name: "Osteon",
+            attributeBonus: { dexterity: 2, intelligence: 1 },
+            size: "Médio",
+            displacement: 9,
+            traits: [
+                "Morto-Vivo: Imune a venenos e doenças",
+                "Esquelético: +2 em Furtividade",
+                "Memórias Fragmentadas: +2 em uma perícia de Conhecimento"
+            ],
+            languages: ["Comum"]
+        },
+        sprite: {
+            name: "Sprite",
+            attributeBonus: { dexterity: 2, charisma: 1 },
+            size: "Pequeno",
+            displacement: 6,
+            traits: [
+                "Voo: Pode voar com velocidade igual ao deslocamento",
+                "Magia Feérica: Pode lançar magias de ilusão como truques",
+                "Diminuto: +4 em testes de Furtividade"
+            ],
+            languages: ["Comum", "Silvestre"]
+        },
+        golem: {
+            name: "Golem",
+            attributeBonus: { strength: 2, constitution: 1 },
+            size: "Médio",
+            displacement: 6,
+            traits: [
+                "Construto: Imune a venenos, doenças e efeitos mentais",
+                "Armadura Natural: +2 na Def"
+              ]
+        }
+    },
+
+    classes: {
+        arcanista: {
+            name: "Arcanista",
+            hitDie: 4,
+            manaDie: 6,
+            primaryStat: "intelligence", // Varia por caminho
+            skillsAvailable: ["Conhecimento", "Investigação", "Misticismo", "Vontade"],
+            proficiencies: ["Armas simples", "Armaduras leves"],
+            spellcaster: true,
+            spellType: "arcana",
+            paths: ["bruxo", "feiticeiro", "mago"]
+        },
+        guerreiro: {
+            name: "Guerreiro",
+            hitDie: 10,
+            manaDie: 2,
+            primaryStat: "strength",
+            skillsAvailable: ["Cavalgar", "Intimidação", "Luta", "Ofício", "Pontaria"],
+            proficiencies: ["Todas as armas", "Todos os escudos", "Todas as armaduras"]
+        },
+        clerigo: {
+            name: "Clérigo",
+            hitDie: 6,
+            manaDie: 4,
+            primaryStat: "wisdom",
+            skillsAvailable: ["Cura", "Conhecimento", "Religião", "Vontade"],
+            proficiencies: ["Armas simples", "Armaduras leves", "Escudos leves"],
+            spellcaster: true,
+            spellType: "divina",
+            mustBeDevout: true
+        },
+        barbaro: {
+            name: "Bárbaro",
+            hitDie: 12,
+            manaDie: 2,
+            primaryStat: "strength",
+            skillsAvailable: ["Atletismo", "Fortitude", "Intimidação", "Luta", "Sobrevivência"],
+            proficiencies: ["Armas simples", "Armas marciais", "Escudos", "Armaduras leves"]
+        },
+        bardo: {
+            name: "Bardo",
+            hitDie: 6,
+            manaDie: 4,
+            primaryStat: "charisma",
+            skillsAvailable: ["Atuação", "Enganação", "Conhecimento", "Misticismo"],
+            proficiencies: ["Armas simples", "Armaduras leves"],
+            spellcaster: true,
+            spellType: "arcana"
+        },
+        bucaneiro: {
+            name: "Bucaneiro",
+            hitDie: 8,
+            manaDie: 4,
+            primaryStat: "dexterity",
+            skillsAvailable: ["Acrobacia", "Atletismo", "Enganação", "Intimidação", "Pontaria"],
+            proficiencies: ["Armas simples", "Armas de fogo", "Armaduras leves"]
+        },
+        cavaleiro: {
+            name: "Cavaleiro",
+            hitDie: 10,
+            manaDie: 3,
+            primaryStat: "strength",
+            skillsAvailable: ["Cavalgar", "Adestramento", "Luta", "Nobreza"],
+            proficiencies: ["Todas as armas", "Todos os escudos", "Todas as armaduras"]
+        },
+        druida: {
+            name: "Druida",
+            hitDie: 8,
+            manaDie: 4,
+            primaryStat: "wisdom",
+            skillsAvailable: ["Cura", "Conhecimento", "Sobrevivência", "Adestramento"],
+            proficiencies: ["Armas simples", "Armaduras leves"],
+            spellcaster: true,
+            spellType: "divina",
+            mustBeDevout: true
+        },
+        inventor: {
+            name: "Inventor",
+            hitDie: 6,
+            manaDie: 4,
+            primaryStat: "intelligence",
+            skillsAvailable: ["Conhecimento", "Máquinas", "Ofício", "Investigação"],
+            proficiencies: ["Armas simples", "Armas de fogo", "Armaduras leves"]
+        },
+        ladino: {
+            name: "Ladino",
+            hitDie: 6,
+            manaDie: 4,
+            primaryStat: "dexterity",
+            skillsAvailable: ["Acrobacia", "Enganação", "Furtividade", "Ladinagem", "Reflexos"],
+            proficiencies: ["Armas simples", "Armaduras leves"]
+        },
+        lutador: {
+            name: "Lutador",
+            hitDie: 10,
+            manaDie: 3,
+            primaryStat: "strength",
+            skillsAvailable: ["Acrobacia", "Atletismo", "Fortitude", "Luta"],
+            proficiencies: ["Armas simples", "Armas marciais", "Armaduras leves"]
+        },
+        nobre: {
+            name: "Nobre",
+            hitDie: 6,
+            manaDie: 4,
+            primaryStat: "charisma",
+            skillsAvailable: ["Diplomacia", "Enganação", "Intimidação", "Nobreza"],
+            proficiencies: ["Armas simples", "Armaduras leves"]
+        },
+        paladino: {
+            name: "Paladino",
+            hitDie: 10,
+            manaDie: 3,
+            primaryStat: "charisma",
+            skillsAvailable: ["Cura", "Diplomacia", "Luta", "Religião"],
+            proficiencies: ["Todas as armas", "Todos os escudos", "Todas as armaduras"],
+            spellcaster: true,
+            spellType: "divina",
+            mustBeDevout: true
+        },
+        ranger: {
+            name: "Ranger",
+            hitDie: 8,
+            manaDie: 4,
+            primaryStat: "wisdom",
+            skillsAvailable: ["Adestramento", "Percepção", "Pontaria", "Sobrevivência"],
+            proficiencies: ["Armas simples", "Armas marciais", "Armaduras leves"]
+        }
+    },
+
+    arcanistPaths: {
+        bruxo: {
+            name: "Bruxo",
+            primaryStat: "intelligence",
+            description: "Lança magias através de um foco mágico",
+            spellsKnown: "Aprende 1 magia por nível",
+            features: [
+                "Foco Arcano: Necessário para lançar magias",
+                "Conjuração espontânea",
+                "Foco tem PV = metade dos seus PV"
+            ]
+        },
+        feiticeiro: {
+            name: "Feiticeiro",
+            primaryStat: "charisma",
+            description: "Poder inato no sangue, herança sobrenatural",
+            spellsKnown: "Aprende 1 magia em níveis ímpares",
+            features: [
+                "Linhagem sobrenatural",
+                "Conjuração espontânea",
+                "Sem necessidade de foco ou memorização"
+            ],
+            lineages: ["draconica", "rubia", "feerica"]
+        },
+        mago: {
+            name: "Mago",
+            primaryStat: "intelligence",
+            description: "Estudioso das artes arcanas",
+            spellsKnown: "Aprende 2 magias por nível + magias extras",
+            features: [
+                "Memorização de magias",
+                "Magias extras por círculo",
+                "Pode aprender magias de pergaminhos"
+            ]
+        }
+    },
+
+    sorcererLineages: {
+        draconica: {
+            name: "Dracônica",
+            description: "Descendente de dragões",
+            basicHeritage: "Resistência a dano 5 (ácido, eletricidade, frio ou fogo) + Carisma em PV iniciais",
+            improvedHeritage: "Garras e presas (1d6 de dano)",
+            superiorHeritage: "Sopro dracônico (3d6 de dano, CD baseada em Carisma)"
+        },
+        rubia: {
+            name: "Rúbia",
+            description: "Tocado pela Tormenta",
+            basicHeritage: "Pode usar poderes da Tormenta + resistência à Tormenta",
+            improvedHeritage: "Mutações rubras menores",
+            superiorHeritage: "Transformação parcial em lefeu"
+        },
+        feerica: {
+            name: "Feérica",
+            description: "Descendente de fadas",
+            basicHeritage: "Pode lançar magias de encantamento como truques",
+            improvedHeritage: "Glamour sobrenatural (+2 em testes sociais)",
+            superiorHeritage: "Teleporte curto (3/dia)"
+        }
+    },
+
+    deities: {
+        khalmyr: {
+            name: "Khalmyr",
+            title: "Deus da Justiça",
+            alignment: "Leal e Bom",
+            devotees: ["Humanos", "Clérigos", "Paladinos"],
+            powers: ["Coragem Total", "Escudo Mágico", "Espada Justiceira"],
+            restrictions: ["Nunca mentir", "Sempre ajudar inocentes", "Nunca fugir de combate justo"]
+        },
+        wynna: {
+            name: "Wynna",
+            title: "Deusa da Magia",
+            alignment: "Neutro",
+            devotees: ["Humanos", "Clérigos", "Arcanistas"],
+            powers: ["Aumento de Mana", "Detectar Magia", "Escola Mágica"],
+            restrictions: ["Nunca destruir conhecimento mágico", "Sempre buscar novos feitiços"]
+        },
+        allihanna: {
+            name: "Allihanna",
+            title: "Deusa da Natureza",
+            alignment: "Neutro e Bom",
+            devotees: ["Humanos", "Clérigos", "Druidas", "Rangers"],
+            powers: ["Empatia Selvagem", "Rastreamento", "Crescimento Vegetal"],
+            restrictions: ["Proteger a natureza", "Nunca usar itens de origem civilizada desnecessariamente"]
+        },
+        valkaria: {
+            name: "Valkaria",
+            title: "Deusa da Humanidade",
+            alignment: "Leal e Bom",
+            devotees: ["Humanos", "Clérigos", "Paladinos"],
+            powers: ["Bênção", "Coragem", "Liderança"],
+            restrictions: ["Proteger humanos", "Lutar contra tirania"]
+        },
+        arsenal: {
+            name: "Arsenal",
+            title: "Deus da Guerra",
+            alignment: "Leal e Neutro",
+            devotees: ["Humanos", "Guerreiros", "Paladinos"],
+            powers: ["Armamentos", "Tática", "Fortaleza"],
+            restrictions: ["Honrar oponentes dignos", "Nunca atacar covardemente"]
+        }
+    },
+
+    origins: {
+        acolito: {
+            name: "Acólito",
+            description: "Criado em templo ou ordem religiosa",
+            items: ["Símbolo sagrado", "Traje de sacerdote"],
+            benefits: ["Cura", "Religião", "Vontade", "Medicina", "Membro da Igreja", "Vontade de Ferro"],
+            uniquePower: "Membro da Igreja: Hospedagem em templos"
+        },
+        artesao: {
+            name: "Artesão",
+            description: "Trabalhador especializado em um ofício",
+            items: ["Ferramentas de artesão", "Kit de trabalho"],
+            benefits: ["Ofício", "Percepção", "Medicina", "Construir Item Superior"],
+            uniquePower: "Perito: +2 em testes de Ofício"
+        },
+        criminoso: {
+            name: "Criminoso",
+            description: "Vida nas ruas, fora da lei",
+            items: ["Lockpicks", "Adaga"],
+            benefits: ["Enganação", "Furtividade", "Ladinagem", "Aparência Inofensiva"],
+            uniquePower: "Contatos Criminosos: Informações no submundo"
+        },
+        estudioso: {
+            name: "Estudioso",
+            description: "Dedicou a vida ao conhecimento",
+            items: ["Livros", "Tinta e pergaminho"],
+            benefits: ["Conhecimento", "Investigação", "Nobreza", "Identificar Item Mágico"],
+            uniquePower: "Erudição: +2 em testes de Conhecimento"
+        },
+        militar: {
+            name: "Militar",
+            description: "Serviu nas forças armadas",
+            items: ["Uniforme", "Insígnia militar"],
+            benefits: ["Guerra", "Intimidação", "Pontaria", "Comandar"],
+            uniquePower: "Veterano: +2 em testes de Guerra"
+        },
+        nobre: {
+            name: "Nobre",
+            description: "Nasceu em família aristocrata",
+            items: ["Roupas finas", "Anel de sinete"],
+            benefits: ["Diplomacia", "Nobreza", "Intimidação", "Recursos"],
+            uniquePower: "Linhagem: Acesso a corte nobre"
+        }
+    },
+
+    skills: [
+        { name: "Acrobacia", attribute: "dexterity" },
+        { name: "Adestramento", attribute: "charisma" },
+        { name: "Atletismo", attribute: "strength" },
+        { name: "Atuação", attribute: "charisma" },
+        { name: "Cavalgar", attribute: "dexterity" },
+        { name: "Conhecimento", attribute: "intelligence" },
+        { name: "Cura", attribute: "wisdom" },
+        { name: "Diplomacia", attribute: "charisma" },
+        { name: "Enganação", attribute: "charisma" },
+        { name: "Furtividade", attribute: "dexterity" },
+        { name: "Guerra", attribute: "intelligence" },
+        { name: "Intimidação", attribute: "charisma" },
+        { name: "Intuição", attribute: "wisdom" },
+        { name: "Investigação", attribute: "intelligence" },
+        { name: "Jogatina", attribute: "charisma" },
+        { name: "Ladinagem", attribute: "dexterity" },
+        { name: "Luta", attribute: "strength" },
+        { name: "Máquinas", attribute: "intelligence" },
+        { name: "Misticismo", attribute: "intelligence" },
+        { name: "Navegação", attribute: "wisdom" },
+        { name: "Nobreza", attribute: "intelligence" },
+        { name: "Ofício", attribute: "intelligence" },
+        { name: "Percepção", attribute: "wisdom" },
+        { name: "Pilotagem", attribute: "dexterity" },
+        { name: "Pontaria", attribute: "dexterity" },
+        { name: "Religião", attribute: "wisdom" },
+        { name: "Sobrevivência", attribute: "wisdom" },
+        { name: "Fortitude", attribute: "constitution" },
+        { name: "Reflexos", attribute: "dexterity" },
+        { name: "Vontade", attribute: "wisdom" }
+    ],
+
+    spells: {
+        1: [
+            { name: "Ataque Certeiro", cost: 1, school: "transmutação" },
+            { name: "Compreender Idiomas", cost: 1, school: "adivinhação" },
+            { name: "Curar Ferimentos", cost: 1, school: "cura" },
+            { name: "Detectar Magia", cost: 1, school: "adivinhação" },
+            { name: "Luz", cost: 1, school: "evocação" },
+            { name: "Mísseis Mágicos", cost: 1, school: "evocação" },
+            { name: "Primeiros Socorros", cost: 1, school: "cura" },
+            { name: "Proteção", cost: 1, school: "abjuração" },
+            { name: "Raio Elétrico", cost: 1, school: "evocação" },
+            { name: "Sono", cost: 1, school: "encantamento" }
+        ],
+        2: [
+            { name: "Bola de Fogo Menor", cost: 3, school: "evocação" },
+            { name: "Camuflagem", cost: 3, school: "ilusão" },
+            { name: "Cura Moderada", cost: 3, school: "cura" },
+            { name: "Força do Touro", cost: 3, school: "transmutação" },
+            { name: "Invisibilidade", cost: 3, school: "ilusão" },
+            { name: "Levitação", cost: 3, school: "transmutação" },
+            { name: "Raio Desintegrador", cost: 3, school: "evocação" },
+            { name: "Terreno Ilusório", cost: 3, school: "ilusão" }
+        ],
+        3: [
+            { name: "Bola de Fogo", cost: 6, school: "evocação" },
+            { name: "Cura Grave", cost: 6, school: "cura" },
+            { name: "Dissipar Magia", cost: 6, school: "abjuração" },
+            { name: "Relâmpago", cost: 6, school: "evocação" },
+            { name: "Teleporte", cost: 6, school: "conjuração" },
+            { name: "Voo", cost: 6, school: "transmutação" }
+        ],
+        4: [
+            { name: "Cura Crítica", cost: 10, school: "cura" },
+            { name: "Invocar Elemental", cost: 10, school: "conjuração" },
+            { name: "Muralha de Fogo", cost: 10, school: "evocação" },
+            { name: "Polimorfismo", cost: 10, school: "transmutação" }
+        ],
+        5: [
+            { name: "Cura Plena", cost: 15, school: "cura" },
+            { name: "Desintegração", cost: 15, school: "evocação" },
+            { name: "Invocar Dragão", cost: 15, school: "conjuração" },
+            { name: "Parar o Tempo", cost: 15, school: "transmutação" }
+        ]
+    }
+};
+
+// Estado do personagem
+let character = {
+    name: "",
+    level: 1,
+    race: "",
+    class: "",
+    arcanistPath: "",
+    sorcererLineage: "",
+    origin: "",
+    deity: "",
+    attributes: {
+        strength: 10,
+        dexterity: 10,
+        constitution: 10,
+        intelligence: 10,
+        wisdom: 10,
+        charisma: 10
+    },
+    trainedSkills: [],
+    knownSpells: []
+};
+
+// Funções utilitárias
+function getModifier(score) {
+    return Math.floor((score - 10) / 2);
+}
+
+function getTrainingBonus(level) {
+    if (level >= 15) return 6;
+    if (level >= 8) return 4;
+    return 2;
+}
+
+function calculateSkillBonus(skillName, isTrained = false) {
+    const skill = T20Data.skills.find(s => s.name === skillName);
+    if (!skill) return 0;
+    
+    const attributeScore = character.attributes[skill.attribute];
+    const attributeBonus = getModifier(attributeScore);
+    const halfLevel = Math.floor(character.level / 2);
+    const trainingBonus = isTrained ? getTrainingBonus(character.level) : 0;
+    
+    return halfLevel + attributeBonus + trainingBonus;
+}
+
+function calculateHitPoints() {
+    if (!character.class) return 0;
+    
+    const classData = T20Data.classes[character.class];
+    const constitutionMod = getModifier(character.attributes.constitution);
+    const baseHP = classData.hitDie + constitutionMod;
+    const levelHP = (character.level - 1) * (Math.floor(classData.hitDie / 2) + 1 + constitutionMod);
+    
+    return Math.max(1, baseHP + levelHP);
+}
+
+function calculateManaPoints() {
+    if (!character.class) return 0;
+    
+    const classData = T20Data.classes[character.class];
+    let keyAttribute = character.attributes[classData.primaryStat];
+    
+    // Ajustar atributo-chave para arcanista baseado no caminho
+    if (character.class === "arcanista" && character.arcanistPath) {
+        const pathData = T20Data.arcanistPaths[character.arcanistPath];
+        keyAttribute = character.attributes[pathData.primaryStat];
+    }
+    
+    const keyAttributeMod = getModifier(keyAttribute);
+    const baseMana = classData.manaDie + keyAttributeMod;
+    const levelMana = (character.level - 1) * (Math.floor(classData.manaDie / 2) + 1);
+    
+    return Math.max(0, baseMana + levelMana);
+}
+
+function calculateDefense() {
+    const dexterityMod = getModifier(character.attributes.dexterity);
+    return 10 + dexterityMod; // Base + Dex modifier
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    setupEventListeners();
+    initializeSkills();
+    updateCharacterSheet();
+});
+
+function setupEventListeners() {
+    // Atributos
+    ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].forEach(attr => {
+        document.getElementById(attr).addEventListener('input', function() {
+            character.attributes[attr] = parseInt(this.value);
+            updateModifiers();
+            updateCharacterSheet();
+        });
+    });
+
+    // Informações básicas
+    document.getElementById('characterName').addEventListener('input', function() {
+        character.name = this.value;
+        updateCharacterSheet();
+    });
+
+    document.getElementById('level').addEventListener('change', function() {
+        character.level = parseInt(this.value);
+        updateCharacterSheet();
+    });
+
+    // Raça
+    document.getElementById('race').addEventListener('change', function() {
+        character.race = this.value;
+        updateRaceDetails();
+        updateCharacterSheet();
+    });
+
+    // Classe
+    document.getElementById('class').addEventListener('change', function() {
+        character.class = this.value;
+        updateClassDetails();
+        updateCharacterSheet();
+    });
+
+    // Caminho do Arcanista
+    document.getElementById('arcanistPathSelect').addEventListener('change', function() {
+        character.arcanistPath = this.value;
+        updateArcanistPathDetails();
+        updateCharacterSheet();
+    });
+
+    // Linhagem do Feiticeiro
+    document.getElementById('sorcererLineageSelect').addEventListener('change', function() {
+        character.sorcererLineage = this.value;
+        updateSorcererLineageDetails();
+        updateCharacterSheet();
+    });
+
+    // Origem
+    document.getElementById('origin').addEventListener('change', function() {
+        character.origin = this.value;
+        updateOriginDetails();
+        updateCharacterSheet();
+    });
+
+    // Deus
+    document.getElementById('deity').addEventListener('change', function() {
+        character.deity = this.value;
+        updateDeityDetails();
+        updateCharacterSheet();
+    });
+}
+
+function updateModifiers() {
+    ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].forEach(attr => {
+        const modifier = getModifier(character.attributes[attr]);
+        const modifierElement = document.getElementById(attr + 'Mod');
+        modifierElement.textContent = modifier >= 0 ? `+${modifier}` : `${modifier}`;
+    });
+}
+
+function updateRaceDetails() {
+    const raceSelect = document.getElementById('race');
+    const detailsPanel = document.getElementById('raceDetails');
+    
+    if (!character.race) {
+        detailsPanel.innerHTML = '';
+        return;
+    }
+    
+    const raceData = T20Data.races[character.race];
+    if (!raceData) return;
+    
+    detailsPanel.innerHTML = `
+        <h4>${raceData.name}</h4>
+        <p><strong>Tamanho:</strong> ${raceData.size}</p>
+        <p><strong>Deslocamento:</strong> ${raceData.displacement}m</p>
+        <p><strong>Idiomas:</strong> ${raceData.languages.join(', ')}</p>
+        <h5>Características Raciais:</h5>
+        <ul>
+            ${raceData.traits.map(trait => `<li>${trait}</li>`).join('')}
+        </ul>
+    `;
+}
+
+function updateClassDetails() {
+    const detailsPanel = document.getElementById('classDetails');
+    const arcanistPath = document.getElementById('arcanistPath');
+    
+    if (!character.class) {
+        detailsPanel.innerHTML = '';
+        arcanistPath.style.display = 'none';
+        return;
+    }
+    
+    const classData = T20Data.classes[character.class];
+    if (!classData) return;
+    
+    detailsPanel.innerHTML = `
+        <h4>${classData.name}</h4>
+        <p><strong>Dado de Vida:</strong> d${classData.hitDie}</p>
+        <p><strong>Dado de Mana:</strong> d${classData.manaDie}</p>
+        <p><strong>Perícias de Classe:</strong> ${classData.skillsAvailable.join(', ')}</p>
+        <p><strong>Proficiências:</strong> ${classData.proficiencies.join(', ')}</p>
+        ${classData.spellcaster ? `<p><strong>Conjurador:</strong> Magias ${classData.spellType}s</p>` : ''}
+    `;
+    
+    // Mostrar seção de caminho do arcanista se necessário
+    if (character.class === 'arcanista') {
+        arcanistPath.style.display = 'block';
+    } else {
+        arcanistPath.style.display = 'none';
+        character.arcanistPath = '';
+        character.sorcererLineage = '';
+    }
+    
+    updateSpellsSection();
+}
+
+function updateArcanistPathDetails() {
+    const detailsPanel = document.getElementById('arcanistPathDetails');
+    const sorcererLineage = document.getElementById('sorcererLineage');
+    
+    if (!character.arcanistPath) {
+        detailsPanel.innerHTML = '';
+        sorcererLineage.style.display = 'none';
+        return;
+    }
+    
+    const pathData = T20Data.arcanistPaths[character.arcanistPath];
+    if (!pathData) return;
+    
+    detailsPanel.innerHTML = `
+        <h4>${pathData.name}</h4>
+        <p>${pathData.description}</p>
+        <p><strong>Atributo-chave:</strong> ${pathData.primaryStat === 'intelligence' ? 'Inteligência' : 
+                                             pathData.primaryStat === 'charisma' ? 'Carisma' : 'Sabedoria'}</p>
+        <p><strong>Magias:</strong> ${pathData.spellsKnown}</p>
+        <h5>Características:</h5>
+        <ul>
+            ${pathData.features.map(feature => `<li>${feature}</li>`).join('')}
+        </ul>
+    `;
+    
+    // Mostrar linhagem para feiticeiro
+    if (character.arcanistPath === 'feiticeiro') {
+        sorcererLineage.style.display = 'block';
+    } else {
+        sorcererLineage.style.display = 'none';
+        character.sorcererLineage = '';
+    }
+}
+
+function updateSorcererLineageDetails() {
+    const detailsPanel = document.getElementById('sorcererLineageDetails');
+    
+    if (!character.sorcererLineage) {
+        detailsPanel.innerHTML = '';
+        return;
+    }
+    
+    const lineageData = T20Data.sorcererLineages[character.sorcererLineage];
+    if (!lineageData) return;
+    
+    detailsPanel.innerHTML = `
+        <h4>Linhagem ${lineageData.name}</h4>
+        <p>${lineageData.description}</p>
+        <p><strong>Herança Básica:</strong> ${lineageData.basicHeritage}</p>
+        <p><strong>Herança Aprimorada (6º nível):</strong> ${lineageData.improvedHeritage}</p>
+        <p><strong>Herança Superior (11º nível):</strong> ${lineageData.superiorHeritage}</p>
+    `;
+}
+
+function updateOriginDetails() {
+    const detailsPanel = document.getElementById('originDetails');
+    
+    if (!character.origin) {
+        detailsPanel.innerHTML = '';
+        return;
+    }
+    
+    const originData = T20Data.origins[character.origin];
+    if (!originData) return;
+    
+    detailsPanel.innerHTML = `
+        <h4>${originData.name}</h4>
+        <p>${originData.description}</p>
+        <p><strong>Itens:</strong> ${originData.items.join(', ')}</p>
+        <p><strong>Benefícios disponíveis:</strong> ${originData.benefits.join(', ')}</p>
+        <p><strong>Poder único:</strong> ${originData.uniquePower}</p>
+    `;
+}
+
+function updateDeityDetails() {
+    const detailsPanel = document.getElementById('deityDetails');
+    
+    if (!character.deity) {
+        detailsPanel.innerHTML = '';
+        return;
+    }
+    
+    const deityData = T20Data.deities[character.deity];
+    if (!deityData) return;
+    
+    detailsPanel.innerHTML = `
+        <h4>${deityData.name} - ${deityData.title}</h4>
+        <p><strong>Alinhamento:</strong> ${deityData.alignment}</p>
+        <p><strong>Devotos:</strong> ${deityData.devotees.join(', ')}</p>
+        <h5>Poderes Concedidos:</h5>
+        <ul>
+            ${deityData.powers.map(power => `<li>${power}</li>`).join('')}
+        </ul>
+        <h5>Obrigações & Restrições:</h5>
+        <ul>
+            ${deityData.restrictions.map(restriction => `<li>${restriction}</li>`).join('')}
+        </ul>
+    `;
+}
+
+function initializeSkills() {
+    const skillsList = document.getElementById('skillsList');
+    
+    T20Data.skills.forEach(skill => {
+        const skillItem = document.createElement('div');
+        skillItem.className = 'skill-item';
+        skillItem.innerHTML = `
+            <span class="skill-name">${skill.name}</span>
+            <span class="skill-bonus" id="skill-${skill.name.toLowerCase().replace(/\s+/g, '-')}">+0</span>
+        `;
+        skillsList.appendChild(skillItem);
+    });
+}
+
+function updateSkills() {
+    // Determinar perícias treinadas baseado na classe e origem
+    const trainedSkills = [];
+    
+    // Perícias da classe
+    if (character.class && T20Data.classes[character.class]) {
+        const classData = T20Data.classes[character.class];
+        // Em T20, você escolhe algumas perícias da lista da classe para treinar
+        // Por simplicidade, vamos treinar as 2-3 primeiras
+        trainedSkills.push(...classData.skillsAvailable.slice(0, 2));
+    }
+    
+    // Perícias da origem
+    if (character.origin && T20Data.origins[character.origin]) {
+        const originData = T20Data.origins[character.origin];
+        // As duas primeiras opções dos benefícios são geralmente perícias
+        const originSkills = originData.benefits.filter(benefit => 
+            T20Data.skills.some(skill => skill.name === benefit)
+        ).slice(0, 2);
+        trainedSkills.push(...originSkills);
+    }
+    
+    character.trainedSkills = [...new Set(trainedSkills)]; // Remove duplicatas
+    
+    // Atualizar display das perícias
+    T20Data.skills.forEach(skill => {
+        const isTrained = character.trainedSkills.includes(skill.name);
+        const bonus = calculateSkillBonus(skill.name, isTrained);
+        const bonusElement = document.getElementById(`skill-${skill.name.toLowerCase().replace(/\s+/g, '-')}`);
+        
+        if (bonusElement) {
+            bonusElement.textContent = bonus >= 0 ? `+${bonus}` : `${bonus}`;
+            bonusElement.className = isTrained ? 'skill-bonus skill-trained' : 'skill-bonus skill-untrained';
+        }
+    });
+}
+
+function updateSpellsSection() {
+    const spellsSection = document.getElementById('spellsSection');
+    const spellsContent = document.getElementById('spellsContent');
+    
+    if (!character.class) {
+        spellsSection.style.display = 'none';
+        return;
+    }
+    
+    const classData = T20Data.classes[character.class];
+    if (!classData.spellcaster) {
+        spellsSection.style.display = 'none';
+        return;
+    }
+    
+    spellsSection.style.display = 'block';
+    
+    // Determinar círculos de magia disponíveis
+    const maxCircle = Math.min(5, Math.floor((character.level + 3) / 4));
+    
+    let spellsHtml = '<p>Círculos de magia disponíveis:</p>';
+    
+    for (let circle = 1; circle <= maxCircle; circle++) {
+        spellsHtml += `
+            <div class="spell-circle">
+                <h3>${circle}º Círculo (Custo: ${getSpellCost(circle)} PM)</h3>
+                <div class="spells-list">
+                    ${T20Data.spells[circle].map(spell => 
+                        `<div class="spell-item" data-spell="${spell.name}">
+                            <strong>${spell.name}</strong><br>
+                            <small>Escola: ${spell.school}</small>
+                        </div>`
+                    ).join('')}
+                </div>
+            </div>
+        `;
+    }
+    
+    spellsContent.innerHTML = spellsHtml;
+}
+
+function getSpellCost(circle) {
+    const costs = { 1: 1, 2: 3, 3: 6, 4: 10, 5: 15 };
+    return costs[circle] || 0;
+}
+
+function updateCalculatedStats() {
+    // Pontos de Vida
+    document.getElementById('hitPoints').textContent = calculateHitPoints();
+    
+    // Pontos de Mana
+    document.getElementById('manaPoints').textContent = calculateManaPoints();
+    
+    // Defesa
+    document.getElementById('defense').textContent = calculateDefense();
+    
+    // Perícias de combate/resistência
+    const fightBonus = calculateSkillBonus('Luta', character.trainedSkills.includes('Luta'));
+    const shootingBonus = calculateSkillBonus('Pontaria', character.trainedSkills.includes('Pontaria'));
+    const fortitudeBonus = calculateSkillBonus('Fortitude', character.trainedSkills.includes('Fortitude'));
+    const reflexesBonus = calculateSkillBonus('Reflexos', character.trainedSkills.includes('Reflexos'));
+    const willBonus = calculateSkillBonus('Vontade', character.trainedSkills.includes('Vontade'));
+    
+    document.getElementById('fightSkill').textContent = fightBonus >= 0 ? `+${fightBonus}` : `${fightBonus}`;
+    document.getElementById('shootingSkill').textContent = shootingBonus >= 0 ? `+${shootingBonus}` : `${shootingBonus}`;
+    document.getElementById('fortitudeSkill').textContent = fortitudeBonus >= 0 ? `+${fortitudeBonus}` : `${fortitudeBonus}`;
+    document.getElementById('reflexesSkill').textContent = reflexesBonus >= 0 ? `+${reflexesBonus}` : `${reflexesBonus}`;
+    document.getElementById('willSkill').textContent = willBonus >= 0 ? `+${willBonus}` : `${willBonus}`;
+}
+
+function updateCharacterSummary() {
+    const summaryElement = document.getElementById('characterSummary');
+    
+    if (!character.name && !character.race && !character.class) {
+        summaryElement.innerHTML = '<p>Configure seu personagem nas seções acima para ver o resumo completo.</p>';
+        return;
+    }
+    
+    let summary = `<h4>${character.name || 'Sem nome'}</h4>`;
+    
+    if (character.race) {
+        const raceData = T20Data.races[character.race];
+        summary += `<p><strong>Raça:</strong> ${raceData ? raceData.name : character.race}</p>`;
+    }
+    
+    if (character.class) {
+        const classData = T20Data.classes[character.class];
+        summary += `<p><strong>Classe:</strong> ${classData ? classData.name : character.class}`;
+        
+        if (character.arcanistPath) {
+            const pathData = T20Data.arcanistPaths[character.arcanistPath];
+            summary += ` (${pathData ? pathData.name : character.arcanistPath})`;
+            
+            if (character.sorcererLineage) {
+                const lineageData = T20Data.sorcererLineages[character.sorcererLineage];
+                summary += ` - Linhagem ${lineageData ? lineageData.name : character.sorcererLineage}`;
+            }
+        }
+        summary += `</p>`;
+    }
+    
+    summary += `<p><strong>Nível:</strong> ${character.level}</p>`;
+    
+    if (character.origin) {
+        const originData = T20Data.origins[character.origin];
+        summary += `<p><strong>Origem:</strong> ${originData ? originData.name : character.origin}</p>`;
+    }
+    
+    if (character.deity) {
+        const deityData = T20Data.deities[character.deity];
+        summary += `<p><strong>Devoção:</strong> ${deityData ? deityData.name : character.deity}</p>`;
+    }
+    
+    summary += `
+        <h5>Atributos:</h5>
+        <p>For ${character.attributes.strength} (${getModifier(character.attributes.strength) >= 0 ? '+' : ''}${getModifier(character.attributes.strength)}), 
+        Des ${character.attributes.dexterity} (${getModifier(character.attributes.dexterity) >= 0 ? '+' : ''}${getModifier(character.attributes.dexterity)}), 
+        Con ${character.attributes.constitution} (${getModifier(character.attributes.constitution) >= 0 ? '+' : ''}${getModifier(character.attributes.constitution)}), 
+        Int ${character.attributes.intelligence} (${getModifier(character.attributes.intelligence) >= 0 ? '+' : ''}${getModifier(character.attributes.intelligence)}), 
+        Sab ${character.attributes.wisdom} (${getModifier(character.attributes.wisdom) >= 0 ? '+' : ''}${getModifier(character.attributes.wisdom)}), 
+        Car ${character.attributes.charisma} (${getModifier(character.attributes.charisma) >= 0 ? '+' : ''}${getModifier(character.attributes.charisma)})</p>
+    `;
+    
+    if (character.trainedSkills.length > 0) {
+        summary += `<h5>Perícias Treinadas:</h5><p>${character.trainedSkills.join(', ')}</p>`;
+    }
+    
+    summaryElement.innerHTML = summary;
+}
+
+function updateCharacterSheet() {
+    updateModifiers();
+    updateSkills();
+    updateCalculatedStats();
+    updateCharacterSummary();
+}
+    </script>
+</body>
+</html>
