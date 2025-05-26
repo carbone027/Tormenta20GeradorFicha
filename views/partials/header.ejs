@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'League of Legends Guide' %></title>
+  <link rel="stylesheet" href="/stylesheet/style.css">
+</head>
+<body>
+  <header>
+    <h1>League of Legends</h1>
+    <p>Guia Básico para Iniciantes</p>
+    <% if (user) { %>
+      <div class="user-info">Bem-vindo, <%= user.username %></div>
+    <% } %>
+  </header>
+
+  <nav>
+    <a href="/" class="nav-link <%= locals.activePage === 'overview' ? 'active' : '' %>">Visão Geral</a>
+    <a href="/runes" class="nav-link <%= locals.activePage === 'runes' ? 'active' : '' %>">Runas</a>
+    <a href="/spells" class="nav-link <%= locals.activePage === 'spells' ? 'active' : '' %>">Feitiços</a>
+    <a href="/damage" class="nav-link <%= locals.activePage === 'damage' ? 'active' : '' %>">Tipos de Dano</a>
+    <a href="/champions" class="nav-link <%= locals.activePage === 'champions' ? 'active' : '' %>">Classes</a>
+    <a href="/lanes" class="nav-link <%= locals.activePage === 'lanes' ? 'active' : '' %>">Lanes</a>
+    <a href="/minions" class="nav-link <%= locals.activePage === 'minions' ? 'active' : '' %>">Minions e Gold</a>
+    
+    <% if (user) { %>
+      <a href="/runes/builder" class="nav-link <%= locals.activePage === 'runeBuilder' ? 'active' : '' %>">Criar Runas</a>
+      <a href="/runes/my-runes" class="nav-link <%= locals.activePage === 'myRunes' ? 'active' : '' %>">Minhas Runas</a>
+      <a href="/logout" class="nav-link auth-btn">Sair</a>
+    <% } else { %>
+      <a href="/login" class="nav-link auth-btn">Login</a>
+    <% } %>
+  </nav>
+
+  <main>

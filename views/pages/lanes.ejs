@@ -1,0 +1,29 @@
+<%- include('../partials/header', { title: 'Lanes do Mapa', activePage: 'lanes' }) %>
+
+<section class="content-section active">
+  <h2>As Lanes do Mapa</h2>
+  <div class="lanes-container">
+    <div class="map-representation">
+      <div class="lane top-lane">
+        <h3>Top Lane</h3>
+        <p>Lane superior. Geralmente 1v1. Foco em farm e escala.</p>
+      </div>
+      <div class="lane jungle">
+        <h3>Jungle</h3>
+        <p>Área entre as lanes. Monstros neutros e objetivos.</p>
+      </div>
+      <div class="lane mid-lane">
+        <h3>Mid Lane</h3>
+        <p>Lane central. Lane mais curta. Fácil de gankar e ajudar outras lanes.</p>
+      </div>
+      <div class="lane bot-lane">
+        <h3>Bot Lane</h3>
+        <p>Lane inferior. Duo lane (ADC + Support). Dragon próximo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="/scripts/lanes.js"></script>
+
+<%- include('../partials/footer') %>

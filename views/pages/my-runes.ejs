@@ -1,0 +1,236 @@
+<%- include('../partials/header', { title: 'Minhas Runas', activePage: 'myRunes' }) %>
+
+<section class="content-section active">
+  <h2>Minhas Páginas de Runas</h2>
+  
+  <div class="my-runes-actions">
+    <a href="/runes/builder" class="nav-btn">✨ Criar Nova Página de Runas</a>
+  </div>
+  
+  <% if (runePages && runePages.length > 0) { %>
+    <div class="rune-pages-grid">
+      <% runePages.forEach(runePage => { %>
+        <div class="rune-page-card" data-id="<%= runePage.id %>">
+          <!-- Header com nome e data -->
+          <div class="rune-page-header">
+            <h3><%= runePage.name %></h3>
+            <div class="rune-page-meta">
+              <span class="created-at">📅 <%= new Date(runePage.created_at).toLocaleDateString('pt-BR') %></span>
+              <button class="delete-rune-btn" data-id="<%= runePage.id %>" title="Excluir página">🗑️</button>
+            </div>
+          </div>
+          
+          <!-- Layout das Runas -->
+          <div class="rune-layout">
+            <!-- Seção das Árvores -->
+            <div class="trees-section">
+              <div class="primary-tree-header">
+                <img src="/assets/runes/<%= getTreeImageName(runePage.primary_tree) %>.png" alt="<%= runePage.primary_tree %>" class="tree-icon">
+                <div class="tree-info">
+                  <span class="tree-name"><%= getTreeName(runePage.primary_tree) %></span>
+                  <span class="tree-type">Primária</span>
+                </div>
+              </div>
+              <div class="secondary-tree-header">
+                <img src="/assets/runes/<%= getTreeImageName(runePage.secondary_tree) %>.png" alt="<%= runePage.secondary_tree %>" class="tree-icon">
+                <div class="tree-info">
+                  <span class="tree-name"><%= getTreeName(runePage.secondary_tree) %></span>
+                  <span class="tree-type">Secundária</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Seção das Runas -->
+            <div class="runes-section">
+              <!-- Coluna Primária -->
+              <div class="primary-runes">
+                <!-- Keystone -->
+                <div class="keystone-rune">
+                  <img src="/assets/runes/<%= runePage.primary_tree %>/<%= runePage.primary_keystone %>.png" 
+                       alt="<%= runePage.primary_keystone %>" 
+                       class="rune-icon keystone-icon"
+                       onerror="this.src='/assets/runes/placeholder.png'">
+                  <span class="rune-name keystone-name"><%= formatRuneName(runePage.primary_keystone) %></span>
+                </div>
+                
+                <!-- Runas Primárias -->
+                <div class="primary-minor-runes">
+                  <div class="minor-rune">
+                    <img src="/assets/runes/<%= runePage.primary_tree %>/<%= runePage.primary_slot1 %>.png" 
+                         alt="<%= runePage.primary_slot1 %>" 
+                         class="rune-icon"
+                         onerror="this.src='/assets/runes/placeholder.png'">
+                    <span class="rune-name"><%= formatRuneName(runePage.primary_slot1) %></span>
+                  </div>
+                  <div class="minor-rune">
+                    <img src="/assets/runes/<%= runePage.primary_tree %>/<%= runePage.primary_slot2 %>.png" 
+                         alt="<%= runePage.primary_slot2 %>" 
+                         class="rune-icon"
+                         onerror="this.src='/assets/runes/placeholder.png'">
+                    <span class="rune-name"><%= formatRuneName(runePage.primary_slot2) %></span>
+                  </div>
+                  <div class="minor-rune">
+                    <img src="/assets/runes/<%= runePage.primary_tree %>/<%= runePage.primary_slot3 %>.png" 
+                         alt="<%= runePage.primary_slot3 %>" 
+                         class="rune-icon"
+                         onerror="this.src='/assets/runes/placeholder.png'">
+                    <span class="rune-name"><%= formatRuneName(runePage.primary_slot3) %></span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Coluna Secundária -->
+              <div class="secondary-runes">
+                <div class="secondary-minor-runes">
+                  <div class="minor-rune">
+                    <img src="/assets/runes/<%= runePage.secondary_tree %>/<%= runePage.secondary_slot1 %>.png" 
+                         alt="<%= runePage.secondary_slot1 %>" 
+                         class="rune-icon"
+                         onerror="this.src='/assets/runes/placeholder.png'">
+                    <span class="rune-name"><%= formatRuneName(runePage.secondary_slot1) %></span>
+                  </div>
+                  <div class="minor-rune">
+                    <img src="/assets/runes/<%= runePage.secondary_tree %>/<%= runePage.secondary_slot2 %>.png" 
+                         alt="<%= runePage.secondary_slot2 %>" 
+                         class="rune-icon"
+                         onerror="this.src='/assets/runes/placeholder.png'">
+                    <span class="rune-name"><%= formatRuneName(runePage.secondary_slot2) %></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Fragmentos Estatísticos -->
+            <div class="shards-section">
+              <h5>💎 Fragmentos</h5>
+              <div class="shards-list">
+                <div class="shard-item">
+                  <img src="/assets/shards/<%= runePage.shard1 %>.png" 
+                       alt="<%= runePage.shard1 %>" 
+                       class="shard-icon"
+                       onerror="this.src='/assets/shards/placeholder.png'">
+                  <span><%= formatShardName(runePage.shard1) %></span>
+                </div>
+                <div class="shard-item">
+                  <img src="/assets/shards/<%= runePage.shard2 %>.png" 
+                       alt="<%= runePage.shard2 %>" 
+                       class="shard-icon"
+                       onerror="this.src='/assets/shards/placeholder.png'">
+                  <span><%= formatShardName(runePage.shard2) %></span>
+                </div>
+                <div class="shard-item">
+                  <img src="/assets/shards/<%= runePage.shard3 %>.png" 
+                       alt="<%= runePage.shard3 %>" 
+                       class="shard-icon"
+                       onerror="this.src='/assets/shards/placeholder.png'">
+                  <span><%= formatShardName(runePage.shard3) %></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="empty-rune-pages">
+      <div class="card">
+        <h3>📝 Nenhuma página de runas encontrada</h3>
+        <p>Você ainda não criou nenhuma página de runas. Comece criando uma nova página personalizada!</p>
+        <a href="/runes/builder" class="nav-btn">✨ Criar Primeira Página</a>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<script src="/scripts/my-runes.js"></script>
+<%- include('../partials/footer') %>
+
+<%
+// Função para mapear nomes das árvores para imagens
+function getTreeImageName(treeId) {
+  const treeMap = {
+    'precisao': 'precision',
+    'dominacao': 'domination', 
+    'feiticaria': 'sorcery',
+    'determinacao': 'resolve',
+    'inspiracao': 'inspiration'
+  };
+  return treeMap[treeId] || treeId;
+}
+
+// Função para obter nomes das árvores em português
+function getTreeName(treeId) {
+  const trees = {
+    'precisao': 'Precisão',
+    'dominacao': 'Dominação',
+    'feiticaria': 'Feitiçaria',
+    'determinacao': 'Determinação',
+    'inspiracao': 'Inspiração'
+  };
+  return trees[treeId] || treeId;
+}
+
+// Função para formatar nomes das runas
+function formatRuneName(runeName) {
+  if (!runeName) return '';
+  
+  const runeNames = {
+    // Keystones
+    'press_the_attack': 'Pressione o Ataque',
+    'lethal_tempo': 'Ritmo Fatal',
+    'fleet_footwork': 'Agilidade nos Pés',
+    'conqueror': 'Conquistador',
+    'electrocute': 'Eletrocutar',
+    'dark_harvest': 'Colheita Sombria',
+    'hail_of_blades': 'Chuva de Lâminas',
+    'arcane_comet': 'Cometa Arcano',
+    'summon_aery': 'Invocar Aery',
+    'phase_rush': 'Ímpeto Gradual',
+    'grasp_of_the_undying': 'Aperto dos Mortos-vivos',
+    'aftershock': 'Pós-Choque',
+    'guardian': 'Guardião',
+    'glacial_augment': 'Aprimoramento Glacial',
+    'unsealed_spellbook': 'Livro de Feitiços Deslacrado',
+    'first_strike': 'Primeiro Ataque',
+    
+    // Runas Menores
+    'absorb_life': 'Absorsão Vital',
+    'triumph': 'Triunfo',
+    'presence_of_mind': 'Presença de Espírito',
+    'legend_alacrity': 'Lenda: Espontaneidade',
+    'legend_haste': 'Lenda: Aceleração',
+    'legend_bloodline': 'Lenda: Linhagem',
+    'coup_de_grace': 'Golpe de Misericórdia',
+    'cut_down': 'Dilacerar',
+    'last_stand': 'Até a Morte',
+    'cheap_shot': 'Golpe Desleal',
+    'taste_of_blood': 'Gosto de Sangue',
+    'sudden_impact': 'Impacto Repentino',
+    'sixth_sense': 'Sexto Sentido',
+    'grisly_mementos': 'Lembrança Aterrorizante',
+    'deep_ward': 'Sentinela Profunda',
+    'treasure_hunter': 'Caçador de Tesouros',
+    'relentless_hunter': 'Caçador Incansável',
+    'ultimate_hunter': 'Caçador Supremo'
+  };
+  
+  return runeNames[runeName] || runeName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+// Função para formatar nomes dos fragmentos
+function formatShardName(shardName) {
+  if (!shardName) return '';
+  
+  const shardNames = {
+    'adaptive_force': 'Força Adaptativa',
+    'attack_speed': 'Velocidade de Ataque',
+    'ability_haste': 'Aceleração de Habilidade',
+    'movement_speed': 'Velocidade de Movimento',
+    'health_bonus': 'Vida Escalável',
+    'health': 'Vida',
+    'tenacity': 'Tenacidade'
+  };
+  
+  return shardNames[shardName] || shardName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+%>

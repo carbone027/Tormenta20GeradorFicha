@@ -1,0 +1,40 @@
+<%- include('../partials/header', { title: 'Tipos de Dano', activePage: 'damage' }) %>
+
+<section class="content-section active">
+  <h2>Tipos de Dano e Resistências</h2>
+  <div class="damage-types">
+    <div class="damage-card physical">
+      <h3>Dano Físico (AD)</h3>
+      <p>Baseado em Attack Damage (AD). Resistido por Armadura.</p>
+      <ul>
+        <li>Ataques básicos da maioria dos campeões</li>
+        <li>Habilidades de ADCs e alguns assassinos</li>
+        <li>Itens de armadura reduzem este dano</li>
+      </ul>
+    </div>
+    
+    <div class="damage-card magical">
+      <h3>Dano Mágico (AP)</h3>
+      <p>Baseado em Ability Power (AP). Resistido por Resistência Mágica.</p>
+      <ul>
+        <li>Habilidades de magos</li>
+        <li>Alguns ataques especiais</li>
+        <li>Itens de RM reduzem este dano</li>
+      </ul>
+    </div>
+    
+    <div class="damage-card true">
+      <h3>Dano Verdadeiro</h3>
+      <p>Não é resistido por nada. Sempre causa o valor total.</p>
+      <ul>
+        <li>Algumas habilidades especiais</li>
+        <li>Ignite, Smite</li>
+        <li>Não pode ser reduzido!</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script src="/scripts/damage.js"></script>
+
+<%- include('../partials/footer') %>

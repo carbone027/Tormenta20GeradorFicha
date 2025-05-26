@@ -1,0 +1,19 @@
+<%- include('partials/header', { title: 'Erro' }) %>
+
+<section class="content-section active">
+  <h2><%= message %></h2>
+  <div class="error-container">
+    <div class="card">
+      <h3>Ocorreu um erro</h3>
+      <p><%= error.status %> - <%= message %></p>
+      <% if (process.env.NODE_ENV !== 'production') { %>
+        <pre><%= error.stack %></pre>
+      <% } %>
+      <div class="error-actions">
+        <a href="/" class="nav-btn">Voltar para a Página Inicial</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
