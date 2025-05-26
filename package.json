@@ -1,7 +1,7 @@
 {
-  "name": "lol-guide",
+  "name": "tormenta20-fichas",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sistema de criação e gerenciamento de fichas para Tormenta20",
   "main": "server.js",
   "engines": {
     "node": "18.x"
@@ -11,13 +11,18 @@
     "dev": "nodemon server.js",
     "build": "echo 'No build step required'",
     "db:setup": "node scripts/runSQLScript.js",
-    "vercel-build": "echo 'Ready for deployment'"
+    "db:test": "node scripts/test-db-connection.js"
   },
-  "keywords": [],
+  "keywords": [
+    "tormenta20",
+    "rpg",
+    "ficha",
+    "character-sheet"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^2.2.0",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
@@ -28,5 +33,17 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.0"
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RafaelSR44/Tormenta20GeradorFicha.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RafaelSR44/Tormenta20GeradorFicha/issues"
+  },
+  "homepage": "https://github.com/RafaelSR44/Tormenta20GeradorFicha#readme"
 }

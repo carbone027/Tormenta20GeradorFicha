@@ -13,7 +13,6 @@ exports.login = async (req, res) => {
     console.log('Login: Dados recebidos', req.body);
     const { username, password } = req.body;
     
-    // Verificar se recebemos os dados do formulário
     if (!username || !password) {
       console.error('Dados de login incompletos');
       return res.render('auth/login', {
@@ -45,7 +44,6 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Configurar sessão
     req.session.user = {
       id: user.id,
       username: user.username,
@@ -76,11 +74,8 @@ exports.registerForm = (req, res) => {
 exports.register = async (req, res) => {
   try {
     console.log('Register: Dados recebidos', req.body);
-    await User.create(req.body.username, req.body.email, req.body.password);
-    console.log('Usuário criado com sucesso');
     const { username, email, password, confirmPassword } = req.body;
     
-    // Verificar se recebemos os dados do formulário
     if (!username || !email || !password || !confirmPassword) {
       console.error('Dados de registro incompletos');
       return res.render('auth/register', {
@@ -120,7 +115,6 @@ exports.register = async (req, res) => {
     const user = await User.create(username, email, password);
     console.log('Usuário criado com sucesso:', user);
     
-    // Configurar sessão
     req.session.user = {
       id: user.id,
       username: user.username,

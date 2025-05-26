@@ -15,7 +15,7 @@ const pool = new Pool({
 });
 
 const runSQLScript = async () => {
-  const filePath = path.join(__dirname, 'BD2.sql');
+  const filePath = path.join(__dirname, 'BD_TORMENTA20.sql');
   const sql = fs.readFileSync(filePath, 'utf8');
 
   try {

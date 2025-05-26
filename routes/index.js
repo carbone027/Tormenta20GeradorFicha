@@ -3,13 +3,12 @@ const router = express.Router();
 
 // Importar controllers
 const homeController = require('../controllers/HomeController');
-const runesController = require('../controllers/RunesController');
-const spellsController = require('../controllers/SpellsController');
-const damageController = require('../controllers/DamageController');
-const championsController = require('../controllers/ChampionsController');
-const lanesController = require('../controllers/LanesController');
-const minionsController = require('../controllers/MinionsController');
 const authController = require('../controllers/AuthController');
+const characterController = require('../controllers/CharacterController');
+const raceController = require('../controllers/RaceController');
+const classController = require('../controllers/ClassController');
+const godsController = require('../controllers/GodsController');
+const equipmentController = require('../controllers/EquipmentController');
 
 // Middleware para verificar autenticação
 const checkAuth = (req, res, next) => {
@@ -23,12 +22,10 @@ router.use(checkAuth);
 
 // Rotas principais
 router.get('/', homeController.index);
-router.get('/runes', runesController.index);
-router.get('/spells', spellsController.index);
-router.get('/damage', damageController.index);
-router.get('/champions', championsController.index);
-router.get('/lanes', lanesController.index);
-router.get('/minions', minionsController.index);
+router.get('/racas', raceController.index);
+router.get('/classes', classController.index);
+router.get('/deuses', godsController.index);
+router.get('/equipamentos', equipmentController.index);
 
 // Rotas de autenticação
 router.get('/login', authController.loginForm);
@@ -37,10 +34,13 @@ router.get('/register', authController.registerForm);
 router.post('/register', authController.register);
 router.get('/logout', authController.logout);
 
-// Rotas para o construtor de runas
-router.get('/runes/builder', runesController.builder);
-router.get('/runes/my-runes', runesController.myRunes);
-router.post('/runes/save', runesController.saveRune);
-router.delete('/runes/:id', runesController.deleteRune);
+// Rotas para personagens/fichas
+router.get('/personagens', characterController.myCharacters);
+router.get('/personagens/criar', characterController.createForm);
+router.post('/personagens/criar', characterController.create);
+router.get('/personagens/:id', characterController.view);
+router.get('/personagens/:id/editar', characterController.editForm);
+router.put('/personagens/:id', characterController.update);
+router.delete('/personagens/:id', characterController.delete);
 
 module.exports = router;

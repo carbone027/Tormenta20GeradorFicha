@@ -6,7 +6,7 @@ require('dotenv').config();
 
 // Configurar sessão
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'lol_secret_key',
+  secret: process.env.SESSION_SECRET || 'tormenta20_secret_key',
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 dia
@@ -58,6 +58,8 @@ const PORT = process.env.PORT || 3100;
 
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta http://localhost:${PORT}`);
+    console.log(`🎲 Servidor Tormenta20 rodando na porta http://localhost:${PORT}`);
   });
 }
+
+module.exports = app;
