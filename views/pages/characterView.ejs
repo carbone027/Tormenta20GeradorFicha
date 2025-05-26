@@ -1,0 +1,416 @@
+<%- include('../partials/header', { title: `${character ? character.nome : 'Personagem'} - Ficha`, activePage: 'characterView' }) %>
+
+<% if (character) { %>
+  <section class="content-section active character-sheet">
+    <!-- Header do Personagem -->
+    <div class="character-header-section">
+      <div class="character-main-info">
+        <div class="character-portrait">
+          <% 
+            // Ícone baseado na classe
+            let classeIcon = '⚔️';
+            if (character.classe_nome) {
+              switch(character.classe_nome.toLowerCase()) {
+                case 'guerreiro': classeIcon = '⚔️'; break;
+                case 'ladino': classeIcon = '🗡️'; break;
+                case 'arcanista': classeIcon = '🔮'; break;
+                case 'clérico': classeIcon = '✨'; break;
+                case 'bárbaro': classeIcon = '🪓'; break;
+                case 'bardo': classeIcon = '🎵'; break;
+                default: classeIcon = '⚔️';
+              }
+            }
+          %>
+          <div class="portrait-icon"><%= classeIcon %></div>
+          <div class="level-badge">Nível <%= character.nivel || 1 %></div>
+        </div>
+        
+        <div class="character-identity">
+          <h1 class="character-name"><%= character.nome %></h1>
+          <p class="character-class-race">
+            <%= character.classe_nome || 'Classe' %> <%= character.raca_nome || 'Raça' %>
+          </p>
+          <% if (character.deus_nome) { %>
+            <p class="character-deity">⭐ Devoto de <%= character.deus_nome %></p>
+          <% } %>
+          <% if (character.experiencia && character.experiencia > 0) { %>
+            <p class="character-xp">🌟 <%= character.experiencia %> XP</p>
+          <% } %>
+        </div>
+        
+        <div class="character-actions">
+          <a href="/personagens/<%= character.id %>/editar" class="action-btn edit-btn">
+            ✏️ Editar Personagem
+          </a>
+          <a href="/personagens" class="action-btn back-btn">
+            ← Meus Personagens
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Características Principais -->
+    <div class="main-characteristics">
+      <div class="characteristic-card vital-stats">
+        <h3>💙 Características Vitais</h3>
+        <div class="vital-grid">
+          <div class="vital-item pv">
+            <div class="vital-icon">❤️</div>
+            <div class="vital-info">
+              <span class="vital-value"><%= character.pontos_vida || 0 %></span>
+              <span class="vital-label">Pontos de Vida</span>
+            </div>
+          </div>
+          
+          <% if (character.pontos_mana && character.pontos_mana > 0) { %>
+            <div class="vital-item pm">
+              <div class="vital-icon">🔵</div>
+              <div class="vital-info">
+                <span class="vital-value"><%= character.pontos_mana %></span>
+                <span class="vital-label">Pontos de Mana</span>
+              </div>
+            </div>
+          <% } %>
+          
+          <div class="vital-item ca">
+            <div class="vital-icon">🛡️</div>
+            <div class="vital-info">
+              <span class="vital-value"><%= character.ca || 10 %></span>
+              <span class="vital-label">Classe de Armadura</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atributos -->
+    <div class="attributes-section">
+      <h3>💪 Atributos</h3>
+      <div class="attributes-grid">
+        <div class="attribute-card">
+          <div class="attr-icon">💪</div>
+          <div class="attr-info">
+            <span class="attr-name">Força</span>
+            <span class="attr-value"><%= character.forca || 10 %></span>
+            <span class="attr-modifier">
+              <% 
+                const forcaMod = Math.floor(((character.forca || 10) - 10) / 2);
+                const forcaModText = forcaMod >= 0 ? '+' + forcaMod : forcaMod;
+              %>
+              (<%= forcaModText %>)
+            </span>
+          </div>
+        </div>
+        
+        <div class="attribute-card">
+          <div class="attr-icon">🏃</div>
+          <div class="attr-info">
+            <span class="attr-name">Destreza</span>
+            <span class="attr-value"><%= character.destreza || 10 %></span>
+            <span class="attr-modifier">
+              <% 
+                const destrezaMod = Math.floor(((character.destreza || 10) - 10) / 2);
+                const destrezaModText = destrezaMod >= 0 ? '+' + destrezaMod : destrezaMod;
+              %>
+              (<%= destrezaModText %>)
+            </span>
+          </div>
+        </div>
+        
+        <div class="attribute-card">
+          <div class="attr-icon">❤️‍🔥</div>
+          <div class="attr-info">
+            <span class="attr-name">Constituição</span>
+            <span class="attr-value"><%= character.constituicao || 10 %></span>
+            <span class="attr-modifier">
+              <% 
+                const constMod = Math.floor(((character.constituicao || 10) - 10) / 2);
+                const constModText = constMod >= 0 ? '+' + constMod : constMod;
+              %>
+              (<%= constModText %>)
+            </span>
+          </div>
+        </div>
+        
+        <div class="attribute-card">
+          <div class="attr-icon">🧠</div>
+          <div class="attr-info">
+            <span class="attr-name">Inteligência</span>
+            <span class="attr-value"><%= character.inteligencia || 10 %></span>
+            <span class="attr-modifier">
+              <% 
+                const intMod = Math.floor(((character.inteligencia || 10) - 10) / 2);
+                const intModText = intMod >= 0 ? '+' + intMod : intMod;
+              %>
+              (<%= intModText %>)
+            </span>
+          </div>
+        </div>
+        
+        <div class="attribute-card">
+          <div class="attr-icon">🧙</div>
+          <div class="attr-info">
+            <span class="attr-name">Sabedoria</span>
+            <span class="attr-value"><%= character.sabedoria || 10 %></span>
+            <span class="attr-modifier">
+              <% 
+                const sabMod = Math.floor(((character.sabedoria || 10) - 10) / 2);
+                const sabModText = sabMod >= 0 ? '+' + sabMod : sabMod;
+              %>
+              (<%= sabModText %>)
+            </span>
+          </div>
+        </div>
+        
+        <div class="attribute-card">
+          <div class="attr-icon">😎</div>
+          <div class="attr-info">
+            <span class="attr-name">Carisma</span>
+            <span class="attr-value"><%= character.carisma || 10 %></span>
+            <span class="attr-modifier">
+              <% 
+                const carMod = Math.floor(((character.carisma || 10) - 10) / 2);
+                const carModText = carMod >= 0 ? '+' + carMod : carMod;
+              %>
+              (<%= carModText %>)
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- História e Personalidade -->
+    <% if (character.historia_pessoal || character.personalidade || character.objetivos) { %>
+      <div class="background-section">
+        <h3>📜 História e Personalidade</h3>
+        <div class="background-grid">
+          <% if (character.historia_pessoal) { %>
+            <div class="background-card">
+              <h4>📖 História Pessoal</h4>
+              <div class="background-content">
+                <p><%= character.historia_pessoal %></p>
+              </div>
+            </div>
+          <% } %>
+          
+          <% if (character.personalidade) { %>
+            <div class="background-card">
+              <h4>🎭 Personalidade</h4>
+              <div class="background-content">
+                <p><%= character.personalidade %></p>
+              </div>
+            </div>
+          <% } %>
+          
+          <% if (character.objetivos) { %>
+            <div class="background-card">
+              <h4>🎯 Objetivos e Motivações</h4>
+              <div class="background-content">
+                <p><%= character.objetivos %></p>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Informações Técnicas -->
+    <div class="technical-info">
+      <h3>ℹ️ Informações do Sistema</h3>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h4>📅 Criação</h4>
+          <p><%= new Date(character.created_at).toLocaleDateString('pt-BR', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          }) %></p>
+        </div>
+        
+        <% if (character.updated_at && character.updated_at !== character.created_at) { %>
+          <div class="tech-card">
+            <h4>✏️ Última Edição</h4>
+            <p><%= new Date(character.updated_at).toLocaleDateString('pt-BR', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            }) %></p>
+          </div>
+        <% } %>
+        
+        <div class="tech-card">
+          <h4>🆔 ID do Personagem</h4>
+          <p><code>#<%= character.id %></code></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações Adicionais -->
+    <div class="additional-actions">
+      <div class="actions-card">
+        <h3>🛠️ Ações Disponíveis</h3>
+        <div class="actions-grid">
+          <button class="action-btn utility-btn" onclick="window.print()">
+            🖨️ Imprimir Ficha
+          </button>
+          
+          <button class="action-btn utility-btn" onclick="exportCharacter()">
+            📥 Exportar Dados
+          </button>
+          
+          <button class="action-btn utility-btn" onclick="shareCharacter()">
+            📤 Compartilhar
+          </button>
+          
+          <button class="action-btn danger-btn" onclick="confirmDelete()">
+            🗑️ Excluir Personagem
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal de Confirmação de Exclusão -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>⚠️ Confirmar Exclusão</h3>
+      </div>
+      <div class="modal-body">
+        <p>Tem certeza que deseja excluir o personagem <strong><%= character.nome %></strong>?</p>
+        <p class="warning-text">Esta ação não pode ser desfeita!</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancelar</button>
+        <button class="btn btn-danger" onclick="deleteCharacter()">🗑️ Excluir Personagem</button>
+      </div>
+    </div>
+  </div>
+
+<% } else { %>
+  <!-- Personagem não encontrado -->
+  <section class="content-section active">
+    <div class="error-state">
+      <div class="error-card">
+        <div class="error-icon">😔</div>
+        <h2>Personagem Não Encontrado</h2>
+        <p>O personagem que você está procurando não existe ou você não tem permissão para visualizá-lo.</p>
+        <div class="error-actions">
+          <a href="/personagens" class="nav-btn">📋 Meus Personagens</a>
+          <a href="/personagens/criar" class="btn btn-secondary">✨ Criar Novo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+<% } %>
+
+
+<script>
+// Funções JavaScript para a página
+function confirmDelete() {
+  document.getElementById('deleteModal').style.display = 'block';
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').style.display = 'none';
+}
+
+async function deleteCharacter() {
+  if (character) {
+    try {
+      const response = await fetch('/personagens/<%= character.id %>', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        // Redirect para a lista de personagens
+        window.location.href = '/personagens';
+      } else {
+        throw new Error('Erro ao excluir personagem');
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('Erro ao excluir personagem. Tente novamente.');
+    }
+  }
+}
+
+function exportCharacter() {
+ if (character) { 
+    const characterData = {
+      nome: '<%= character.nome %>',
+      classe: '<%= character.classe_nome %>',
+      raca: '<%= character.raca_nome %>',
+      nivel: '<%= character.nivel || 1 %>',
+      atributos: {
+        forca: '<%= character.forca || 10 %>',
+        destreza: '<%= character.destreza || 10 %>',
+        constituicao:' <%= character.constituicao || 10 %>',
+        inteligencia: '<%= character.inteligencia || 10 %>',
+        sabedoria: '<%= character.sabedoria || 10 %>',
+        carisma: '<%= character.carisma || 10 %>'
+      },
+      caracteristicas: {
+        pontosVida: '<%= character.pontos_vida || 0 %>',
+        pontosMana: '<%= character.pontos_mana || 0 %>',
+        ca: '<%= character.ca || 10 %>'
+      }
+    };
+    
+    const dataStr = JSON.stringify(characterData, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = '<%= character.nome.replace(/[^a-z0-9]/gi, ';') %>_tormenta20.json';
+    link.click();
+   } 
+}
+
+function shareCharacter() {
+  if (navigator.share) {
+    navigator.share({
+      title: '<%= character ? character.nome : "Personagem" %> - Tormenta20',
+      text: 'Confira meu personagem de Tormenta20!',
+      url: window.location.href
+    });
+  } else {
+    // Fallback para copiar URL
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert('Link copiado para a área de transferência!');
+    });
+  }
+}
+
+// Fechar modal clicando fora
+window.addEventListener('click', function(e) {
+  const modal = document.getElementById('deleteModal');
+  if (e.target === modal) {
+    closeDeleteModal();
+  }
+});
+
+// Animações de entrada
+document.addEventListener('DOMContentLoaded', function() {
+  const cards = document.querySelectorAll('.attribute-card, .vital-item, .background-card');
+  cards.forEach((card, index) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    
+    setTimeout(() => {
+      card.style.transition = 'all 0.6s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, index * 100);
+  });
+});
+</script>
+
+<%- include('../partials/footer') %>

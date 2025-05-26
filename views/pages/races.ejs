@@ -1,0 +1,198 @@
+<%- include('../partials/header', { title: 'Raças de Arton', activePage: 'races' }) %>
+
+<section class="content-section active">
+  <h2>🧝 Raças de Arton</h2>
+  <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
+    Escolha a raça que definirá a herança e características naturais do seu personagem. Cada raça possui bônus únicos de atributos e habilidades especiais que moldarão sua jornada em Arton.
+  </p>
+
+  <% if (racas && racas.length > 0) { %>
+    <div class="racas-grid">
+      <% racas.forEach(raca => { %>
+        <div class="raca-card">
+          <div class="raca-header">
+            <h3><%= raca.nome %></h3>
+          </div>
+          
+          <div class="raca-content">
+            <p class="raca-descricao"><%= raca.descricao %></p>
+            
+            <% if (raca.bonus_atributos) { %>
+              <div class="bonus-atributos">
+                <h4>💪 Bônus de Atributos</h4>
+                <div class="atributos-lista">
+                  <% 
+                    const bonus = typeof raca.bonus_atributos === 'string' ? 
+                      JSON.parse(raca.bonus_atributos) : raca.bonus_atributos;
+                    
+                    Object.entries(bonus).forEach(([atributo, valor]) => {
+                  %>
+                    <span class="bonus-item">
+                      <strong><%= atributo.charAt(0).toUpperCase() + atributo.slice(1) %>:</strong> 
+                      +<%= valor %>
+                    </span>
+                  <% }); %>
+                </div>
+              </div>
+            <% } %>
+            
+            <% if (raca.habilidades_raciais && raca.habilidades_raciais.length > 0) { %>
+              <div class="habilidades-raciais">
+                <h4>✨ Habilidades Raciais</h4>
+                <ul class="habilidades-lista">
+                  <% raca.habilidades_raciais.forEach(habilidade => { %>
+                    <li><%= habilidade %></li>
+                  <% }); %>
+                </ul>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="empty-state">
+      <div class="card">
+        <h3>📋 Nenhuma raça encontrada</h3>
+        <p>Não foi possível carregar as raças disponíveis. Tente novamente mais tarde.</p>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Guia de Escolha -->
+  <div class="raca-guide">
+    <h2>🎯 Guia para Escolha de Raça</h2>
+    <div class="content-grid">
+      <div class="card guide-card">
+        <h3>👤 Humanos</h3>
+        <p><strong>Versáteis e Adaptativos</strong></p>
+        <ul>
+          <li>🎯 <strong>Ideal para:</strong> Qualquer classe</li>
+          <li>💪 <strong>Força:</strong> Flexibilidade total</li>
+          <li>🎭 <strong>Roleplay:</strong> Ambiciosos e determinados</li>
+          <li>⭐ <strong>Recomendado para:</strong> Iniciantes</li>
+        </ul>
+      </div>
+      
+      <div class="card guide-card">
+        <h3>🧝 Elfos</h3>
+        <p><strong>Mágicos e Longevos</strong></p>
+        <ul>
+          <li>🎯 <strong>Ideal para:</strong> Arcanistas, Bardos</li>
+          <li>💪 <strong>Força:</strong> Magia e percepção</li>
+          <li>🎭 <strong>Roleplay:</strong> Sábios e refinados</li>
+          <li>⭐ <strong>Recomendado para:</strong> Fãs de magia</li>
+        </ul>
+      </div>
+      
+      <div class="card guide-card">
+        <h3>⛏️ Anões</h3>
+        <p><strong>Resistentes e Artesãos</strong></p>
+        <ul>
+          <li>🎯 <strong>Ideal para:</strong> Guerreiros, Cléricos</li>
+          <li>💪 <strong>Força:</strong> Resistência e artesanato</li>
+          <li>🎭 <strong>Roleplay:</strong> Honrados e teimosos</li>
+          <li>⭐ <strong>Recomendado para:</strong> Defensores</li>
+        </ul>
+      </div>
+      
+      <div class="card guide-card">
+        <h3>🍀 Halflings</h3>
+        <p><strong>Sortudos e Ágeis</strong></p>
+        <ul>
+          <li>🎯 <strong>Ideal para:</strong> Ladinos, Bardos</li>
+          <li>💪 <strong>Força:</strong> Agilidade e sorte</li>
+          <li>🎭 <strong>Roleplay:</strong> Otimistas e corajosos</li>
+          <li>⭐ <strong>Recomendado para:</strong> Aventureiros astutos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Combinações Recomendadas -->
+  <div class="combinacoes-section">
+    <h2>🎲 Combinações Clássicas</h2>
+    <div class="content-grid">
+      <div class="card combo-card">
+        <h4>⚔️ Guerreiro Humano</h4>
+        <p>A combinação mais equilibrada. Versatilidade para qualquer situação de combate.</p>
+        <span class="combo-rating">⭐⭐⭐⭐⭐ Clássico</span>
+      </div>
+      
+      <div class="card combo-card">
+        <h4>🔮 Arcanista Élfico</h4>
+        <p>Máximo potencial mágico. Perfeito para dominar as artes arcanas.</p>
+        <span class="combo-rating">⭐⭐⭐⭐⭐ Poderoso</span>
+      </div>
+      
+      <div class="card combo-card">
+        <h4>🛡️ Clérico Anão</h4>
+        <p>Resistência incomparável. Ideal para curar e proteger a party.</p>
+        <span class="combo-rating">⭐⭐⭐⭐⭐ Confiável</span>
+      </div>
+      
+      <div class="card combo-card">
+        <h4>🎭 Bardo Halfling</h4>
+        <p>Carisma e sorte combinados. Perfeito para diplomacia e suporte.</p>
+        <span class="combo-rating">⭐⭐⭐⭐⭐ Carismático</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dicas Importantes -->
+  <div class="dicas-raca">
+    <h2>💡 Dicas Importantes</h2>
+    <div class="card">
+      <div class="content-grid">
+        <div class="dica-item">
+          <h4>🎯 Foco no Conceito</h4>
+          <p>Escolha a raça que melhor se alinha com o conceito do seu personagem, não apenas pelos bônus mecânicos.</p>
+        </div>
+        
+        <div class="dica-item">
+          <h4>⚖️ Equilíbrio</h4>
+          <p>Todas as raças são viáveis. O mais importante é como você interpreta e desenvolve seu personagem.</p>
+        </div>
+        
+        <div class="dica-item">
+          <h4>🎭 Roleplay</h4>
+          <p>Considere como a cultura e história da raça influenciarão a personalidade do seu herói.</p>
+        </div>
+        
+        <div class="dica-item">
+          <h4>🤝 Party</h4>
+          <p>Pense em como sua escolha se complementará com os outros membros do grupo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <% if (user) { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>🎨 Pronto para Criar?</h3>
+        <p>Agora que você conhece as raças disponíveis, que tal criar seu primeiro personagem?</p>
+        <div class="cta-buttons">
+          <a href="/personagens/criar" class="nav-btn">✨ Criar Personagem</a>
+          <a href="/classes" class="btn btn-secondary">⚔️ Ver Classes</a>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>🚀 Comece Sua Aventura</h3>
+        <p>Faça login para começar a criar seus personagens épicos!</p>
+        <div class="cta-buttons">
+          <a href="/register" class="nav-btn">✨ Criar Conta</a>
+          <a href="/login" class="btn btn-secondary">🔐 Login</a>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+
+
+<%- include('../partials/footer') %>

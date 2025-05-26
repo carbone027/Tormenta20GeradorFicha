@@ -3,33 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof title !== 'undefined' ? title : 'League of Legends Guide' %></title>
+  <title><%= typeof title !== 'undefined' ? title : 'Tormenta20 - Sistema de Fichas' %></title>
   <link rel="stylesheet" href="/stylesheet/style.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
 </head>
 <body>
   <header>
-    <h1>League of Legends</h1>
-    <p>Guia Básico para Iniciantes</p>
+    <h1>⚔️ Tormenta20</h1>
+    <p>Sistema de Criação e Gerenciamento de Fichas</p>
     <% if (user) { %>
-      <div class="user-info">Bem-vindo, <%= user.username %></div>
+      <div class="user-info">🛡️ Bem-vindo, <%= user.username %></div>
     <% } %>
   </header>
 
   <nav>
-    <a href="/" class="nav-link <%= locals.activePage === 'overview' ? 'active' : '' %>">Visão Geral</a>
-    <a href="/runes" class="nav-link <%= locals.activePage === 'runes' ? 'active' : '' %>">Runas</a>
-    <a href="/spells" class="nav-link <%= locals.activePage === 'spells' ? 'active' : '' %>">Feitiços</a>
-    <a href="/damage" class="nav-link <%= locals.activePage === 'damage' ? 'active' : '' %>">Tipos de Dano</a>
-    <a href="/champions" class="nav-link <%= locals.activePage === 'champions' ? 'active' : '' %>">Classes</a>
-    <a href="/lanes" class="nav-link <%= locals.activePage === 'lanes' ? 'active' : '' %>">Lanes</a>
-    <a href="/minions" class="nav-link <%= locals.activePage === 'minions' ? 'active' : '' %>">Minions e Gold</a>
+    <a href="/" class="nav-link <%= locals.activePage === 'overview' ? 'active' : '' %>">
+      🏠 Início
+    </a>
+    
+    <a href="/racas" class="nav-link <%= locals.activePage === 'races' ? 'active' : '' %>">
+      🧝 Raças
+    </a>
+    
+    <a href="/classes" class="nav-link <%= locals.activePage === 'classes' ? 'active' : '' %>">
+      ⚔️ Classes
+    </a>
+    
+    <a href="/deuses" class="nav-link <%= locals.activePage === 'gods' ? 'active' : '' %>">
+      ⭐ Deuses
+    </a>
+    
+    <a href="/equipamentos" class="nav-link <%= locals.activePage === 'equipment' ? 'active' : '' %>">
+      🛡️ Equipamentos
+    </a>
     
     <% if (user) { %>
-      <a href="/runes/builder" class="nav-link <%= locals.activePage === 'runeBuilder' ? 'active' : '' %>">Criar Runas</a>
-      <a href="/runes/my-runes" class="nav-link <%= locals.activePage === 'myRunes' ? 'active' : '' %>">Minhas Runas</a>
-      <a href="/logout" class="nav-link auth-btn">Sair</a>
+      <a href="/personagens" class="nav-link <%= locals.activePage === 'myCharacters' ? 'active' : '' %>">
+        📋 Meus Personagens
+      </a>
+      
+      <a href="/personagens/criar" class="nav-link <%= locals.activePage === 'createCharacter' ? 'active' : '' %>">
+        ✨ Criar Personagem
+      </a>
+      
+      <a href="/logout" class="nav-link auth-btn">
+        🚪 Sair
+      </a>
     <% } else { %>
-      <a href="/login" class="nav-link auth-btn">Login</a>
+      <a href="/login" class="nav-link auth-btn">
+        🔐 Login
+      </a>
     <% } %>
   </nav>
 

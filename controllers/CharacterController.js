@@ -87,7 +87,7 @@ exports.view = async (req, res) => {
       title: `${character.nome} - Ficha`,
       activePage: 'characterView',
       user: req.session.user,
-      character
+      characters: [character]
     });
   } catch (error) {
     console.error('Erro ao visualizar personagem:', error);

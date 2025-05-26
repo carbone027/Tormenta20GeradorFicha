@@ -1,0 +1,349 @@
+<%- include('../partials/header', { title: 'Panteão de Arton', activePage: 'gods' }) %>
+
+<section class="content-section active">
+  <h2>⭐ Panteão de Arton</h2>
+  <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
+    Os deuses de Arton são entidades ativas que influenciam diretamente o mundo mortal. Escolha sabiamente seu patrono divino, pois ele moldará não apenas seus poderes, mas também sua jornada como herói.
+  </p>
+
+  <!-- Introdução ao Panteão -->
+  <div class="pantheon-intro">
+    <div class="card intro-card">
+      <h3>🏛️ Os Vinte Deuses</h3>
+      <p>Diferente de outros mundos de fantasia, em Arton os deuses são <strong>presenças ativas</strong> que caminham entre os mortais, concedem poderes diretamente a seus seguidores e travem suas próprias batalhas épicas. Cada deus possui um domínio específico e oferece diferentes tipos de poder a seus devotos.</p>
+      
+      <div class="pantheon-facts">
+        <div class="fact-grid">
+          <div class="fact-item">
+            <span class="fact-icon">⚔️</span>
+            <h4>Deuses da Guerra</h4>
+            <p>Valkaria e Khalmyr lideram as forças militares</p>
+          </div>
+          <div class="fact-item">
+            <span class="fact-icon">🔮</span>
+            <h4>Deuses da Magia</h4>
+            <p>Lena e Wynna dominam conhecimento arcano</p>
+          </div>
+          <div class="fact-item">
+            <span class="fact-icon">💚</span>
+            <h4>Deuses da Cura</h4>
+            <p>Marah oferece paz e renovação</p>
+          </div>
+          <div class="fact-item">
+            <span class="fact-icon">🍀</span>
+            <h4>Deuses da Sorte</h4>
+            <p>Nimb protege aventureiros e viajantes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de Deuses -->
+  <% if (deuses && deuses.length > 0) { %>
+    <div class="deuses-grid">
+      <% deuses.forEach(deus => { %>
+        <div class="deus-card" data-dominio="<%= deus.dominio.toLowerCase() %>">
+          <div class="deus-header">
+            <div class="deus-symbol">
+              <% 
+                // Ícones baseados no domínio
+                let icone = '⭐'; // padrão
+                switch(deus.dominio.toLowerCase()) {
+                  case 'justiça': icone = '⚖️'; break;
+                  case 'guerra': icone = '⚔️'; break;
+                  case 'magia': icone = '🔮'; break;
+                  case 'cura': icone = '💚'; break;
+                  case 'sorte': icone = '🍀'; break;
+                  case 'natureza': icone = '🌿'; break;
+                  default: icone = '⭐';
+                }
+              %>
+              <span class="symbol-icon"><%= icone %></span>
+            </div>
+            <h3><%= deus.nome %></h3>
+            <p class="deus-dominio">Deus(a) da <%= deus.dominio %></p>
+          </div>
+          
+          <div class="deus-content">
+            <div class="deus-simbolo-info">
+              <h4>🏺 Símbolo Sagrado</h4>
+              <p><%= deus.simbolo %></p>
+            </div>
+            
+            <div class="deus-descricao">
+              <h4>📜 Descrição</h4>
+              <p><%= deus.descricao %></p>
+            </div>
+            
+            <% if (deus.poderes_concedidos && deus.poderes_concedidos.length > 0) { %>
+              <div class="poderes-concedidos">
+                <h4>✨ Poderes Concedidos</h4>
+                <ul class="poderes-lista">
+                  <% deus.poderes_concedidos.forEach(poder => { %>
+                    <li><%= poder %></li>
+                  <% }); %>
+                </ul>
+              </div>
+            <% } %>
+            
+            <div class="deus-ideais">
+              <h4>🎯 Ideal Para</h4>
+              <p class="ideal-text">
+                <% 
+                  // Sugestões baseadas no domínio
+                  let ideal = '';
+                  switch(deus.dominio.toLowerCase()) {
+                    case 'justiça':
+                      ideal = 'Paladinos, Guerreiros honrados, Cléricos dedicados à ordem';
+                      break;
+                    case 'guerra':
+                      ideal = 'Guerreiros, Bárbaros, qualquer classe que valorize o combate';
+                      break;
+                    case 'magia':
+                      ideal = 'Arcanistas, Bardos, estudiosos das artes místicas';
+                      break;
+                    case 'cura':
+                      ideal = 'Cléricos, personagens focados em apoio e proteção';
+                      break;
+                    case 'sorte':
+                      ideal = 'Ladinos, Bardos, aventureiros que dependem da fortuna';
+                      break;
+                    case 'natureza':
+                      ideal = 'Druidas, Rangers, personagens conectados ao mundo natural';
+                      break;
+                    default:
+                      ideal = 'Personagens alinhados com os ideais divinos';
+                  }
+                %>
+                <%= ideal %>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="empty-state">
+      <div class="card">
+        <h3>📋 Nenhum deus encontrado</h3>
+        <p>Não foi possível carregar o panteão de Arton. Tente novamente mais tarde.</p>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Filtros por Domínio -->
+  <div class="domain-filters">
+    <h2>🔍 Filtrar por Domínio</h2>
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">Todos os Deuses</button>
+      <button class="filter-btn" data-filter="justiça">⚖️ Justiça</button>
+      <button class="filter-btn" data-filter="guerra">⚔️ Guerra</button>
+      <button class="filter-btn" data-filter="magia">🔮 Magia</button>
+      <button class="filter-btn" data-filter="cura">💚 Cura</button>
+      <button class="filter-btn" data-filter="sorte">🍀 Sorte</button>
+      <button class="filter-btn" data-filter="natureza">🌿 Natureza</button>
+    </div>
+  </div>
+
+  <!-- Guia de Escolha -->
+  <div class="escolha-guide">
+    <h2>🎯 Como Escolher Seu Deus</h2>
+    <div class="content-grid">
+      <div class="card guide-step">
+        <h4>1️⃣ Analise sua Classe</h4>
+        <p>Algumas classes se beneficiam mais de certos domínios:</p>
+        <ul>
+          <li><strong>Guerreiros:</strong> Guerra, Justiça</li>
+          <li><strong>Arcanistas:</strong> Magia, Conhecimento</li>
+          <li><strong>Cléricos:</strong> Qualquer domínio, baseado no conceito</li>
+          <li><strong>Ladinos:</strong> Sorte, Liberdade</li>
+        </ul>
+      </div>
+      
+      <div class="card guide-step">
+        <h4>2️⃣ Considere a Personalidade</h4>
+        <p>O deus deve refletir os valores e objetivos do seu personagem:</p>
+        <ul>
+          <li><strong>Honrado e justo:</strong> Khalmyr</li>
+          <li><strong>Corajoso e combativo:</strong> Valkaria</li>
+          <li><strong>Sábio e estudioso:</strong> Lena</li>
+          <li><strong>Compassivo e protetor:</strong> Marah</li>
+        </ul>
+      </div>
+      
+      <div class="card guide-step">
+        <h4>3️⃣ Pense no Roleplay</h4>
+        <p>Seguir um deus traz responsabilidades e oportunidades:</p>
+        <ul>
+          <li>🙏 <strong>Orações e rituais</strong> diários</li>
+          <li>⚖️ <strong>Códigos morais</strong> a seguir</li>
+          <li>🏛️ <strong>Templos</strong> para visitar</li>
+          <li>👥 <strong>Comunidade</strong> de fiéis</li>
+        </ul>
+      </div>
+      
+      <div class="card guide-step">
+        <h4>4️⃣ Benefícios Mecânicos</h4>
+        <p>Cada deus oferece vantagens específicas:</p>
+        <ul>
+          <li>✨ <strong>Poderes especiais</strong> únicos</li>
+          <li>🎲 <strong>Bônus</strong> em situações relevantes</li>
+          <li>🛡️ <strong>Proteções</strong> divinas</li>
+          <li>🤝 <strong>Aliados</strong> entre outros devotos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Relacionamentos Divinos -->
+  <div class="divine-relationships">
+    <h2>🤝 Relacionamentos Entre Deuses</h2>
+    <div class="card">
+      <div class="relationships-grid">
+        <div class="relationship-group allies">
+          <h4>💚 Alianças Divinas</h4>
+          <ul>
+            <li><strong>Khalmyr & Valkaria:</strong> Justiça e guerra honrada</li>
+            <li><strong>Lena & Wynna:</strong> Conhecimento e natureza</li>
+            <li><strong>Marah & Khalmyr:</strong> Paz através da justiça</li>
+          </ul>
+        </div>
+        
+        <div class="relationship-group rivals">
+          <h4>⚔️ Rivalidades Divinas</h4>
+          <ul>
+            <li><strong>Ordem vs Caos:</strong> Diferentes visões de mundo</li>
+            <li><strong>Guerra vs Paz:</strong> Filosofias opostas</li>
+            <li><strong>Natureza vs Civilização:</strong> Conflito eterno</li>
+          </ul>
+        </div>
+        
+        <div class="relationship-group neutral">
+          <h4>⚖️ Neutralidade</h4>
+          <p>Muitos deuses mantêm neutralidade estratégica, focando em seus domínios específicos sem interferir nos assuntos de outros deuses, exceto quando seus domínios se sobrepõem.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dicas Importantes -->
+  <div class="divine-tips">
+    <h2>💡 Dicas Importantes</h2>
+    <div class="content-grid">
+      <div class="card tip-card">
+        <h4>🎭 Pode Não Ter Deus</h4>
+        <p>Nem todo personagem precisa seguir um deus específico. Personagens podem ser agnósticos, ateus, ou simplesmente não religiosos.</p>
+      </div>
+      
+      <div class="card tip-card">
+        <h4>🔄 Mudança de Fé</h4>
+        <p>Em situações especiais, personagens podem mudar de deus, mas isso deve envolver roleplay significativo e consequências narrativas.</p>
+      </div>
+      
+      <div class="card tip-card">
+        <h4>⚖️ Código Moral</h4>
+        <p>Seguir um deus significa aderir aos seus princípios. Quebrar repetidamente esses princípios pode resultar na perda dos favores divinos.</p>
+      </div>
+      
+      <div class="card tip-card">
+        <h4>🎲 Role com o Mestre</h4>
+        <p>Converse com seu Mestre sobre como a religião será tratada na campanha e quais oportunidades de roleplay estarão disponíveis.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <% if (user) { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>🎨 Pronto para Escolher?</h3>
+        <p>Agora que você conhece o panteão de Arton, que tal criar um personagem devoto?</p>
+        <div class="cta-buttons">
+          <a href="/personagens/criar" class="nav-btn">✨ Criar Personagem</a>
+          <a href="/equipamentos" class="btn btn-secondary">🛡️ Ver Equipamentos</a>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>🚀 Entre no Mundo Divino</h3>
+        <p>Cadastre-se para criar personagens e explorar os mistérios de Arton!</p>
+        <div class="cta-buttons">
+          <a href="/register" class="nav-btn">✨ Criar Conta</a>
+          <a href="/login" class="btn btn-secondary">🔐 Login</a>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const deusCards = document.querySelectorAll('.deus-card');
+  
+  // Função de filtro
+  function filterDeuses(domain) {
+    deusCards.forEach(card => {
+      if (domain === 'all' || card.dataset.dominio === domain) {
+        card.classList.remove('hidden');
+        // Animação de entrada
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.3s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100);
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+  
+  // Event listeners para botões de filtro
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Remover classe active de todos os botões
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Adicionar classe active ao botão clicado
+      this.classList.add('active');
+      
+      // Filtrar deuses
+      const domain = this.dataset.filter;
+      filterDeuses(domain);
+    });
+  });
+  
+  // Animação inicial dos cards
+  deusCards.forEach((card, index) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(30px)';
+    
+    setTimeout(() => {
+      card.style.transition = 'all 0.6s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, index * 100);
+  });
+  
+  // Scroll suave para seções
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+});
+</script>
+
+<%- include('../partials/footer') %>

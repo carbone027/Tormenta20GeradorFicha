@@ -1,5 +1,5 @@
 const pool = require('../config/database');
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 
 class User {
   static async findByUsername(username) {
@@ -24,7 +24,7 @@ class User {
 
   static async create(username, email, password) {
     try {
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcryptjs.hash(password, 10);
       const result = await pool.query(
         'INSERT INTO usuarios_tormenta (username, email, password) VALUES ($1, $2, $3) RETURNING *',
         [username, email, hashedPassword]
@@ -37,7 +37,7 @@ class User {
   }
 
   static async verifyPassword(user, password) {
-    return await bcrypt.compare(password, user.password);
+    return await bcryptjs.compare(password, user.password);
   }
 }
 

@@ -1,0 +1,303 @@
+<%- include('../partials/header', { title: 'Classes de Personagem', activePage: 'classes' }) %>
+
+<section class="content-section active">
+  <h2>⚔️ Classes de Personagem</h2>
+  <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
+    Escolha a classe que definirá o papel e as habilidades principais do seu herói. Cada classe oferece um estilo de jogo único e habilidades especializadas para enfrentar os desafios de Arton.
+  </p>
+
+  <% if (classes && classes.length > 0) { %>
+    <div class="classes-grid">
+      <% classes.forEach(classe => { %>
+        <div class="classe-card">
+          <div class="classe-header">
+            <div class="classe-icon-container">
+              <!-- Ícone baseado no nome da classe -->
+              <% 
+                let icone = '⚔️'; // padrão
+                switch(classe.nome.toLowerCase()) {
+                  case 'guerreiro': icone = '⚔️'; break;
+                  case 'ladino': icone = '🗡️'; break;
+                  case 'arcanista': icone = '🔮'; break;
+                  case 'clérico': icone = '✨'; break;
+                  case 'bárbaro': icone = '🪓'; break;
+                  case 'bardo': icone = '🎵'; break;
+                  default: icone = '⚔️';
+                }
+              %>
+              <span class="classe-icon"><%= icone %></span>
+            </div>
+            <h3><%= classe.nome %></h3>
+          </div>
+          
+          <div class="classe-content">
+            <p class="classe-descricao"><%= classe.descricao %></p>
+            
+            <div class="classe-stats">
+              <div class="stat-row">
+                <span class="stat-label">🎯 Atributo Principal:</span>
+                <span class="stat-value"><%= classe.atributo_principal %></span>
+              </div>
+              
+              <div class="stat-row">
+                <span class="stat-label">❤️ Pontos de Vida:</span>
+                <span class="stat-value"><%= classe.pontos_vida_base %></span>
+              </div>
+              
+              <% if (classe.pontos_mana_base && classe.pontos_mana_base > 0) { %>
+                <div class="stat-row">
+                  <span class="stat-label">🔵 Pontos de Mana:</span>
+                  <span class="stat-value"><%= classe.pontos_mana_base %></span>
+                </div>
+              <% } %>
+            </div>
+            
+            <% if (classe.pericias && classe.pericias.length > 0) { %>
+              <div class="pericias-section">
+                <h4>🎲 Perícias de Classe</h4>
+                <div class="pericias-lista">
+                  <% classe.pericias.forEach(pericia => { %>
+                    <span class="pericia-tag"><%= pericia %></span>
+                  <% }); %>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="empty-state">
+      <div class="card">
+        <h3>📋 Nenhuma classe encontrada</h3>
+        <p>Não foi possível carregar as classes disponíveis. Tente novamente mais tarde.</p>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Guia de Escolha por Estilo -->
+  <div class="estilo-guide">
+    <h2>🎯 Encontre Seu Estilo de Jogo</h2>
+    <div class="content-grid">
+      <div class="card estilo-card combate">
+        <h3>⚔️ Combate Corpo a Corpo</h3>
+        <p><strong>Para quem gosta de ação direta</strong></p>
+        <ul>
+          <li>🛡️ <strong>Guerreiro:</strong> Versátil e resistente</li>
+          <li>🪓 <strong>Bárbaro:</strong> Dano explosivo e resistência</li>
+        </ul>
+        <div class="estilo-rating">
+          <span>💪 Dificuldade: ⭐⭐</span>
+        </div>
+      </div>
+      
+      <div class="card estilo-card magia">
+        <h3>🔮 Magia e Mistério</h3>
+        <p><strong>Para mestres das artes arcanas</strong></p>
+        <ul>
+          <li>✨ <strong>Arcanista:</strong> Poder mágico supremo</li>
+          <li>⭐ <strong>Clérico:</strong> Magia divina e cura</li>
+        </ul>
+        <div class="estilo-rating">
+          <span>🧠 Dificuldade: ⭐⭐⭐⭐</span>
+        </div>
+      </div>
+      
+      <div class="card estilo-card sutileza">
+        <h3>🗡️ Sutileza e Perícia</h3>
+        <p><strong>Para os espertos e ágeis</strong></p>
+        <ul>
+          <li>🥷 <strong>Ladino:</strong> Furtividade e precisão</li>
+          <li>🎵 <strong>Bardo:</strong> Versatilidade e carisma</li>
+        </ul>
+        <div class="estilo-rating">
+          <span>🎭 Dificuldade: ⭐⭐⭐</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detalhamento das Classes -->
+  <div class="detalhes-classes">
+    <h2>📖 Guia Detalhado das Classes</h2>
+    
+    <div class="classe-detalhada">
+      <div class="card">
+        <h3>⚔️ Guerreiro - O Mestre das Armas</h3>
+        <div class="content-grid">
+          <div class="classe-info">
+            <h4>👤 Perfil</h4>
+            <p>Especialistas em combate, os guerreiros dominam todas as armas e táticas de batalha. São a espinha dorsal de qualquer grupo de aventureiros.</p>
+            
+            <h4>💪 Pontos Fortes</h4>
+            <ul>
+              <li>Alta resistência e pontos de vida</li>
+              <li>Proficiência com todas as armas</li>
+              <li>Versatilidade em combate</li>
+              <li>Boa defesa</li>
+            </ul>
+          </div>
+          
+          <div class="classe-gameplay">
+            <h4>🎮 Como Jogar</h4>
+            <ul>
+              <li>Fique na linha de frente</li>
+              <li>Proteja aliados mais frágeis</li>
+              <li>Use táticas variadas conforme a situação</li>
+              <li>Invista em Força e Constituição</li>
+            </ul>
+            
+            <h4>🎯 Ideal Para</h4>
+            <p><strong>Jogadores iniciantes</strong> que querem simplicidade e efetividade, ou veteranos que gostam de táticas de combate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="classe-detalhada">
+      <div class="card">
+        <h3>🔮 Arcanista - Mestre da Magia</h3>
+        <div class="content-grid">
+          <div class="classe-info">
+            <h4>👤 Perfil</h4>
+            <p>Estudiosos da magia arcana, capazes de alterar a realidade através de feitiços poderosos. Sua inteligência é sua maior arma.</p>
+            
+            <h4>💪 Pontos Fortes</h4>
+            <ul>
+              <li>Maior poder mágico do jogo</li>
+              <li>Versatilidade de feitiços</li>
+              <li>Controle de área</li>
+              <li>Solução para problemas complexos</li>
+            </ul>
+          </div>
+          
+          <div class="classe-gameplay">
+            <h4>🎮 Como Jogar</h4>
+            <ul>
+              <li>Mantenha distância segura</li>
+              <li>Gerencie pontos de mana cuidadosamente</li>
+              <li>Prepare feitiços estrategicamente</li>
+              <li>Invista em Inteligência</li>
+            </ul>
+            
+            <h4>🎯 Ideal Para</h4>
+            <p><strong>Jogadores experientes</strong> que gostam de complexidade e planejamento estratégico.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="classe-detalhada">
+      <div class="card">
+        <h3>✨ Clérico - Servo dos Deuses</h3>
+        <div class="content-grid">
+          <div class="classe-info">
+            <h4>👤 Perfil</h4>
+            <p>Canalizadores do poder divino, os cléricos equilibram combate e magia, sendo essenciais para a sobrevivência do grupo.</p>
+            
+            <h4>💪 Pontos Fortes</h4>
+            <ul>
+              <li>Melhor curandeiro do jogo</li>
+              <li>Magia divina poderosa</li>
+              <li>Boa resistência</li>
+              <li>Versátil em várias situações</li>
+            </ul>
+          </div>
+          
+          <div class="classe-gameplay">
+            <h4>🎮 Como Jogar</h4>
+            <ul>
+              <li>Balance cura e combate</li>
+              <li>Escolha o deus adequado</li>
+              <li>Apoie seus aliados</li>
+              <li>Invista em Sabedoria</li>
+            </ul>
+            
+            <h4>🎯 Ideal Para</h4>
+            <p><strong>Jogadores colaborativos</strong> que gostam de apoiar o grupo e ter um papel central.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Combinações Raciais Recomendadas -->
+  <div class="combinacoes-raciais">
+    <h2>🎲 Melhores Combinações Raça/Classe</h2>
+    <div class="content-grid">
+      <div class="card combo-otima">
+        <h4>⭐ Combinações Ótimas</h4>
+        <ul>
+          <li>👤 <strong>Humano Guerreiro:</strong> Versatilidade máxima</li>
+          <li>🧝 <strong>Elfo Arcanista:</strong> Máximo poder mágico</li>
+          <li>⛏️ <strong>Anão Clérico:</strong> Resistência e sabedoria</li>
+          <li>🍀 <strong>Halfling Ladino:</strong> Agilidade e sorte</li>
+        </ul>
+      </div>
+      
+      <div class="card combo-interessante">
+        <h4>🎭 Combinações Interessantes</h4>
+        <ul>
+          <li>🧝 <strong>Elfo Bardo:</strong> Carisma élfico</li>
+          <li>⛏️ <strong>Anão Guerreiro:</strong> Tanque imparável</li>
+          <li>🍀 <strong>Halfling Bardo:</strong> Charme irresistível</li>
+          <li>👤 <strong>Humano Bárbaro:</strong> Força adaptável</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dicas para Escolha -->
+  <div class="dicas-escolha">
+    <h2>💡 Dicas para Escolher Sua Classe</h2>
+    <div class="content-grid">
+      <div class="card dica-card">
+        <h4>🎯 Seu Primeiro Personagem</h4>
+        <p>Para iniciantes, recomendamos <strong>Guerreiro</strong> ou <strong>Clérico</strong>. São classes mais diretas e perdoam erros de iniciante.</p>
+      </div>
+      
+      <div class="card dica-card">
+        <h4>🤝 Pense no Grupo</h4>
+        <p>Considere o que sua mesa precisa. Um grupo sem curandeiro sofrerá mais que um grupo sem um especialista em dano.</p>
+      </div>
+      
+      <div class="card dica-card">
+        <h4>🎭 Roleplay em Primeiro</h4>
+        <p>Escolha a classe que combina com a personalidade que você quer interpretar. Mecânicas podem ser ajustadas, personalidade não.</p>
+      </div>
+      
+      <div class="card dica-card">
+        <h4>📈 Evolução do Personagem</h4>
+        <p>Pense em como sua classe evoluirá. Algumas começam fracas mas ficam poderosas, outras são consistentes desde o início.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <% if (user) { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>🎨 Hora de Criar Seu Herói!</h3>
+        <p>Escolheu sua classe? Agora é hora de dar vida ao seu personagem!</p>
+        <div class="cta-buttons">
+          <a href="/personagens/criar" class="nav-btn">✨ Criar Personagem</a>
+          <a href="/deuses" class="btn btn-secondary">⭐ Ver Deuses</a>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>🚀 Pronto para a Aventura?</h3>
+        <p>Cadastre-se e comece a criar seus heróis épicos!</p>
+        <div class="cta-buttons">
+          <a href="/register" class="nav-btn">✨ Criar Conta</a>
+          <a href="/login" class="btn btn-secondary">🔐 Login</a>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+
+<%- include('../partials/footer') %>

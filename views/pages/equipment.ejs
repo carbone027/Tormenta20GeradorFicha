@@ -1,0 +1,517 @@
+<%- include('../partials/header', { title: 'Equipamentos', activePage: 'equipment' }) %>
+
+<section class="content-section active">
+  <h2>🛡️ Arsenal de Arton</h2>
+  <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
+    Explore o vasto arsenal de armas, armaduras e equipamentos disponíveis para equipar seus heróis. Do simples ao épico, cada item tem seu lugar nas aventuras de Arton.
+  </p>
+
+  <!-- Filtros de Equipamento -->
+  <div class="equipment-filters">
+    <h3>🔍 Filtrar Equipamentos</h3>
+    <div class="filter-controls">
+      <div class="filter-group">
+        <label>Tipo de Equipamento:</label>
+        <select id="tipoFilter" class="filter-select">
+          <option value="all">Todos os Tipos</option>
+          <option value="arma">⚔️ Armas</option>
+          <option value="armadura">🛡️ Armaduras</option>
+          <option value="escudo">🔰 Escudos</option>
+          <option value="acessorio">💍 Acessórios</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>Categoria:</label>
+        <select id="categoriaFilter" class="filter-select">
+          <option value="all">Todas as Categorias</option>
+          <option value="simples">Simples</option>
+          <option value="marcial">Marcial</option>
+          <option value="leve">Leve</option>
+          <option value="média">Média</option>
+          <option value="pesada">Pesada</option>
+          <option value="defesa">Defesa</option>
+          <option value="equipamento">Equipamento</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>Buscar:</label>
+        <input type="text" id="searchFilter" class="filter-input" placeholder="Nome do item...">
+      </div>
+      
+      <button id="clearFilters" class="btn btn-secondary">🔄 Limpar Filtros</button>
+    </div>
+  </div>
+
+  <!-- Lista de Equipamentos -->
+  <% if (equipamentosPorTipo && Object.keys(equipamentosPorTipo).length > 0) { %>
+    <div class="equipment-container" id="equipmentContainer">
+      <% Object.entries(equipamentosPorTipo).forEach(([tipo, equipamentos]) => { %>
+        <div class="equipment-section" data-tipo="<%= tipo %>">
+          <div class="section-header">
+            <h3 class="section-title">
+              <% 
+                let tipoIcon = '⚔️';
+                switch(tipo) {
+                  case 'arma': tipoIcon = '⚔️'; break;
+                  case 'armadura': tipoIcon = '🛡️'; break;
+                  case 'escudo': tipoIcon = '🔰'; break;
+                  case 'acessorio': tipoIcon = '💍'; break;
+                  default: tipoIcon = '📦';
+                }
+              %>
+              <%= tipoIcon %> <%= tipo.charAt(0).toUpperCase() + tipo.slice(1) %>s
+            </h3>
+            <span class="items-count">(<%= equipamentos.length %> itens)</span>
+          </div>
+          
+          <div class="equipment-grid">
+            <% equipamentos.forEach(item => { %>
+              <div class="equipment-card" 
+                   data-tipo="<%= item.tipo %>" 
+                   data-categoria="<%= item.categoria %>"
+                   data-nome="<%= item.nome.toLowerCase() %>">
+                
+                <div class="equipment-header">
+                  <div class="equipment-icon">
+                    <% 
+                      let itemIcon = '📦';
+                      if (item.tipo === 'arma') {
+                        if (item.categoria === 'marcial') itemIcon = '⚔️';
+                        else if (item.nome.toLowerCase().includes('arco')) itemIcon = '🏹';
+                        else if (item.nome.toLowerCase().includes('adaga')) itemIcon = '🗡️';
+                        else if (item.nome.toLowerCase().includes('martelo')) itemIcon = '🔨';
+                        else itemIcon = '⚔️';
+                      } else if (item.tipo === 'armadura') {
+                        if (item.categoria === 'leve') itemIcon = '🧥';
+                        else if (item.categoria === 'pesada') itemIcon = '🛡️';
+                        else itemIcon = '👕';
+                      } else if (item.tipo === 'escudo') {
+                        itemIcon = '🔰';
+                      } else {
+                        itemIcon = '💍';
+                      }
+                    %>
+                    <%= itemIcon %>
+                  </div>
+                  <h4 class="equipment-name"><%= item.nome %></h4>
+                  <p class="equipment-category"><%= item.categoria || 'Padrão' %></p>
+                </div>
+                
+                <div class="equipment-content">
+                  <div class="equipment-description">
+                    <p><%= item.descricao %></p>
+                  </div>
+                  
+                  <div class="equipment-stats">
+                    <div class="stats-grid">
+                      <% if (item.preco_tibares && item.preco_tibares > 0) { %>
+                        <div class="stat-item">
+                          <span class="stat-icon">💰</span>
+                          <span class="stat-label">Preço</span>
+                          <span class="stat-value"><%= item.preco_tibares %> T$</span>
+                        </div>
+                      <% } %>
+                      
+                      <% if (item.peso && item.peso > 0) { %>
+                        <div class="stat-item">
+                          <span class="stat-icon">⚖️</span>
+                          <span class="stat-label">Peso</span>
+                          <span class="stat-value"><%= item.peso %> kg</span>
+                        </div>
+                      <% } %>
+                      
+                      <% if (item.bonus_ca && item.bonus_ca > 0) { %>
+                        <div class="stat-item">
+                          <span class="stat-icon">🛡️</span>
+                          <span class="stat-label">Bônus CA</span>
+                          <span class="stat-value">+<%= item.bonus_ca %></span>
+                        </div>
+                      <% } %>
+                      
+                      <% if (item.dano) { %>
+                        <div class="stat-item">
+                          <span class="stat-icon">💥</span>
+                          <span class="stat-label">Dano</span>
+                          <span class="stat-value"><%= item.dano %></span>
+                        </div>
+                      <% } %>
+                      
+                      <% if (item.alcance && item.alcance > 1) { %>
+                        <div class="stat-item">
+                          <span class="stat-icon">🎯</span>
+                          <span class="stat-label">Alcance</span>
+                          <span class="stat-value"><%= item.alcance %>m</span>
+                        </div>
+                      <% } %>
+                    </div>
+                  </div>
+                  
+                  <% if (item.propriedades && item.propriedades.length > 0) { %>
+                    <div class="equipment-properties">
+                      <h5>✨ Propriedades</h5>
+                      <div class="properties-list">
+                        <% item.propriedades.forEach(prop => { %>
+                          <span class="property-tag"><%= prop %></span>
+                        <% }); %>
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="empty-state">
+      <div class="card">
+        <h3>📦 Nenhum equipamento encontrado</h3>
+        <p>Não foi possível carregar os equipamentos disponíveis. Tente novamente mais tarde.</p>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Guia de Equipamentos -->
+  <div class="equipment-guide">
+    <h2>📚 Guia de Equipamentos</h2>
+    
+    <div class="guide-sections">
+      <div class="content-grid">
+        <div class="card guide-card">
+          <h3>⚔️ Armas</h3>
+          <h4>Categorias de Armas:</h4>
+          <ul>
+            <li><strong>Simples:</strong> Fáceis de usar, ideais para iniciantes</li>
+            <li><strong>Marciais:</strong> Requerem treinamento, maior dano</li>
+          </ul>
+          
+          <h4>Tipos Comuns:</h4>
+          <ul>
+            <li>🗡️ <strong>Espadas:</strong> Versáteis, corpo a corpo</li>
+            <li>🏹 <strong>Arcos:</strong> Ataques à distância</li>
+            <li>🔨 <strong>Martelos:</strong> Alto dano, pesados</li>
+            <li>🗡️ <strong>Adagas:</strong> Leves, podem ser arremessadas</li>
+          </ul>
+        </div>
+        
+        <div class="card guide-card">
+          <h3>🛡️ Armaduras</h3>
+          <h4>Categorias de Armadura:</h4>
+          <ul>
+            <li><strong>Leve:</strong> Não atrapalha movimento</li>
+            <li><strong>Média:</strong> Equilíbrio proteção/mobilidade</li>
+            <li><strong>Pesada:</strong> Máxima proteção</li>
+          </ul>
+          
+          <h4>Considerações:</h4>
+          <ul>
+            <li>📊 <strong>CA:</strong> Classe de Armadura base</li>
+            <li>🏃 <strong>Destreza:</strong> Limite do bônus de Des</li>
+            <li>⚖️ <strong>Peso:</strong> Afeta carga e movimento</li>
+          </ul>
+        </div>
+        
+        <div class="card guide-card">
+          <h3>🔰 Escudos</h3>
+          <h4>Benefícios:</h4>
+          <ul>
+            <li>🛡️ <strong>CA Extra:</strong> +2 de bônus</li>
+            <li>🤺 <strong>Defesa Ativa:</strong> Bloqueio consciente</li>
+            <li>⚔️ <strong>Combate:</strong> Pode ser usado para atacar</li>
+          </ul>
+          
+          <h4>Restrições:</h4>
+          <ul>
+            <li>🤲 <strong>Mãos:</strong> Ocupa uma mão</li>
+            <li>🎯 <strong>Proficiência:</strong> Necessária para efetividade</li>
+          </ul>
+        </div>
+        
+        <div class="card guide-card">
+          <h3>💍 Acessórios</h3>
+          <h4>Itens Utilitários:</h4>
+          <ul>
+            <li>🎒 <strong>Mochilas:</strong> Aumentam capacidade</li>
+            <li>🪢 <strong>Cordas:</strong> Escaladas e travessias</li>
+            <li>🕯️ <strong>Tochas:</strong> Iluminação</li>
+            <li>🧪 <strong>Poções:</strong> Cura e efeitos especiais</li>
+          </ul>
+          
+          <h4>Dica:</h4>
+          <p>Não subestime itens mundanos! Uma corda pode salvar vidas em situações críticas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dicas de Escolha -->
+  <div class="equipment-tips">
+    <h2>💡 Dicas para Escolher Equipamentos</h2>
+    <div class="content-grid">
+      <div class="card tip-card">
+        <h4>💰 Orçamento Inicial</h4>
+        <p>Personagens iniciantes têm recursos limitados. Priorize:</p>
+        <ul>
+          <li>🛡️ <strong>Proteção básica</strong> (armadura simples)</li>
+          <li>⚔️ <strong>Arma principal</strong> adequada à classe</li>
+          <li>🎒 <strong>Equipamentos de sobrevivência</strong></li>
+        </ul>
+      </div>
+      
+      <div class="card tip-card">
+        <h4>⚖️ Gerenciamento de Peso</h4>
+        <p>Carga excessiva reduz movimento. Considere:</p>
+        <ul>
+          <li>💪 <strong>Força do personagem</strong></li>
+          <li>🎒 <strong>Capacidade da mochila</strong></li>
+          <li>⚖️ <strong>Peso vs. benefício</strong> de cada item</li>
+        </ul>
+      </div>
+      
+      <div class="card tip-card">
+        <h4>🎯 Especialização</h4>
+        <p>Foque no estilo de sua classe:</p>
+        <ul>
+          <li>⚔️ <strong>Guerreiros:</strong> Armas pesadas, armaduras</li>
+          <li>🏹 <strong>Ladinos:</strong> Armas leves, itens utilitários</li>
+          <li>🔮 <strong>Arcanistas:</strong> Componentes mágicos</li>
+          <li>✨ <strong>Cléricos:</strong> Símbolos sagrados, cura</li>
+        </ul>
+      </div>
+      
+      <div class="card tip-card">
+        <h4>📈 Evolução</h4>
+        <p>Planeje upgrades futuros:</p>
+        <ul>
+          <li>💎 <strong>Itens mágicos</strong> substituem mundanos</li>
+          <li>🔧 <strong>Melhorias</strong> em ferreiros</li>
+          <li>🏆 <strong>Recompensas</strong> de aventuras</li>
+          <li>💰 <strong>Economia</strong> para grandes compras</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabela de Preços -->
+  <div class="pricing-reference">
+    <h2>💰 Referência de Preços</h2>
+    <div class="card">
+      <div class="pricing-grid">
+        <div class="price-category">
+          <h4>⚔️ Armas Simples</h4>
+          <ul>
+            <li>Adaga: 20 T$</li>
+            <li>Bordão: 5 T$</li>
+            <li>Clava: 1 T$</li>
+            <li>Punhal: 20 T$</li>
+          </ul>
+        </div>
+        
+        <div class="price-category">
+          <h4>⚔️ Armas Marciais</h4>
+          <ul>
+            <li>Espada Longa: 200 T$</li>
+            <li>Martelo de Guerra: 150 T$</li>
+            <li>Arco Longo: 150 T$</li>
+            <li>Machado de Batalha: 100 T$</li>
+          </ul>
+        </div>
+        
+        <div class="price-category">
+          <h4>🛡️ Armaduras</h4>
+          <ul>
+            <li>Couro: 100 T$</li>
+            <li>Couro Batido: 450 T$</li>
+            <li>Cota de Malha: 500 T$</li>
+            <li>Placas: 1.500 T$</li>
+          </ul>
+        </div>
+        
+        <div class="price-category">
+          <h4>🎒 Equipamentos</h4>
+          <ul>
+            <li>Mochila: 20 T$</li>
+            <li>Corda (15m): 20 T$</li>
+            <li>Tocha: 1 T$</li>
+            <li>Ração (1 dia): 2 T$</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="pricing-note">
+        <p><strong>💡 Nota:</strong> Preços podem variar conforme a região, disponibilidade e qualidade do item. T$ = Tibares (moeda de Arton)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <% if (user) { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>⚔️ Equipar Seus Heróis</h3>
+        <p>Agora que conhece os equipamentos, que tal criar um personagem bem equipado?</p>
+        <div class="cta-buttons">
+          <a href="/personagens/criar" class="nav-btn">✨ Criar Personagem</a>
+          <a href="/personagens" class="btn btn-secondary">📋 Meus Personagens</a>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>🚀 Aventure-se em Arton</h3>
+        <p>Cadastre-se para criar personagens e equipá-los para grandes aventuras!</p>
+        <div class="cta-buttons">
+          <a href="/register" class="nav-btn">✨ Criar Conta</a>
+          <a href="/login" class="btn btn-secondary">🔐 Login</a>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<style>
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tipoFilter = document.getElementById('tipoFilter');
+  const categoriaFilter = document.getElementById('categoriaFilter');
+  const searchFilter = document.getElementById('searchFilter');
+  const clearFiltersBtn = document.getElementById('clearFilters');
+  
+  const equipmentCards = document.querySelectorAll('.equipment-card');
+  const equipmentSections = document.querySelectorAll('.equipment-section');
+  
+  // Função para filtrar equipamentos
+  function filterEquipments() {
+    const tipoValue = tipoFilter.value;
+    const categoriaValue = categoriaFilter.value;
+    const searchValue = searchFilter.value.toLowerCase();
+    
+    let visibleSections = new Set();
+    
+    equipmentCards.forEach(card => {
+      const cardTipo = card.dataset.tipo;
+      const cardCategoria = card.dataset.categoria;
+      const cardNome = card.dataset.nome;
+      
+      let shouldShow = true;
+      
+      // Filtro por tipo
+      if (tipoValue !== 'all' && cardTipo !== tipoValue) {
+        shouldShow = false;
+      }
+      
+      // Filtro por categoria
+      if (categoriaValue !== 'all' && cardCategoria !== categoriaValue) {
+        shouldShow = false;
+      }
+      
+      // Filtro por busca
+      if (searchValue && !cardNome.includes(searchValue)) {
+        shouldShow = false;
+      }
+      
+      if (shouldShow) {
+        card.classList.remove('hidden');
+        visibleSections.add(cardTipo);
+        
+        // Animação de entrada
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.3s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100);
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    
+    // Mostrar/ocultar seções baseado nos itens visíveis
+    equipmentSections.forEach(section => {
+      const sectionTipo = section.dataset.tipo;
+      if (visibleSections.has(sectionTipo)) {
+        section.classList.remove('hidden');
+      } else {
+        section.classList.add('hidden');
+      }
+    });
+    
+    // Atualizar contadores
+    updateItemCounts();
+  }
+  
+  // Função para atualizar contadores de itens
+  function updateItemCounts() {
+    equipmentSections.forEach(section => {
+      const visibleCards = section.querySelectorAll('.equipment-card:not(.hidden)');
+      const countElement = section.querySelector('.items-count');
+      if (countElement) {
+        countElement.textContent = `(${visibleCards.length} itens)`;
+      }
+    });
+  }
+  
+  // Event listeners
+  tipoFilter.addEventListener('change', filterEquipments);
+  categoriaFilter.addEventListener('change', filterEquipments);
+  searchFilter.addEventListener('input', filterEquipments);
+  
+  // Limpar filtros
+  clearFiltersBtn.addEventListener('click', function() {
+    tipoFilter.value = 'all';
+    categoriaFilter.value = 'all';
+    searchFilter.value = '';
+    
+    equipmentCards.forEach(card => {
+      card.classList.remove('hidden');
+      card.style.transition = 'all 0.3s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    });
+    
+    equipmentSections.forEach(section => {
+      section.classList.remove('hidden');
+    });
+    
+    updateItemCounts();
+  });
+  
+  // Inicialização
+  updateItemCounts();
+  
+  // Scroll suave para seções
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+  
+  // Melhorar UX dos filtros
+  [tipoFilter, categoriaFilter, searchFilter].forEach(filter => {
+    filter.addEventListener('focus', function() {
+      this.style.borderColor = 'var(--accent-gold)';
+    });
+    
+    filter.addEventListener('blur', function() {
+      this.style.borderColor = 'var(--border-color)';
+    });
+  });
+});
+</script>
+
+<%- include('../partials/footer') %>

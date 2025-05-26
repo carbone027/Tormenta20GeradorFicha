@@ -1,19 +1,241 @@
-<%- include('partials/header', { title: 'Erro' }) %>
+<%- include('partials/header', { title: 'Erro - Tormenta20' }) %>
 
-<section class="content-section active">
-  <h2><%= message %></h2>
-  <div class="error-container">
-    <div class="card">
-      <h3>Ocorreu um erro</h3>
-      <p><%= error.status %> - <%= message %></p>
-      <% if (process.env.NODE_ENV !== 'production') { %>
-        <pre><%= error.stack %></pre>
-      <% } %>
-      <div class="error-actions">
-        <a href="/" class="nav-btn">Voltar para a Página Inicial</a>
+  <section class="content-section active error-section">
+    <div class="error-container">
+      <div class="error-illustration">
+        <% let errorIcon='😔' ; let errorTitle='Algo deu errado' ; let errorDescription='Ocorreu um erro inesperado.' ;
+          if (error && error.status) { switch(error.status) { case 404: errorIcon='🗺️' ;
+          errorTitle='Página Perdida nas Terras de Arton' ;
+          errorDescription='A página que você procura desapareceu como um tesouro em uma masmorra abandonada.' ; break;
+          case 403: errorIcon='🛡️' ; errorTitle='Acesso Negado pelo Guarda' ;
+          errorDescription='Você não possui as credenciais necessárias para acessar esta área protegida.' ; break; case
+          500: errorIcon='⚡' ; errorTitle='Tempestade Mágica no Servidor' ;
+          errorDescription='Os ventos arcanos perturbaram nossos sistemas. Nossos magos estão trabalhando para restaurar a ordem.'
+          ; break; default: errorIcon='🎲' ; errorTitle='Falha Crítica nos Dados' ;
+          errorDescription='Parece que os dados não foram favoráveis desta vez.' ; } } %>
+
+          <div class="error-icon">
+            <%= errorIcon %>
+          </div>
+          <h1 class="error-title">
+            <%= errorTitle %>
+          </h1>
+          <p class="error-description">
+            <%= errorDescription %>
+          </p>
+
+          <% if (error && error.status) { %>
+            <div class="error-code">
+              <span class="error-status">Código do Erro: <%= error.status %></span>
+            </div>
+            <% } %>
       </div>
-    </div>
-  </div>
-</section>
 
-<%- include('partials/footer') %>
+      <div class="error-message-card">
+        <h3>📜 Detalhes da Aventura Mal Sucedida</h3>
+        <div class="error-details">
+          <% if (message) { %>
+            <div class="error-detail">
+              <span class="detail-label">🎯 Problema:</span>
+              <span class="detail-value">
+                <%= message %>
+              </span>
+            </div>
+            <% } %>
+
+              <% if (error && error.status) { %>
+                <div class="error-detail">
+                  <span class="detail-label">🔢 Código:</span>
+                  <span class="detail-value">
+                    <%= error.status %>
+                  </span>
+                </div>
+                <% } %>
+
+                  <div class="error-detail">
+                    <span class="detail-label">⏰ Horário:</span>
+                    <span class="detail-value">
+                      <%= new Date().toLocaleString('pt-BR') %>
+                    </span>
+                  </div>
+
+                  <div class="error-detail">
+                    <span class="detail-label">🌐 Página:</span>
+                    <span class="detail-value">
+                      <%= typeof originalUrl !=='undefined' ? originalUrl : 'Desconhecida' %>
+                    </span>
+                  </div>
+        </div>
+      </div>
+
+      <!-- Ações Sugeridas -->
+      <div class="error-actions">
+        <h3>⚔️ Como Continuar Sua Jornada</h3>
+        <div class="actions-grid">
+          <a href="/" class="action-btn primary-action">
+            🏠 Retornar à Taverna (Início)
+          </a>
+
+          <button onclick="history.back()" class="action-btn secondary-action">
+            ↩️ Voltar ao Local Anterior
+          </button>
+
+          <button onclick="location.reload()" class="action-btn utility-action">
+            🔄 Tentar Novamente
+          </button>
+
+          <% if (user) { %>
+            <a href="/personagens" class="action-btn character-action">
+              📋 Ver Meus Personagens
+            </a>
+            <% } else { %>
+              <a href="/login" class="action-btn character-action">
+                🔐 Fazer Login
+              </a>
+              <% } %>
+        </div>
+      </div>
+
+      <!-- Dicas Úteis -->
+      <div class="error-tips">
+        <h3>💡 Dicas do Mestre</h3>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon">🗺️</div>
+            <h4>Navegação</h4>
+            <p>Use o menu principal para navegar pelas diferentes seções do sistema.</p>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon">🔗</div>
+            <h4>Links Quebrados</h4>
+            <p>Se um link não funcionar, tente acessar a página através do menu principal.</p>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon">💾</div>
+            <h4>Dados Salvos</h4>
+            <p>Seus personagens estão seguros! Erros técnicos não afetam seus dados salvos.</p>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon">🔄</div>
+            <h4>Problemas Temporários</h4>
+            <p>Se persistir, aguarde alguns minutos e tente novamente. Pode ser um problema temporário.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informações de Debug (apenas em desenvolvimento) -->
+      <% if (process.env.NODE_ENV !=='production' && error && error.stack) { %>
+        <div class="debug-info">
+          <h3>🔧 Informações de Debug</h3>
+          <div class="debug-card">
+            <pre class="debug-stack"><%= error.stack %></pre>
+          </div>
+        </div>
+        <% } %>
+
+          <!-- Easter Egg / Flavor Text -->
+          <div class="flavor-text">
+            <div class="flavor-card">
+              <h4>📖 Crônicas de Arton</h4>
+              <p class="flavor-quote">
+                <% const
+                  flavorTexts=[ '"Mesmo os maiores heróis enfrentam obstáculos em suas jornadas. O importante é não desistir." - Sábio de Valkaria'
+                  , '"Toda aventura tem seus percalços. Um verdadeiro aventureiro aprende com cada erro." - Mestre Explorador'
+                  , '"Em Arton, até os contratempos fazem parte da grande história que você está escrevendo." - Cronista Real'
+                  , '"Não há falha que não possa ser superada com determinação e um bom plano." - Estrategista Militar'
+                  , '"Lembre-se: cada erro é uma oportunidade de aprender algo novo sobre o mundo." - Arquimago da Torre'
+                  ]; const randomFlavor=flavorTexts[Math.floor(Math.random() * flavorTexts.length)]; %>
+                  <%= randomFlavor %>
+              </p>
+            </div>
+          </div>
+    </div>
+  </section>
+
+  <style>
+
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Adicionar atributo data-status se houver código de erro
+      if (error && error.status) {
+        const container = document.querySelector('.error-container');
+        if (container) {
+          container.setAttribute('data-status', '<%= error.status %>');
+        }
+      }
+
+      // Adicionar efeito de digitação no título
+      const title = document.querySelector('.error-title');
+      if (title) {
+        const originalText = title.textContent;
+        title.textContent = '';
+
+        let i = 0;
+        const typeWriter = () => {
+          if (i < originalText.length) {
+            title.textContent += originalText.charAt(i);
+            i++;
+            setTimeout(typeWriter, 50);
+          }
+        };
+
+        setTimeout(typeWriter, 500);
+      }
+
+      // Adicionar efeito de shake no ícone quando clicado
+      const errorIcon = document.querySelector('.error-icon');
+      if (errorIcon) {
+        errorIcon.addEventListener('click', function () {
+          this.style.animation = 'none';
+          setTimeout(() => {
+            this.style.animation = 'bounce 0.5s ease-out';
+          }, 10);
+        });
+      }
+
+      // Auto-refresh em caso de erro 500 (após 30 segundos)
+      if (error && error.status === 500) {
+        let countdown = 30;
+        const refreshBtn = document.querySelector('.utility-action');
+
+        if (refreshBtn) {
+          const originalText = refreshBtn.textContent;
+
+          const updateCountdown = () => {
+            refreshBtn.textContent = `🔄 Auto-refresh em ${countdown}s`;
+            countdown--;
+
+            if (countdown <= 0) {
+              location.reload();
+            } else {
+              setTimeout(updateCountdown, 1000);
+            }
+          };
+
+          // Começar countdown após 5 segundos
+          setTimeout(() => {
+            updateCountdown();
+          }, 5000);
+        }
+      }
+
+      // Log do erro para análise (apenas em desenvolvimento)
+      if (process.env.NODE_ENV !== 'production') {
+        console.group('🐛 Informações do Erro');
+        console.log('Mensagem:', '<%= message || "N/A" %>');
+        console.log('Status:', '<%= error && error.status ? error.status : "N/A" %>');
+        console.log('URL:', '<%= typeof originalUrl !== "undefined" ? originalUrl : "N/A" %>');
+        console.log('Timestamp:', new Date().toISOString());
+        if (error && error.stack) {
+          console.log('Stack Trace:', error.stack);
+        };
+      };
+    });
+  </script>
+
+  <%- include('partials/footer') %>}
