@@ -1,0 +1,394 @@
+<%- include('../partials/header', { title: 'Meus Personagens', activePage: 'myCharacters' }) %>
+
+<section class="content-section active">
+  <div class="page-header">
+    <h2>📋 Meus Personagens</h2>
+    <p>Gerencie todos os seus heróis de Arton em um só lugar</p>
+  </div>
+  
+  <div class="characters-actions">
+    <a href="/personagens/criar" class="nav-btn create-btn">
+      ✨ Criar Novo Personagem
+    </a>
+    <div class="view-options">
+      <button class="view-btn active" data-view="grid">🔲 Grade</button>
+      <button class="view-btn" data-view="list">📋 Lista</button>
+    </div>
+  </div>
+
+  <% if (characters && characters.length > 0) { %>
+    <!-- Estatísticas rápidas -->
+    <div class="characters-stats">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info">
+            <span class="stat-number"><%= characters.length %></span>
+            <span class="stat-label">Personagens</span>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-info">
+            <span class="stat-number">
+              <%= characters.reduce((total, char) => total + (char.nivel || 1), 0) %>
+            </span>
+            <span class="stat-label">Níveis Totais</span>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-info">
+            <span class="stat-number">
+              <%= Math.max(...characters.map(char => char.nivel || 1)) %>
+            </span>
+            <span class="stat-label">Maior Nível</span>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">⚔️</div>
+          <div class="stat-info">
+            <span class="stat-number">
+              <%= [...new Set(characters.map(char => char.classe_nome))].length %>
+            </span>
+            <span class="stat-label">Classes Diferentes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de Personagens -->
+    <div class="characters-container" id="charactersContainer">
+      <div class="characters-grid" id="charactersGrid">
+        <% characters.forEach(character => { %>
+          <div class="character-card" data-id="<%= character.id %>">
+            <div class="character-header">
+              <div class="character-avatar">
+                <% 
+                  // Ícone baseado na classe
+                  let classeIcon = '⚔️';
+                  if (character.classe_nome) {
+                    switch(character.classe_nome.toLowerCase()) {
+                      case 'guerreiro': classeIcon = '⚔️'; break;
+                      case 'ladino': classeIcon = '🗡️'; break;
+                      case 'arcanista': classeIcon = '🔮'; break;
+                      case 'clérico': classeIcon = '✨'; break;
+                      case 'bárbaro': classeIcon = '🪓'; break;
+                      case 'bardo': classeIcon = '🎵'; break;
+                      default: classeIcon = '⚔️';
+                    }
+                  }
+                %>
+                <span class="avatar-icon"><%= classeIcon %></span>
+                <div class="level-badge">Nv. <%= character.nivel || 1 %></div>
+              </div>
+              
+              <div class="character-info">
+                <h3 class="character-name"><%= character.nome %></h3>
+                <p class="character-details">
+                  <%= character.classe_nome || 'Classe' %> <%= character.raca_nome || 'Raça' %>
+                </p>
+                <% if (character.deus_nome) { %>
+                  <p class="character-deity">⭐ Devoto de <%= character.deus_nome %></p>
+                <% } %>
+              </div>
+            </div>
+            
+            <div class="character-stats">
+              <div class="stat-row">
+                <div class="stat-item">
+                  <span class="stat-icon">❤️</span>
+                  <span class="stat-value"><%= character.pontos_vida || 0 %></span>
+                  <span class="stat-label">PV</span>
+                </div>
+                
+                <% if (character.pontos_mana && character.pontos_mana > 0) { %>
+                  <div class="stat-item">
+                    <span class="stat-icon">🔵</span>
+                    <span class="stat-value"><%= character.pontos_mana %></span>
+                    <span class="stat-label">PM</span>
+                  </div>
+                <% } %>
+                
+                <div class="stat-item">
+                  <span class="stat-icon">🛡️</span>
+                  <span class="stat-value"><%= character.ca || 10 %></span>
+                  <span class="stat-label">CA</span>
+                </div>
+                
+                <% if (character.experiencia && character.experiencia > 0) { %>
+                  <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-value"><%= character.experiencia %></span>
+                    <span class="stat-label">XP</span>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+            
+            <div class="character-attributes">
+              <div class="attributes-row">
+                <div class="attr-item">
+                  <span class="attr-label">FOR</span>
+                  <span class="attr-value"><%= character.forca || 10 %></span>
+                </div>
+                <div class="attr-item">
+                  <span class="attr-label">DES</span>
+                  <span class="attr-value"><%= character.destreza || 10 %></span>
+                </div>
+                <div class="attr-item">
+                  <span class="attr-label">CON</span>
+                  <span class="attr-value"><%= character.constituicao || 10 %></span>
+                </div>
+                <div class="attr-item">
+                  <span class="attr-label">INT</span>
+                  <span class="attr-value"><%= character.inteligencia || 10 %></span>
+                </div>
+                <div class="attr-item">
+                  <span class="attr-label">SAB</span>
+                  <span class="attr-value"><%= character.sabedoria || 10 %></span>
+                </div>
+                <div class="attr-item">
+                  <span class="attr-label">CAR</span>
+                  <span class="attr-value"><%= character.carisma || 10 %></span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="character-meta">
+              <div class="creation-date">
+                📅 Criado em <%= new Date(character.created_at).toLocaleDateString('pt-BR') %>
+              </div>
+              <% if (character.updated_at && character.updated_at !== character.created_at) { %>
+                <div class="last-modified">
+                  ✏️ Editado em <%= new Date(character.updated_at).toLocaleDateString('pt-BR') %>
+                </div>
+              <% } %>
+            </div>
+            
+            <div class="character-actions">
+              <a href="/personagens/<%= character.id %>" class="action-btn view-btn">
+                👁️ Ver Ficha
+              </a>
+              <a href="/personagens/<%= character.id %>/editar" class="action-btn edit-btn">
+                ✏️ Editar
+              </a>
+              <button class="action-btn delete-btn" data-id="<%= character.id %>" data-name="<%= character.nome %>">
+                🗑️ Excluir
+              </button>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  <% } else { %>
+    <!-- Estado vazio -->
+    <div class="empty-state">
+      <div class="empty-card">
+        <div class="empty-icon">📝</div>
+        <h3>Nenhum Personagem Criado</h3>
+        <p>Você ainda não possui nenhum herói em sua jornada por Arton.</p>
+        <p>Que tal criar seu primeiro personagem épico?</p>
+        
+        <div class="empty-actions">
+          <a href="/personagens/criar" class="nav-btn">✨ Criar Primeiro Personagem</a>
+          <a href="/racas" class="btn btn-secondary">🧝 Explorar Raças</a>
+        </div>
+      </div>
+      
+      <!-- Dicas para iniciantes -->
+      <div class="starter-tips">
+        <h3>💡 Dicas para Começar</h3>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <h4>1️⃣ Escolha a Raça</h4>
+            <p>Comece explorando as raças disponíveis e suas características únicas.</p>
+            <a href="/racas">Ver Raças →</a>
+          </div>
+          
+          <div class="tip-card">
+            <h4>2️⃣ Selecione a Classe</h4>
+            <p>Cada classe oferece um estilo de jogo diferente. Encontre o seu!</p>
+            <a href="/classes">Ver Classes →</a>
+          </div>
+          
+          <div class="tip-card">
+            <h4>3️⃣ Conheça os Deuses</h4>
+            <p>Os deuses de Arton concedem poderes especiais aos seus seguidores.</p>
+            <a href="/deuses">Ver Deuses →</a>
+          </div>
+          
+          <div class="tip-card">
+            <h4>4️⃣ Crie Sua História</h4>
+            <p>Desenvolva a personalidade e background do seu personagem.</p>
+            <a href="/personagens/criar">Criar Agora →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<!-- Modal de Confirmação de Exclusão -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>⚠️ Confirmar Exclusão</h3>
+    </div>
+    <div class="modal-body">
+      <p>Tem certeza que deseja excluir o personagem <strong id="characterToDelete"></strong>?</p>
+      <p class="warning-text">Esta ação não pode ser desfeita!</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="cancelDelete">Cancelar</button>
+      <button class="btn btn-danger" id="confirmDelete">🗑️ Excluir Personagem</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  let deleteCharacterId = null;
+  
+  // View toggle
+  const viewButtons = document.querySelectorAll('.view-btn');
+  const charactersContainer = document.getElementById('charactersContainer');
+  
+  viewButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      viewButtons.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      const view = this.dataset.view;
+      if (view === 'list') {
+        charactersContainer.classList.add('list-view');
+      } else {
+        charactersContainer.classList.remove('list-view');
+      }
+    });
+  });
+  
+  // Delete functionality
+  const deleteButtons = document.querySelectorAll('.delete-btn');
+  const deleteModal = document.getElementById('deleteModal');
+  const characterToDeleteEl = document.getElementById('characterToDelete');
+  const confirmDeleteBtn = document.getElementById('confirmDelete');
+  const cancelDeleteBtn = document.getElementById('cancelDelete');
+  
+  deleteButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      deleteCharacterId = this.dataset.id;
+      const characterName = this.dataset.name;
+      characterToDeleteEl.textContent = characterName;
+      deleteModal.style.display = 'block';
+    });
+  });
+  
+  cancelDeleteBtn.addEventListener('click', function() {
+    deleteModal.style.display = 'none';
+    deleteCharacterId = null;
+  });
+  
+  confirmDeleteBtn.addEventListener('click', async function() {
+    if (!deleteCharacterId) return;
+    
+    try {
+      const response = await fetch(`/personagens/${deleteCharacterId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        // Remove o card da interface
+        const characterCard = document.querySelector(`[data-id="${deleteCharacterId}"]`);
+        if (characterCard) {
+          characterCard.style.animation = 'fadeOut 0.3s ease-out';
+          setTimeout(() => {
+            characterCard.remove();
+            
+            // Verifica se não há mais personagens
+            const remainingCards = document.querySelectorAll('.character-card');
+            if (remainingCards.length === 0) {
+              location.reload(); // Recarrega para mostrar o estado vazio
+            }
+          }, 300);
+        }
+        
+        deleteModal.style.display = 'none';
+        deleteCharacterId = null;
+        
+        // Feedback visual
+        showNotification('Personagem excluído com sucesso!', 'success');
+      } else {
+        throw new Error('Erro ao excluir personagem');
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      showNotification('Erro ao excluir personagem. Tente novamente.', 'error');
+    }
+  });
+  
+  // Fechar modal clicando fora
+  window.addEventListener('click', function(e) {
+    if (e.target === deleteModal) {
+      deleteModal.style.display = 'none';
+      deleteCharacterId = null;
+    }
+  });
+  
+  // Função para mostrar notificações
+  function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      z-index: 1001;
+      animation: slideInRight 0.3s ease-out;
+      background: ${type === 'success' ? '#4caf50' : '#f44336'};
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.3s ease-out';
+      setTimeout(() => {
+        notification.remove();
+      }, 300);
+    }, 3000);
+  }
+  
+  // Animações CSS adicionais
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.8); }
+    }
+    
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+});
+</script>
+
+<%- include('../partials/footer') %>

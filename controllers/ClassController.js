@@ -1,3 +1,5 @@
+const pool = require('../config/database'); 
+
 exports.index = async (req, res) => {
   try {
     const classes = await pool.query('SELECT * FROM classes ORDER BY nome');

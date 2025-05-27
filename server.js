@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const methodOverride = require('method-override');
 const session = require('express-session');
 require('dotenv').config();
 
@@ -15,6 +16,7 @@ app.use(session({
 // Middleware para processar JSON e dados de formulários
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 // Configura o mecanismo de views para EJS
 app.set("view engine", "ejs");

@@ -1,3 +1,5 @@
+const pool = require('../config/database'); 
+
 exports.index = async (req, res) => {
   try {
     const deuses = await pool.query('SELECT * FROM deuses ORDER BY nome');

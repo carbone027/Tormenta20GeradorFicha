@@ -1,5 +1,7 @@
 const Character = require('../models/character');
 const pool = require('../config/database');
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 exports.myCharacters = async (req, res) => {
   if (!req.session.user) {
@@ -74,26 +76,34 @@ exports.create = async (req, res) => {
 exports.view = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('🔍 Buscando personagem com ID:', id);
+    
     const character = await Character.findById(id);
+    console.log('📋 Personagem encontrado:', character ? 'SIM' : 'NÃO');
     
     if (!character) {
+      console.log('❌ Personagem não encontrado');
       return res.status(404).render('error', {
         message: 'Personagem não encontrado',
-        error: { status: 404 }
+        error: { status: 404 },
+        user: req.session.user
       });
     }
+    
+    console.log('✅ Renderizando template com personagem:', character.nome);
     
     res.render('pages/character-view', {
       title: `${character.nome} - Ficha`,
       activePage: 'characterView',
       user: req.session.user,
-      characters: [character]
+      character: character
     });
   } catch (error) {
-    console.error('Erro ao visualizar personagem:', error);
+    console.error('💥 Erro ao visualizar personagem:', error);
     res.status(500).render('error', {
       message: 'Erro ao carregar personagem',
-      error
+      error,
+      user: req.session.user
     });
   }
 };
@@ -143,16 +153,28 @@ exports.update = async (req, res) => {
   
   try {
     const { id } = req.params;
+    console.log('📝 Atualizando personagem ID:', id);
+    console.log('📊 Dados recebidos:', req.body);
+    
     const updated = await Character.update(id, req.session.user.id, req.body);
     
     if (!updated) {
-      return res.status(404).json({ error: 'Personagem não encontrado' });
+      return res.status(404).render('error', {
+        message: 'Personagem não encontrado',
+        error: { status: 404 },
+        user: req.session.user
+      });
     }
     
+    console.log('✅ Personagem atualizado com sucesso');
     res.redirect(`/personagens/${id}`);
   } catch (error) {
-    console.error('Erro ao atualizar personagem:', error);
-    res.status(500).json({ error: 'Erro ao atualizar personagem' });
+    console.error('💥 Erro ao atualizar personagem:', error);
+    res.status(500).render('error', {
+      message: 'Erro ao atualizar personagem',
+      error,
+      user: req.session.user
+    });
   }
 };
 

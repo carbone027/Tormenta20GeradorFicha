@@ -1,0 +1,557 @@
+<%- include('../partials/header', { title: `Editar ${character ? character.nome : 'Personagem'}`, activePage: 'editCharacter' }) %>
+
+<section class="content-section active">
+  <h2>✏️ Editar Personagem</h2>
+  <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
+    Modifique as informações do seu herói. Todas as alterações serão salvas automaticamente quando você confirmar.
+  </p>
+
+  <% if (character) { %>
+    <form action="/personagens/<%= character.id %>?_method=PUT" method="POST" class="character-form" id="characterForm">
+      <!-- Informações Básicas -->
+      <div class="form-section">
+        <h3>📝 Informações Básicas</h3>
+        <div class="card">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="nome">⚔️ Nome do Personagem *</label>
+              <input type="text" id="nome" name="nome" required 
+                     value="<%= character.nome %>"
+                     placeholder="Ex: Alaric Fortaleza, Lyanna Luaverde..." 
+                     maxlength="100">
+              <small>Escolha um nome que reflita a personalidade e origem do seu herói</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="nivel">📊 Nível</label>
+              <input type="number" id="nivel" name="nivel" 
+                     value="<%= character.nivel || 1 %>" 
+                     min="1" max="20" required>
+              <small>Nível atual do personagem</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raça, Classe e Deus -->
+      <div class="form-section">
+        <h3>🧬 Origem e Vocação</h3>
+        <div class="card">
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label for="raca_id">🧝 Raça *</label>
+              <select id="raca_id" name="raca_id" required>
+                <option value="">Escolha uma raça...</option>
+                <% if (racas && racas.length > 0) { %>
+                  <% racas.forEach(raca => { %>
+                    <option value="<%= raca.id %>" 
+                            data-bonus='<%= JSON.stringify(raca.bonus_atributos) %>'
+                            <%= character.raca_id == raca.id ? 'selected' : '' %>>
+                      <%= raca.nome %>
+                    </option>
+                  <% }); %>
+                <% } %>
+              </select>
+              <small>Define características físicas e habilidades raciais</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="classe_id">⚔️ Classe *</label>
+              <select id="classe_id" name="classe_id" required>
+                <option value="">Escolha uma classe...</option>
+                <% if (classes && classes.length > 0) { %>
+                  <% classes.forEach(classe => { %>
+                    <option value="<%= classe.id %>" 
+                            data-vida="<%= classe.pontos_vida_base %>"
+                            data-mana="<%= classe.pontos_mana_base || 0 %>"
+                            data-atributo="<%= classe.atributo_principal %>"
+                            <%= character.classe_id == classe.id ? 'selected' : '' %>>
+                      <%= classe.nome %>
+                    </option>
+                  <% }); %>
+                <% } %>
+              </select>
+              <small>Determina habilidades e papel no grupo</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="deus_id">⭐ Deus Patrono</label>
+              <select id="deus_id" name="deus_id">
+                <option value="">Sem deus específico</option>
+                <% if (deuses && deuses.length > 0) { %>
+                  <% deuses.forEach(deus => { %>
+                    <option value="<%= deus.id %>"
+                            <%= character.deus_id == deus.id ? 'selected' : '' %>>
+                      <%= deus.nome %> - <%= deus.dominio %>
+                    </option>
+                  <% }); %>
+                <% } %>
+              </select>
+              <small>Divindade que seu personagem venera (opcional)</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Atributos -->
+      <div class="form-section">
+        <h3>💪 Atributos</h3>
+        <div class="card">
+          <div class="atributos-info">
+            <p>📋 <strong>Distribuição de Pontos:</strong> Você tem <span id="pontosRestantes">0</span> pontos restantes para distribuir. Cada atributo pode variar entre 8 e 18.</p>
+            <p>💡 <strong>Dica:</strong> Mantenha o foco no atributo principal da sua classe!</p>
+          </div>
+          
+          <div class="atributos-grid">
+            <div class="atributo-card">
+              <label for="forca">💪 Força</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="forca">-</button>
+                <input type="number" id="forca" name="forca" 
+                       value="<%= character.forca || 10 %>" 
+                       min="8" max="18" readonly>
+                <button type="button" class="attr-btn plus" data-attr="forca">+</button>
+              </div>
+              <small>Força física, ataques corpo a corpo</small>
+              <div class="bonus-display" id="bonus-forca">+0</div>
+            </div>
+            
+            <div class="atributo-card">
+              <label for="destreza">🏃 Destreza</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="destreza">-</button>
+                <input type="number" id="destreza" name="destreza" 
+                       value="<%= character.destreza || 10 %>" 
+                       min="8" max="18" readonly>
+                <button type="button" class="attr-btn plus" data-attr="destreza">+</button>
+              </div>
+              <small>Agilidade, ataques à distância</small>
+              <div class="bonus-display" id="bonus-destreza">+0</div>
+            </div>
+            
+            <div class="atributo-card">
+              <label for="constituicao">❤️ Constituição</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="constituicao">-</button>
+                <input type="number" id="constituicao" name="constituicao" 
+                       value="<%= character.constituicao || 10 %>" 
+                       min="8" max="18" readonly>
+                <button type="button" class="attr-btn plus" data-attr="constituicao">+</button>
+              </div>
+              <small>Resistência, pontos de vida</small>
+              <div class="bonus-display" id="bonus-constituicao">+0</div>
+            </div>
+            
+            <div class="atributo-card">
+              <label for="inteligencia">🧠 Inteligência</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="inteligencia">-</button>
+                <input type="number" id="inteligencia" name="inteligencia" 
+                       value="<%= character.inteligencia || 10 %>" 
+                       min="8" max="18" readonly>
+                <button type="button" class="attr-btn plus" data-attr="inteligencia">+</button>
+              </div>
+              <small>Raciocínio, magia arcana</small>
+              <div class="bonus-display" id="bonus-inteligencia">+0</div>
+            </div>
+            
+            <div class="atributo-card">
+              <label for="sabedoria">🧙 Sabedoria</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="sabedoria">-</button>
+                <input type="number" id="sabedoria" name="sabedoria" 
+                       value="<%= character.sabedoria || 10 %>" 
+                       min="8" max="18" readonly>
+                <button type="button" class="attr-btn plus" data-attr="sabedoria">+</button>
+              </div>
+              <small>Percepção, magia divina</small>
+              <div class="bonus-display" id="bonus-sabedoria">+0</div>
+            </div>
+            
+            <div class="atributo-card">
+              <label for="carisma">😎 Carisma</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="carisma">-</button>
+                <input type="number" id="carisma" name="carisma" 
+                       value="<%= character.carisma || 10 %>" 
+                       min="8" max="18" readonly>
+                <button type="button" class="attr-btn plus" data-attr="carisma">+</button>
+              </div>
+              <small>Personalidade, liderança</small>
+              <div class="bonus-display" id="bonus-carisma">+0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Características Derivadas -->
+      <div class="form-section">
+        <h3>📊 Características Derivadas</h3>
+        <div class="card">
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label for="pontos_vida">❤️ Pontos de Vida</label>
+              <input type="number" id="pontos_vida" name="pontos_vida" 
+                     value="<%= character.pontos_vida || 0 %>" 
+                     min="1" required>
+              <small>Pode ser ajustado manualmente conforme evolução</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="pontos_mana">🔵 Pontos de Mana</label>
+              <input type="number" id="pontos_mana" name="pontos_mana" 
+                     value="<%= character.pontos_mana || 0 %>" 
+                     min="0">
+              <small>Para classes que usam magia</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="ca">🛡️ Classe de Armadura</label>
+              <input type="number" id="ca" name="ca" 
+                     value="<%= character.ca || 10 %>" 
+                     min="10">
+              <small>Inclui bônus de equipamentos e Destreza</small>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="experiencia">⭐ Experiência</label>
+            <input type="number" id="experiencia" name="experiencia" 
+                   value="<%= character.experiencia || 0 %>" 
+                   min="0">
+            <small>Pontos de experiência acumulados</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Background e Roleplay -->
+      <div class="form-section">
+        <h3>🎭 História e Personalidade</h3>
+        <div class="card">
+          <div class="form-group">
+            <label for="historia_pessoal">📜 História Pessoal</label>
+            <textarea id="historia_pessoal" name="historia_pessoal" rows="4" 
+                      placeholder="Descreva a origem, família, eventos marcantes da vida do personagem..."><%= character.historia_pessoal || '' %></textarea>
+            <small>Onde nasceu? Como cresceu? O que o motivou a se tornar um aventureiro?</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="personalidade">🎭 Personalidade</label>
+            <textarea id="personalidade" name="personalidade" rows="3" 
+                      placeholder="Corajoso, sarcástico, tímido, arrogante... Como seu personagem se comporta?"><%= character.personalidade || '' %></textarea>
+            <small>Traços de personalidade, maneirismos, medos, vícios...</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="objetivos">🎯 Objetivos e Motivações</label>
+            <textarea id="objetivos" name="objetivos" rows="3" 
+                      placeholder="O que seu personagem busca? Vingança? Conhecimento? Riqueza? Justiça?"><%= character.objetivos || '' %></textarea>
+            <small>O que move seu personagem? Quais são seus sonhos e ambições?</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview do Personagem -->
+      <div class="form-section">
+        <h3>👁️ Preview do Personagem</h3>
+        <div class="card character-preview" id="characterPreview">
+          <div class="preview-content">
+            <div class="preview-header">
+              <h4 id="previewNome"><%= character.nome %></h4>
+              <p id="previewClasseRaca">Classe Raça - Nível <%= character.nivel || 1 %></p>
+            </div>
+            
+            <div class="preview-stats">
+              <div class="preview-atributos">
+                <h5>Atributos</h5>
+                <div class="attrs-preview" id="attrsPreview">
+                  <!-- Preenchido via JavaScript -->
+                </div>
+              </div>
+              
+              <div class="preview-derivadas">
+                <h5>Características</h5>
+                <div class="derivadas-preview" id="derivadasPreview">
+                  <!-- Preenchido via JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div class="form-actions">
+        <button type="submit" class="nav-btn">💾 Salvar Alterações</button>
+        <a href="/personagens/<%= character.id %>" class="btn btn-secondary">👁️ Ver Ficha</a>
+        <a href="/personagens" class="btn btn-secondary">📋 Meus Personagens</a>
+        <button type="button" class="btn btn-secondary" id="resetForm">🔄 Resetar</button>
+      </div>
+    </form>
+  <% } else { %>
+    <!-- Personagem não encontrado -->
+    <div class="error-state">
+      <div class="error-card">
+        <div class="error-icon">😔</div>
+        <h2>Personagem Não Encontrado</h2>
+        <p>O personagem que você está tentando editar não foi encontrado ou você não tem permissão para editá-lo.</p>
+        <div class="error-actions">
+          <a href="/personagens" class="nav-btn">📋 Meus Personagens</a>
+          <a href="/personagens/criar" class="btn btn-secondary">✨ Criar Novo</a>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Verificação de segurança
+  const characterExists = <%= character ? 'true' : 'false' %>;
+  if (!characterExists) {
+    console.log('❌ Personagem não encontrado para edição');
+    return;
+  }
+
+  // Configuração inicial
+  let pontosDisponiveis = 27; // Para cálculo de custo
+  const custoPorPonto = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9, 16: 12, 17: 15, 18: 19 };
+  
+  // Elementos do DOM
+  const pontosRestantesEl = document.getElementById('pontosRestantes');
+  const atributos = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'];
+  
+  // Calcular pontos iniciais usados
+  function calcularPontosIniciais() {
+    let pontosUsados = 0;
+    atributos.forEach(attr => {
+      const valor = parseInt(document.getElementById(attr).value);
+      pontosUsados += custoPorPonto[valor] || 0;
+    });
+    pontosDisponiveis = 27 - pontosUsados;
+    pontosRestantesEl.textContent = pontosDisponiveis;
+  }
+  
+  // Atualizar preview e cálculos
+  function atualizarCalculos() {
+    // Atualizar pontos restantes
+    let pontosUsados = 0;
+    atributos.forEach(attr => {
+      const valor = parseInt(document.getElementById(attr).value);
+      pontosUsados += custoPorPonto[valor] || 0;
+      
+      // Atualizar modificador
+      const modificador = Math.floor((valor - 10) / 2);
+      document.getElementById('bonus-' + attr).textContent = modificador >= 0 ? '+' + modificador : modificador;
+    });
+    
+    pontosDisponiveis = 27 - pontosUsados;
+    pontosRestantesEl.textContent = pontosDisponiveis;
+    
+    // Atualizar botões
+    atributos.forEach(attr => {
+      const input = document.getElementById(attr);
+      const valor = parseInt(input.value);
+      const btnMinus = input.parentNode.querySelector('.minus');
+      const btnPlus = input.parentNode.querySelector('.plus');
+      
+      btnMinus.disabled = valor <= 8;
+      
+      if (valor >= 18) {
+        btnPlus.disabled = true;
+      } else {
+        const custoProximo = (custoPorPonto[valor + 1] || 0) - (custoPorPonto[valor] || 0);
+        btnPlus.disabled = pontosDisponiveis < custoProximo;
+      }
+    });
+    
+    // Calcular características derivadas automaticamente
+    calcularCaracteristicasDerivadas();
+    atualizarPreview();
+  }
+  
+  // Calcular PV, PM, CA automaticamente
+  function calcularCaracteristicasDerivadas() {
+    const classeSelect = document.getElementById('classe_id');
+    const constituicao = parseInt(document.getElementById('constituicao').value);
+    const destreza = parseInt(document.getElementById('destreza').value);
+    const nivel = parseInt(document.getElementById('nivel').value) || 1;
+    
+    if (classeSelect.selectedOptions.length > 0) {
+      const option = classeSelect.selectedOptions[0];
+      const vidaBase = parseInt(option.dataset.vida) || 0;
+      const manaBase = parseInt(option.dataset.mana) || 0;
+      
+      // Calcular PV (opcional - só se o usuário quiser auto-cálculo)
+      const modCon = Math.floor((constituicao - 10) / 2);
+      const pvCalculado = vidaBase + modCon + ((nivel - 1) * (Math.floor(vidaBase / 4) + modCon));
+      
+      // Não forçar o cálculo, apenas sugerir
+      const pvAtual = parseInt(document.getElementById('pontos_vida').value);
+      if (pvAtual === 0 || pvAtual < pvCalculado) {
+        document.getElementById('pontos_vida').value = Math.max(1, pvCalculado);
+      }
+      
+      // Calcular PM
+      if (manaBase > 0) {
+        const pmCalculado = manaBase + ((nivel - 1) * Math.floor(manaBase / 4));
+        const pmAtual = parseInt(document.getElementById('pontos_mana').value);
+        if (pmAtual === 0 || pmAtual < pmCalculado) {
+          document.getElementById('pontos_mana').value = pmCalculado;
+        }
+      }
+    }
+    
+    // Calcular CA base (10 + mod Destreza)
+    const modDes = Math.floor((destreza - 10) / 2);
+    const caBase = 10 + modDes;
+    const caAtual = parseInt(document.getElementById('ca').value);
+    
+    // Só atualizar se a CA atual é menor que a base
+    if (caAtual < caBase) {
+      document.getElementById('ca').value = caBase;
+    }
+  }
+  
+  // Atualizar preview
+  function atualizarPreview() {
+    const nome = document.getElementById('nome').value || '<%= character.nome %>';
+    const racaSelect = document.getElementById('raca_id');
+    const classeSelect = document.getElementById('classe_id');
+    const nivel = document.getElementById('nivel').value || 1;
+    
+    let classeNome = 'Classe';
+    let racaNome = 'Raça';
+    
+    if (classeSelect.selectedOptions.length > 0) {
+      classeNome = classeSelect.selectedOptions[0].textContent;
+    }
+    
+    if (racaSelect.selectedOptions.length > 0) {
+      racaNome = racaSelect.selectedOptions[0].textContent;
+    }
+    
+    document.getElementById('previewNome').textContent = nome;
+    document.getElementById('previewClasseRaca').textContent = `${classeNome} ${racaNome} - Nível ${nivel}`;
+    
+    // Atualizar atributos no preview
+    const attrsPreview = document.getElementById('attrsPreview');
+    attrsPreview.innerHTML = '';
+    
+    atributos.forEach(attr => {
+      const valor = document.getElementById(attr).value;
+      const modificador = document.getElementById('bonus-' + attr).textContent;
+      const nome = attr.charAt(0).toUpperCase() + attr.slice(1);
+      
+      const div = document.createElement('div');
+      div.className = 'attr-preview';
+      div.innerHTML = `
+        <span class="label">${nome}:</span>
+        <span class="value">${valor} (${modificador})</span>
+      `;
+      attrsPreview.appendChild(div);
+    });
+    
+    // Atualizar características derivadas no preview
+    const derivadasPreview = document.getElementById('derivadasPreview');
+    derivadasPreview.innerHTML = '';
+    
+    const derivadas = [
+      { label: 'Pontos de Vida', value: document.getElementById('pontos_vida').value },
+      { label: 'Pontos de Mana', value: document.getElementById('pontos_mana').value },
+      { label: 'Classe de Armadura', value: document.getElementById('ca').value }
+    ];
+    
+    derivadas.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'stat-preview';
+      div.innerHTML = `
+        <span class="label">${item.label}:</span>
+        <span class="value">${item.value}</span>
+      `;
+      derivadasPreview.appendChild(div);
+    });
+  }
+  
+  // Event listeners para atributos
+  document.querySelectorAll('.attr-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const attr = this.dataset.attr;
+      const input = document.getElementById(attr);
+      const valor = parseInt(input.value);
+      
+      if (this.classList.contains('plus') && valor < 18) {
+        const custoProximo = (custoPorPonto[valor + 1] || 0) - (custoPorPonto[valor] || 0);
+        if (pontosDisponiveis >= custoProximo) {
+          input.value = valor + 1;
+        }
+      } else if (this.classList.contains('minus') && valor > 8) {
+        input.value = valor - 1;
+      }
+      
+      atualizarCalculos();
+    });
+  });
+  
+  // Event listeners para selects
+  document.getElementById('classe_id').addEventListener('change', function() {
+    atualizarCalculos();
+    
+    // Destacar atributo principal
+    document.querySelectorAll('.atributo-card').forEach(card => {
+      card.classList.remove('principal');
+    });
+    
+    if (this.selectedOptions.length > 0) {
+      const atributoPrincipal = this.selectedOptions[0].dataset.atributo;
+      if (atributoPrincipal) {
+        const card = document.getElementById(atributoPrincipal.toLowerCase()).closest('.atributo-card');
+        if (card) card.classList.add('principal');
+      }
+    }
+  });
+  
+  document.getElementById('raca_id').addEventListener('change', atualizarCalculos);
+  document.getElementById('nivel').addEventListener('input', atualizarCalculos);
+  document.getElementById('nome').addEventListener('input', atualizarPreview);
+  
+  // Event listeners para características derivadas
+  ['pontos_vida', 'pontos_mana', 'ca', 'experiencia'].forEach(campo => {
+    document.getElementById(campo).addEventListener('input', atualizarPreview);
+  });
+  
+  // Reset form
+  document.getElementById('resetForm').addEventListener('click', function() {
+    if (confirm('Tem certeza que deseja resetar o formulário? Todas as alterações não salvas serão perdidas.')) {
+      location.reload();
+    }
+  });
+  
+  // Form submission com validação
+  document.getElementById('characterForm').addEventListener('submit', function(e) {
+    // Verificar se os pontos estão dentro do limite
+    if (pontosDisponiveis < 0) {
+      e.preventDefault();
+      alert('❌ Você excedeu o limite de pontos de atributos! Ajuste os valores antes de salvar.');
+      return false;
+    }
+    
+    // Feedback visual
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = '💾 Salvando...';
+    submitBtn.disabled = true;
+    
+    // Permitir o submit normal
+    console.log('✅ Formulário sendo enviado');
+  });
+  
+  // Inicialização
+  calcularPontosIniciais();
+  atualizarCalculos();
+  
+  console.log('✅ Editor de personagem inicializado');
+});
+</script>
+
+<%- include('../partials/footer') %>
