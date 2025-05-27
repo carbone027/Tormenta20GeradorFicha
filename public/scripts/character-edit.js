@@ -1,4 +1,4 @@
-// Script para edição de personagem com sistema atualizado
+// Script para edição de personagem - Sistema livre com reset correto de raças
 document.addEventListener('DOMContentLoaded', function() {
   // Verificar se há dados do personagem disponíveis
   const characterForm = document.getElementById('characterForm');
@@ -7,79 +7,60 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  // Configuração inicial
-  let pontosDisponiveis = 27; // Para cálculo de custo
-  
-  // Sistema de custos atualizado - baseado no valor 10 como padrão
-  const custoPorPonto = { 
-    8: -2,   // Reduzir de 10 para 8 "devolve" 2 pontos
-    9: -1,   // Reduzir de 10 para 9 "devolve" 1 ponto
-    10: 0,   // Valor base - sem custo
-    11: 1,   // Subir de 10 para 11 custa 1 ponto
-    12: 2,   // Subir de 10 para 12 custa 2 pontos
-    13: 3,   // Subir de 10 para 13 custa 3 pontos
-    14: 5,   // Subir de 10 para 14 custa 5 pontos
-    15: 7,   // Subir de 10 para 15 custa 7 pontos
-    16: 10,  // Subir de 10 para 16 custa 10 pontos
-    17: 13,  // Subir de 10 para 17 custa 13 pontos
-    18: 17,  // Subir de 10 para 18 custa 17 pontos
-    19: 22,  // Subir de 10 para 19 custa 22 pontos
-    20: 28   // Subir de 10 para 20 custa 28 pontos
-  };
-  
   // Elementos do DOM
   const pontosRestantesEl = document.getElementById('pontosRestantes');
   const atributos = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'];
+  const racaSelect = document.getElementById('raca_id');
   
-  // Calcular pontos iniciais usados baseado nos valores atuais (sem bônus racial)
-  function calcularPontosIniciais() {
-    let pontosUsados = 0;
-    
-    // Precisamos "reverter" os bônus raciais para calcular o valor base
-    atributos.forEach(attr => {
-      const valorAtual = parseInt(document.getElementById(attr).value);
-      // Para edição, assumimos que o valor já inclui bônus raciais
-      // Seria ideal ter uma forma de distinguir valor base vs valor com bônus
-      // Por simplicidade, vamos calcular como se fosse o valor final
-      pontosUsados += custoPorPonto[Math.min(20, Math.max(8, valorAtual))] || 0;
-    });
-    
-    pontosDisponiveis = Math.max(0, 27 - pontosUsados);
-    pontosRestantesEl.textContent = pontosDisponiveis;
+  // Esconder/remover o sistema de pontos
+  if (pontosRestantesEl && pontosRestantesEl.parentElement) {
+    pontosRestantesEl.parentElement.style.display = 'none';
   }
+  
+  // Função de debug para rastrear valores
+  function debugAtributos(momento) {
+    console.log(`🔍 Debug [${momento}]:`);
+    atributos.forEach(attr => {
+      const input = document.getElementById(attr);
+      console.log(`  ${attr}: valor=${input.value}, base=${input.dataset.valorBase || 'undefined'}`);
+    });
+  }
+  
+  // Salvar valores atuais como base na inicialização
+  atributos.forEach(attr => {
+    const input = document.getElementById(attr);
+    if (!input.dataset.valorBase) {
+      input.dataset.valorBase = input.value;
+    }
+  });
   
   // Atualizar preview e cálculos
   function atualizarCalculos() {
-    // Atualizar pontos restantes
-    let pontosUsados = 0;
+    // Atualizar modificadores
     atributos.forEach(attr => {
       const valor = parseInt(document.getElementById(attr).value);
-      const valorSeguro = Math.min(20, Math.max(8, valor));
-      pontosUsados += custoPorPonto[valorSeguro] || 0;
-      
-      // Atualizar modificador
       const modificador = Math.floor((valor - 10) / 2);
-      document.getElementById('bonus-' + attr).textContent = modificador >= 0 ? '+' + modificador : modificador;
+      const bonusElement = document.getElementById('bonus-' + attr);
+      if (bonusElement) {
+        bonusElement.textContent = modificador >= 0 ? '+' + modificador : modificador;
+      }
     });
     
-    pontosDisponiveis = Math.max(0, 27 - pontosUsados);
-    pontosRestantesEl.textContent = pontosDisponiveis;
-    
-    // Atualizar botões
+    // SEMPRE permitir alteração dos atributos (sem limitação de pontos)
     atributos.forEach(attr => {
       const input = document.getElementById(attr);
-      const valor = parseInt(input.value);
       const btnMinus = input.parentNode.querySelector('.minus');
       const btnPlus = input.parentNode.querySelector('.plus');
       
-      btnMinus.disabled = valor <= 8;
+      const valor = parseInt(input.value);
       
-      if (valor >= 20) {
-        btnPlus.disabled = true;
-      } else {
-        const custoProximo = (custoPorPonto[Math.min(20, valor + 1)] || 0) - (custoPorPonto[valor] || 0);
-        btnPlus.disabled = pontosDisponiveis < custoProximo;
-      }
+      // Habilitar/desabilitar baseado apenas nos limites mínimo e máximo
+      btnMinus.disabled = valor <= 3;  // Mínimo 3
+      btnPlus.disabled = valor >= 20;  // Máximo 20
+      
+      // Remover opacidade que indica desabilitado
+      btnMinus.style.opacity = btnMinus.disabled ? '0.5' : '1';
+      btnPlus.style.opacity = btnPlus.disabled ? '0.5' : '1';
     });
     
     // Calcular características derivadas automaticamente
@@ -103,9 +84,9 @@ document.addEventListener('DOMContentLoaded', function() {
       const modCon = Math.floor((constituicao - 10) / 2);
       const pvCalculado = vidaBase + modCon + ((nivel - 1) * (Math.floor(vidaBase / 4) + modCon));
       
-      // Não forçar o cálculo, apenas sugerir
+      // Não forçar o cálculo, apenas sugerir se for muito baixo
       const pvAtual = parseInt(document.getElementById('pontos_vida').value);
-      if (pvAtual === 0 || pvAtual < pvCalculado) {
+      if (pvAtual === 0 || pvAtual < Math.max(1, pvCalculado)) {
         document.getElementById('pontos_vida').value = Math.max(1, pvCalculado);
       }
       
@@ -148,49 +129,57 @@ document.addEventListener('DOMContentLoaded', function() {
       racaNome = racaSelect.selectedOptions[0].textContent;
     }
     
-    document.getElementById('previewNome').textContent = nome;
-    document.getElementById('previewClasseRaca').textContent = `${classeNome} ${racaNome} - Nível ${nivel}`;
+    const previewNome = document.getElementById('previewNome');
+    const previewClasseRaca = document.getElementById('previewClasseRaca');
+    
+    if (previewNome) previewNome.textContent = nome;
+    if (previewClasseRaca) previewClasseRaca.textContent = `${classeNome} ${racaNome} - Nível ${nivel}`;
     
     // Atualizar atributos no preview
     const attrsPreview = document.getElementById('attrsPreview');
-    attrsPreview.innerHTML = '';
-    
-    atributos.forEach(attr => {
-      const valor = document.getElementById(attr).value;
-      const modificador = document.getElementById('bonus-' + attr).textContent;
-      const nome = attr.charAt(0).toUpperCase() + attr.slice(1);
+    if (attrsPreview) {
+      attrsPreview.innerHTML = '';
       
-      const div = document.createElement('div');
-      div.className = 'attr-preview';
-      div.innerHTML = `
-        <span class="label">${nome}:</span>
-        <span class="value">${valor} (${modificador})</span>
-      `;
-      attrsPreview.appendChild(div);
-    });
+      atributos.forEach(attr => {
+        const valor = document.getElementById(attr).value;
+        const bonusElement = document.getElementById('bonus-' + attr);
+        const modificador = bonusElement ? bonusElement.textContent : '+0';
+        const nome = attr.charAt(0).toUpperCase() + attr.slice(1);
+        
+        const div = document.createElement('div');
+        div.className = 'attr-preview';
+        div.innerHTML = `
+          <span class="label">${nome}:</span>
+          <span class="value">${valor} (${modificador})</span>
+        `;
+        attrsPreview.appendChild(div);
+      });
+    }
     
     // Atualizar características derivadas no preview
     const derivadasPreview = document.getElementById('derivadasPreview');
-    derivadasPreview.innerHTML = '';
-    
-    const derivadas = [
-      { label: 'Pontos de Vida', value: document.getElementById('pontos_vida').value },
-      { label: 'Pontos de Mana', value: document.getElementById('pontos_mana').value },
-      { label: 'Classe de Armadura', value: document.getElementById('ca').value }
-    ];
-    
-    derivadas.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'stat-preview';
-      div.innerHTML = `
-        <span class="label">${item.label}:</span>
-        <span class="value">${item.value}</span>
-      `;
-      derivadasPreview.appendChild(div);
-    });
+    if (derivadasPreview) {
+      derivadasPreview.innerHTML = '';
+      
+      const derivadas = [
+        { label: 'Pontos de Vida', value: document.getElementById('pontos_vida').value },
+        { label: 'Pontos de Mana', value: document.getElementById('pontos_mana').value },
+        { label: 'Classe de Armadura', value: document.getElementById('ca').value }
+      ];
+      
+      derivadas.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'stat-preview';
+        div.innerHTML = `
+          <span class="label">${item.label}:</span>
+          <span class="value">${item.value}</span>
+        `;
+        derivadasPreview.appendChild(div);
+      });
+    }
   }
   
-  // Event listeners para atributos
+  // Event listeners para atributos (sempre funcionais)
   document.querySelectorAll('.attr-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       const attr = this.dataset.attr;
@@ -198,11 +187,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const valor = parseInt(input.value);
       
       if (this.classList.contains('plus') && valor < 20) {
-        const custoProximo = (custoPorPonto[Math.min(20, valor + 1)] || 0) - (custoPorPonto[valor] || 0);
-        if (pontosDisponiveis >= custoProximo) {
-          input.value = valor + 1;
-        }
-      } else if (this.classList.contains('minus') && valor > 8) {
+        input.value = valor + 1;
+      } else if (this.classList.contains('minus') && valor > 3) {
         input.value = valor - 1;
       }
       
@@ -228,7 +214,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  document.getElementById('raca_id').addEventListener('change', atualizarCalculos);
+  // Event listener para mudança de raça (com reset correto)
+  if (racaSelect) {
+    racaSelect.addEventListener('change', function() {
+      console.log('🔄 Trocando raça na edição para:', this.selectedOptions[0]?.textContent || 'Nenhuma');
+      debugAtributos('Antes do reset na edição');
+      
+      // Em modo de edição, permitir reset para valores base ou manter valores atuais
+      const resposta = confirm('Deseja resetar os atributos para os valores base e aplicar os bônus da nova raça?\n\nSim = Reset e aplicar bônus da nova raça\nNão = Manter valores atuais');
+      
+      if (resposta) {
+        // Reset para valores base
+        atributos.forEach(attr => {
+          const input = document.getElementById(attr);
+          if (input.dataset.valorBase) {
+            input.value = parseInt(input.dataset.valorBase);
+          }
+        });
+        debugAtributos('Após reset na edição');
+      }
+      
+      atualizarCalculos();
+    });
+  }
+  
   document.getElementById('nivel').addEventListener('input', atualizarCalculos);
   document.getElementById('nome').addEventListener('input', atualizarPreview);
   
@@ -252,13 +261,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Form submission com validação
   characterForm.addEventListener('submit', function(e) {
-    // Verificar se os pontos estão dentro do limite
-    if (pontosDisponiveis < 0) {
-      e.preventDefault();
-      alert('❌ Você excedeu o limite de pontos de atributos! Ajuste os valores antes de salvar.');
-      return false;
-    }
-    
     // Feedback visual
     const submitBtn = this.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
@@ -270,8 +272,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   // Inicialização
-  calcularPontosIniciais();
   atualizarCalculos();
   
-  console.log('✅ Editor de personagem atualizado inicializado (sistema com bônus dobrados)');
+  console.log('✅ Editor de personagem livre inicializado');
+  console.log('🔧 Correção aplicada: Reset opcional ao trocar raças na edição');
+  console.log('📋 Funcionalidades: Distribuição livre, sem limitação de pontos');
 });

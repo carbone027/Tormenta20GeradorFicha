@@ -92,11 +92,14 @@
     <div class="form-section">
       <h3>💪 Atributos</h3>
       <div class="card">
-        <div class="atributos-info">
-          <p>📋 <strong>Distribuição de Pontos:</strong> Você tem <span id="pontosRestantes">27</span> pontos para distribuir entre os atributos. Cada atributo começa em <strong>10</strong>.</p>
-          <p>💡 <strong>Dica:</strong> Defina primeiro os valores base, depois escolha a raça para aplicar os bônus raciais!</p>
-          <p>⚠️ <strong>Importante:</strong> Após escolher uma raça, os <strong>bônus raciais são dobrados</strong> e aplicados automaticamente!</p>
-          <p>🔥 <strong>Novo Sistema:</strong> Bônus racial +1 = +2 aplicado, +2 = +4 aplicado, etc.</p>
+        <div class="atributos-info" style="display: none;">
+          <p>📋 <strong>Sistema Livre:</strong> Você pode distribuir os atributos livremente. <span id="pontosRestantes" style="display: none;">27</span></p>
+        </div>
+        
+        <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 1rem; margin-bottom: 2rem; text-align: center;">
+          <p>🎯 <strong>Sistema Livre de Distribuição:</strong> Ajuste os atributos conforme desejar (mínimo 3, máximo 20).</p>
+          <p>💡 <strong>Dica:</strong> Defina primeiro os valores que deseja, depois escolha a raça para aplicar os bônus!</p>
+          <p>⚡ <strong>Novo Sistema:</strong> Bônus raciais são dobrados (+1 vira +2, +2 vira +4) e você pode ajustar livremente!</p>
         </div>
         
         <div class="atributos-grid">
@@ -266,7 +269,6 @@
   </form>
 </section>
 
-<!-- Script específico para criação de personagem com todas as raças -->
 <script src="/scripts/character-create.js"></script>
 
 <%- include('../partials/footer') %>

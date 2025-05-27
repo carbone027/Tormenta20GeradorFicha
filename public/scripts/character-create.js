@@ -1,29 +1,28 @@
-// Script para criação de personagem com sistema atualizado
+// Script atualizado para criação de personagem - Sistema livre de distribuição
+// Remove limitação de pontos e permite ajustes livres dos atributos
 document.addEventListener('DOMContentLoaded', function() {
-  let pontosDisponiveis = 27; // Pontos para distribuir livremente
   let bonusRacialAplicado = false;
   let bonusLivresDisponiveis = 0;
   let bonusLivresUsados = 0;
-  
-  // Sistema de custos - agora baseado no valor final do atributo
-  const custoPorPonto = { 
-    8: -2,   // Reduzir de 10 para 8 "devolve" 2 pontos
-    9: -1,   // Reduzir de 10 para 9 "devolve" 1 ponto
-    10: 0,   // Valor base - sem custo
-    11: 1,   // Subir de 10 para 11 custa 1 ponto
-    12: 2,   // Subir de 10 para 12 custa 2 pontos
-    13: 3,   // Subir de 10 para 13 custa 3 pontos
-    14: 5,   // Subir de 10 para 14 custa 5 pontos
-    15: 7,   // Subir de 10 para 15 custa 7 pontos
-    16: 10,  // Subir de 10 para 16 custa 10 pontos
-    17: 13,  // Subir de 10 para 17 custa 13 pontos
-    18: 17   // Subir de 10 para 18 custa 17 pontos
-  };
   
   // Elementos do DOM
   const pontosRestantesEl = document.getElementById('pontosRestantes');
   const atributos = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'];
   const racaSelect = document.getElementById('raca_id');
+  
+  // Esconder/remover o sistema de pontos
+  if (pontosRestantesEl && pontosRestantesEl.parentElement) {
+    pontosRestantesEl.parentElement.style.display = 'none';
+  }
+  
+  // Função de debug para rastrear valores
+  function debugAtributos(momento) {
+    console.log(`🔍 Debug [${momento}]:`);
+    atributos.forEach(attr => {
+      const input = document.getElementById(attr);
+      console.log(`  ${attr}: valor=${input.value}, base=${input.dataset.valorBase || 'undefined'}`);
+    });
+  }
   
   // Criar interface para bônus raciais livres
   function criarInterfaceBonusLivres() {
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `).join('')}
       </div>
       <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted); font-style: italic;">
-        💡 Nota: Algumas raças têm restrições específicas nos bônus livres.
+        💡 Nota: Os bônus são aplicados automaticamente. Você pode ajustar os valores manualmente depois.
       </p>
     `;
     
@@ -117,11 +116,12 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Bônus original:', bonusOriginal);
       console.log('Bônus dobrado aplicado:', bonus);
       
-      // Resetar valores base
+      // Garantir que todos os atributos tenham valores base definidos
       atributos.forEach(attr => {
         const input = document.getElementById(attr);
-        input.dataset.valorBase = input.dataset.valorBase || input.value;
-        input.value = parseInt(input.dataset.valorBase);
+        if (!input.dataset.valorBase) {
+          input.dataset.valorBase = input.value;
+        }
       });
       
       // Verificar se tem bônus livre
@@ -133,23 +133,25 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('bonus-disponiveis').textContent = bonusLivresDisponiveis;
         document.getElementById('bonus-restantes').textContent = bonusLivresDisponiveis;
         
-        // Aplicar penalidades se houver
+        // Aplicar apenas as penalidades fixas se houver
         Object.entries(bonus).forEach(([atributo, valor]) => {
           if (atributo !== 'livre' && valor < 0) {
             const input = document.getElementById(atributo);
             if (input) {
-              const novoValor = parseInt(input.value) + valor;
+              const valorBase = parseInt(input.dataset.valorBase);
+              const novoValor = valorBase + valor;
               input.value = Math.max(3, novoValor); // Mínimo 3
               console.log(`Aplicando penalidade dobrada: ${atributo} ${valor} = ${input.value}`);
             }
           }
         });
       } else {
-        // Bônus fixos dobrados
+        // Aplicar bônus fixos dobrados diretamente nos valores base
         Object.entries(bonus).forEach(([atributo, valor]) => {
           const input = document.getElementById(atributo);
           if (input) {
-            const novoValor = parseInt(input.value) + valor;
+            const valorBase = parseInt(input.dataset.valorBase);
+            const novoValor = valorBase + valor;
             input.value = Math.max(3, Math.min(20, novoValor)); // Min 3, Max 20
             console.log(`Aplicando bônus dobrado: ${atributo} ${valor > 0 ? '+' : ''}${valor} = ${input.value}`);
           }
@@ -163,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       bonusRacialAplicado = true;
-      recalcularPontos();
       atualizarCalculos();
       
     } catch (error) {
@@ -205,18 +206,20 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
     
-    // Resetar valores para valores base
+    // Resetar TODOS os atributos para valores base primeiro
     atributos.forEach(attr => {
       const input = document.getElementById(attr);
-      input.value = parseInt(input.dataset.valorBase || 10);
+      const valorBase = parseInt(input.dataset.valorBase || 10);
+      input.value = valorBase;
     });
     
-    // Reaplicar penalidades fixas (dobradas)
+    // Reaplicar penalidades fixas (dobradas) se houver
     Object.entries(bonusData).forEach(([atributo, valor]) => {
       if (atributo !== 'livre' && valor < 0) {
         const input = document.getElementById(atributo);
         if (input) {
-          const novoValor = parseInt(input.value) + valor;
+          const valorBase = parseInt(input.dataset.valorBase);
+          const novoValor = valorBase + valor;
           input.value = Math.max(3, novoValor);
         }
       }
@@ -227,7 +230,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const atributo = checkbox.value;
       const input = document.getElementById(atributo);
       if (input) {
-        const novoValor = parseInt(input.value) + 2; // +2 (dobrado do +1 original)
+        const valorAtual = parseInt(input.value);
+        const novoValor = valorAtual + 2; // +2 (dobrado do +1 original)
         input.value = Math.min(20, novoValor);
       }
     });
@@ -235,20 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
     bonusLivresUsados = checkboxes.length;
     document.getElementById('bonus-restantes').textContent = bonusLivresDisponiveis - bonusLivresUsados;
     
-    recalcularPontos();
     atualizarCalculos();
-  }
-  
-  // Recalcular pontos usados considerando valores atuais
-  function recalcularPontos() {
-    let pontosUsados = 0;
-    atributos.forEach(attr => {
-      const valorBase = parseInt(document.getElementById(attr).dataset.valorBase || 10);
-      pontosUsados += custoPorPonto[valorBase] || 0;
-    });
-    
-    pontosDisponiveis = 27 - pontosUsados;
-    pontosRestantesEl.textContent = pontosDisponiveis;
   }
   
   // Atualizar preview e cálculos
@@ -257,33 +248,28 @@ document.addEventListener('DOMContentLoaded', function() {
     atributos.forEach(attr => {
       const valor = parseInt(document.getElementById(attr).value);
       const modificador = Math.floor((valor - 10) / 2);
-      document.getElementById('bonus-' + attr).textContent = modificador >= 0 ? '+' + modificador : modificador;
+      const bonusElement = document.getElementById('bonus-' + attr);
+      if (bonusElement) {
+        bonusElement.textContent = modificador >= 0 ? '+' + modificador : modificador;
+      }
     });
     
-    // Atualizar botões apenas para valores base (quando não há bônus racial aplicado)
-    if (!bonusRacialAplicado) {
-      atributos.forEach(attr => {
-        const input = document.getElementById(attr);
-        const valor = parseInt(input.value);
-        const btnMinus = input.parentNode.querySelector('.minus');
-        const btnPlus = input.parentNode.querySelector('.plus');
-        
-        btnMinus.disabled = valor <= 8;
-        
-        if (valor >= 18) {
-          btnPlus.disabled = true;
-        } else {
-          const custoProximo = (custoPorPonto[valor + 1] || 0) - (custoPorPonto[valor] || 0);
-          btnPlus.disabled = pontosDisponiveis < custoProximo;
-        }
-      });
-    } else {
-      // Desabilitar botões quando bônus racial aplicado
-      document.querySelectorAll('.attr-btn').forEach(btn => {
-        btn.disabled = true;
-        btn.style.opacity = '0.5';
-      });
-    }
+    // SEMPRE permitir alteração dos atributos (não travar os botões)
+    atributos.forEach(attr => {
+      const input = document.getElementById(attr);
+      const btnMinus = input.parentNode.querySelector('.minus');
+      const btnPlus = input.parentNode.querySelector('.plus');
+      
+      const valor = parseInt(input.value);
+      
+      // Habilitar/desabilitar baseado apenas nos limites mínimo e máximo
+      btnMinus.disabled = valor <= 3;  // Mínimo 3
+      btnPlus.disabled = valor >= 20;  // Máximo 20
+      
+      // Remover opacidade que indica desabilitado
+      btnMinus.style.opacity = btnMinus.disabled ? '0.5' : '1';
+      btnPlus.style.opacity = btnPlus.disabled ? '0.5' : '1';
+    });
     
     // Calcular características derivadas
     calcularCaracteristicasDerivadas();
@@ -339,65 +325,71 @@ document.addEventListener('DOMContentLoaded', function() {
       racaNome = racaSelect.selectedOptions[0].textContent;
     }
     
-    document.getElementById('previewNome').textContent = nome;
-    document.getElementById('previewClasseRaca').textContent = `${classeNome} ${racaNome} - Nível ${nivel}`;
+    const previewNome = document.getElementById('previewNome');
+    const previewClasseRaca = document.getElementById('previewClasseRaca');
+    
+    if (previewNome) previewNome.textContent = nome;
+    if (previewClasseRaca) previewClasseRaca.textContent = `${classeNome} ${racaNome} - Nível ${nivel}`;
     
     // Atualizar atributos no preview
     const attrsPreview = document.getElementById('attrsPreview');
-    attrsPreview.innerHTML = '';
-    
-    atributos.forEach(attr => {
-      const valor = document.getElementById(attr).value;
-      const modificador = document.getElementById('bonus-' + attr).textContent;
-      const nome = attr.charAt(0).toUpperCase() + attr.slice(1);
+    if (attrsPreview) {
+      attrsPreview.innerHTML = '';
       
-      const div = document.createElement('div');
-      div.className = 'attr-preview';
-      div.innerHTML = `
-        <span class="label">${nome}:</span>
-        <span class="value">${valor} (${modificador})</span>
-      `;
-      attrsPreview.appendChild(div);
-    });
+      atributos.forEach(attr => {
+        const valor = document.getElementById(attr).value;
+        const bonusElement = document.getElementById('bonus-' + attr);
+        const modificador = bonusElement ? bonusElement.textContent : '+0';
+        const nome = attr.charAt(0).toUpperCase() + attr.slice(1);
+        
+        const div = document.createElement('div');
+        div.className = 'attr-preview';
+        div.innerHTML = `
+          <span class="label">${nome}:</span>
+          <span class="value">${valor} (${modificador})</span>
+        `;
+        attrsPreview.appendChild(div);
+      });
+    }
     
     // Atualizar características derivadas no preview
     const derivadasPreview = document.getElementById('derivadasPreview');
-    derivadasPreview.innerHTML = '';
-    
-    const derivadas = [
-      { label: 'Pontos de Vida', value: document.getElementById('pontos_vida').value },
-      { label: 'Pontos de Mana', value: document.getElementById('pontos_mana').value },
-      { label: 'Classe de Armadura', value: document.getElementById('ca').value }
-    ];
-    
-    derivadas.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'stat-preview';
-      div.innerHTML = `
-        <span class="label">${item.label}:</span>
-        <span class="value">${item.value}</span>
-      `;
-      derivadasPreview.appendChild(div);
-    });
+    if (derivadasPreview) {
+      derivadasPreview.innerHTML = '';
+      
+      const derivadas = [
+        { label: 'Pontos de Vida', value: document.getElementById('pontos_vida').value },
+        { label: 'Pontos de Mana', value: document.getElementById('pontos_mana').value },
+        { label: 'Classe de Armadura', value: document.getElementById('ca').value }
+      ];
+      
+      derivadas.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'stat-preview';
+        div.innerHTML = `
+          <span class="label">${item.label}:</span>
+          <span class="value">${item.value}</span>
+        `;
+        derivadasPreview.appendChild(div);
+      });
+    }
   }
   
-  // Event listeners para atributos (apenas para valores base)
+  // Event listeners para atributos (sempre funcionais)
   document.querySelectorAll('.attr-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-      if (bonusRacialAplicado) return; // Não permitir mudanças após aplicar bônus racial
-      
       const attr = this.dataset.attr;
       const input = document.getElementById(attr);
       const valor = parseInt(input.value);
       
-      if (this.classList.contains('plus') && valor < 18) {
-        const custoProximo = (custoPorPonto[valor + 1] || 0) - (custoPorPonto[valor] || 0);
-        if (pontosDisponiveis >= custoProximo) {
-          input.value = valor + 1;
-          input.dataset.valorBase = input.value;
-        }
-      } else if (this.classList.contains('minus') && valor > 8) {
+      if (this.classList.contains('plus') && valor < 20) {
+        input.value = valor + 1;
+      } else if (this.classList.contains('minus') && valor > 3) {
         input.value = valor - 1;
+      }
+      
+      // Atualizar valor base quando não há raça selecionada ou quando ajustando manualmente
+      if (!racaSelect.value || !bonusRacialAplicado) {
         input.dataset.valorBase = input.value;
       }
       
@@ -407,23 +399,25 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Event listener para mudança de raça
   racaSelect.addEventListener('change', function() {
+    console.log('🔄 Trocando raça para:', this.selectedOptions[0]?.textContent || 'Nenhuma');
+    debugAtributos('Antes do reset');
+    
     bonusRacialAplicado = false;
     bonusLivresDisponiveis = 0;
     bonusLivresUsados = 0;
     
-    // Resetar para valores base
+    // RESETAR todos os atributos para valores base antes de aplicar nova raça
     atributos.forEach(attr => {
       const input = document.getElementById(attr);
-      if (input.dataset.valorBase) {
-        input.value = input.dataset.valorBase;
+      // Se não há valor base definido, assumir o valor atual como base
+      if (!input.dataset.valorBase) {
+        input.dataset.valorBase = input.value;
       }
+      // Resetar para o valor base (sem bônus raciais)
+      input.value = parseInt(input.dataset.valorBase);
     });
     
-    // Reabilitar botões
-    document.querySelectorAll('.attr-btn').forEach(btn => {
-      btn.disabled = false;
-      btn.style.opacity = '1';
-    });
+    debugAtributos('Após reset');
     
     // Esconder interface de bônus livres
     const bonusInterface = document.getElementById('bonus-livres-interface');
@@ -431,12 +425,16 @@ document.addEventListener('DOMContentLoaded', function() {
       bonusInterface.style.display = 'none';
     }
     
-    // Aplicar novos bônus
+    // Aplicar novos bônus da raça selecionada
     if (this.value) {
-      setTimeout(aplicarBonusRacial, 100);
+      setTimeout(() => {
+        aplicarBonusRacial();
+        debugAtributos('Após aplicar bônus');
+      }, 100);
+    } else {
+      // Se nenhuma raça selecionada, apenas atualizar cálculos
+      atualizarCalculos();
     }
-    
-    atualizarCalculos();
   });
   
   // Event listeners para outros campos
@@ -461,34 +459,31 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('nome').addEventListener('input', atualizarPreview);
   
   // Reset form
-  document.getElementById('resetForm').addEventListener('click', function() {
-    if (confirm('Tem certeza que deseja resetar o formulário? Todos os dados serão perdidos.')) {
-      document.getElementById('characterForm').reset();
-      bonusRacialAplicado = false;
-      bonusLivresDisponiveis = 0;
-      bonusLivresUsados = 0;
-      
-      atributos.forEach(attr => {
-        const input = document.getElementById(attr);
-        input.value = 10; // Iniciar em 10 ao invés de 8
-        input.dataset.valorBase = 10;
-      });
-      
-      // Esconder interface de bônus livres
-      const bonusInterface = document.getElementById('bonus-livres-interface');
-      if (bonusInterface) {
-        bonusInterface.remove();
+  const resetBtn = document.getElementById('resetForm');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      if (confirm('Tem certeza que deseja resetar o formulário? Todos os dados serão perdidos.')) {
+        document.getElementById('characterForm').reset();
+        bonusRacialAplicado = false;
+        bonusLivresDisponiveis = 0;
+        bonusLivresUsados = 0;
+        
+        atributos.forEach(attr => {
+          const input = document.getElementById(attr);
+          input.value = 10; // Iniciar em 10
+          input.dataset.valorBase = 10;
+        });
+        
+        // Esconder interface de bônus livres
+        const bonusInterface = document.getElementById('bonus-livres-interface');
+        if (bonusInterface) {
+          bonusInterface.remove();
+        }
+        
+        atualizarCalculos();
       }
-      
-      // Reabilitar botões
-      document.querySelectorAll('.attr-btn').forEach(btn => {
-        btn.disabled = false;
-        btn.style.opacity = '1';
-      });
-      
-      atualizarCalculos();
-    }
-  });
+    });
+  }
   
   // Inicializar valores base em 10
   atributos.forEach(attr => {
@@ -500,5 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar
   atualizarCalculos();
   
-  console.log('✅ Sistema de criação atualizado inicializado (início em 10, bônus dobrados)');
+  console.log('✅ Sistema de criação livre inicializado');
+  console.log('🔧 Correção aplicada: Reset automático ao trocar raças');
+  console.log('📋 Funcionalidades: Distribuição livre, bônus raciais dobrados, reset correto');
 });
