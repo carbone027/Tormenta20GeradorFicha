@@ -184,6 +184,106 @@
         </div>
       </div>
 
+      <!-- Poderes -->
+      <div class="form-section">
+        <h3>✨ Poderes</h3>
+        <div class="card">
+          <!-- Poderes Atuais do Personagem -->
+          <% if (poderesPersonagem && poderesPersonagem.length > 0) { %>
+            <div class="poderes-atuais-section">
+              <h4>🧬 Poderes Atuais</h4>
+              <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                Poderes que seu personagem possui atualmente:
+              </p>
+              <div class="poderes-atuais-lista">
+                <% poderesPersonagem.forEach(poder => { %>
+                  <div class="poder-atual-card">
+                    <div class="poder-header">
+                      <span class="poder-nome"><%= poder.nome %></span>
+                      <span class="poder-fonte <%= poder.fonte %>">
+                        <% 
+                          let sourceIcon = '📝';
+                          let sourceText = poder.fonte;
+                          switch(poder.fonte) {
+                            case 'raca': sourceIcon = '🧬'; sourceText = 'Racial'; break;
+                            case 'escolha': sourceIcon = '⚡'; sourceText = 'Escolhido'; break;
+                            case 'classe': sourceIcon = '⚔️'; sourceText = 'Classe'; break;
+                            case 'deus': sourceIcon = '⭐'; sourceText = 'Divino'; break;
+                          }
+                        %>
+                        <%= sourceIcon %> <%= sourceText %>
+                      </span>
+                    </div>
+                    <p class="poder-descricao"><%= poder.descricao %></p>
+                    <% if (poder.observacoes) { %>
+                      <p class="poder-observacoes">📝 <em><%= poder.observacoes %></em></p>
+                    <% } %>
+                  </div>
+                <% }); %>
+              </div>
+            </div>
+          <% } %>
+
+          <!-- Poderes Disponíveis para Seleção/Edição -->
+          <% if (poderesDisponiveis && Object.keys(poderesDisponiveis).length > 0) { %>
+            <div class="poderes-selecao-section">
+              <h4>⚡ Poderes Adicionais</h4>
+              <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                Adicione ou remova poderes do seu personagem:
+              </p>
+              
+              <% Object.entries(poderesDisponiveis).forEach(([tipo, poderes]) => { %>
+                <% if (poderes && poderes.length > 0) { %>
+                  <div class="poder-tipo-group">
+                    <h5 class="poder-tipo-title">
+                      <% 
+                        let tipoIcon = '✨';
+                        let tipoNome = tipo;
+                        switch(tipo) {
+                          case 'geral': tipoIcon = '⚡'; tipoNome = 'Poderes Gerais'; break;
+                          case 'combate': tipoIcon = '⚔️'; tipoNome = 'Poderes de Combate'; break;
+                          case 'destino': tipoIcon = '🌟'; tipoNome = 'Poderes de Destino'; break;
+                          case 'magia': tipoIcon = '🔮'; tipoNome = 'Poderes de Magia'; break;
+                        }
+                      %>
+                      <%= tipoIcon %> <%= tipoNome %>
+                    </h5>
+                    
+                    <div class="poderes-grid">
+                      <% poderes.forEach(poder => { %>
+                        <div class="poder-selecao-card">
+                          <label class="poder-checkbox-label">
+                            <% 
+                              // Verificar se o poder já está selecionado
+                              let isSelected = false;
+                              if (poderesPersonagem) {
+                                isSelected = poderesPersonagem.some(p => p.id == poder.id && p.fonte === 'escolha');
+                              }
+                            %>
+                            <input type="checkbox" name="poderes_selecionados" value="<%= poder.id %>" 
+                                   class="poder-checkbox" <%= isSelected ? 'checked' : '' %>>
+                            <div class="poder-info">
+                              <span class="poder-nome"><%= poder.nome %></span>
+                              <span class="poder-descricao"><%= poder.descricao %></span>
+                              <% if (poder.pre_requisitos) { %>
+                                <span class="poder-requisitos">📋 <strong>Pré-req:</strong> <%= poder.pre_requisitos %></span>
+                              <% } %>
+                              <% if (poder.custo_pm && poder.custo_pm > 0) { %>
+                                <span class="poder-custo">💙 <strong>Custo:</strong> <%= poder.custo_pm %> PM</span>
+                              <% } %>
+                            </div>
+                          </label>
+                        </div>
+                      <% }); %>
+                    </div>
+                  </div>
+                <% } %>
+              <% }); %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
       <!-- Características Derivadas -->
       <div class="form-section">
         <h3>📊 Características Derivadas</h3>
@@ -274,6 +374,13 @@
                 <div class="derivadas-preview" id="derivadasPreview">
                   <!-- Preenchido via JavaScript -->
                 </div>
+              </div>
+            </div>
+            
+            <div class="preview-poderes" id="previewPoderes">
+              <h5>Poderes Selecionados</h5>
+              <div class="poderes-preview" id="poderesPreview">
+                <!-- Preenchido via JavaScript -->
               </div>
             </div>
           </div>

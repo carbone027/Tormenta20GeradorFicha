@@ -1,9 +1,10 @@
-// Script atualizado para criação de personagem - Sistema livre de distribuição
-// Remove limitação de pontos e permite ajustes livres dos atributos
+// Script atualizado para criação de personagem - Sistema livre de distribuição + Poderes
+// Remove limitação de pontos e permite ajustes livres dos atributos + integração com poderes
 document.addEventListener('DOMContentLoaded', function() {
   let bonusRacialAplicado = false;
   let bonusLivresDisponiveis = 0;
   let bonusLivresUsados = 0;
+  let poderesRaciaisCarregados = [];
   
   // Elementos do DOM
   const pontosRestantesEl = document.getElementById('pontosRestantes');
@@ -22,6 +23,116 @@ document.addEventListener('DOMContentLoaded', function() {
       const input = document.getElementById(attr);
       console.log(`  ${attr}: valor=${input.value}, base=${input.dataset.valorBase || 'undefined'}`);
     });
+  }
+  
+  // Função para carregar poderes raciais
+  async function carregarPoderesRaciais(racaId) {
+    try {
+      console.log('📚 Carregando poderes raciais para raça ID:', racaId);
+      
+      const response = await fetch(`/api/racas/${racaId}/poderes`);
+      if (!response.ok) {
+        throw new Error('Erro ao carregar poderes raciais');
+      }
+      
+      const data = await response.json();
+      if (data.success) {
+        poderesRaciaisCarregados = data.poderes || [];
+        exibirPoderesRaciais(poderesRaciaisCarregados);
+        console.log('✅ Poderes raciais carregados:', poderesRaciaisCarregados.length);
+      } else {
+        console.warn('⚠️ Nenhum poder racial encontrado');
+        poderesRaciaisCarregados = [];
+        esconderPoderesRaciais();
+      }
+    } catch (error) {
+      console.error('❌ Erro ao carregar poderes raciais:', error);
+      poderesRaciaisCarregados = [];
+      esconderPoderesRaciais();
+    }
+  }
+  
+  // Função para exibir poderes raciais
+  function exibirPoderesRaciais(poderes) {
+    const secaoPoderes = document.querySelector('.poderes-raciais-section');
+    const listaPoderes = document.getElementById('poderesRaciaisLista');
+    
+    if (!secaoPoderes || !listaPoderes) return;
+    
+    if (poderes && poderes.length > 0) {
+      listaPoderes.innerHTML = '';
+      
+      poderes.forEach(poder => {
+        const poderCard = document.createElement('div');
+        poderCard.className = 'poder-racial-card';
+        poderCard.innerHTML = `
+          <div class="poder-racial-header">
+            <span class="poder-nome">✨ ${poder.nome}</span>
+            <span class="poder-automatico">🧬 Automático</span>
+          </div>
+          <p class="poder-descricao">${poder.descricao}</p>
+          ${poder.pre_requisitos ? `<p class="poder-requisitos">📋 <strong>Pré-requisitos:</strong> ${poder.pre_requisitos}</p>` : ''}
+          ${poder.custo_pm && poder.custo_pm > 0 ? `<p class="poder-custo">💙 <strong>Custo:</strong> ${poder.custo_pm} PM</p>` : ''}
+        `;
+        listaPoderes.appendChild(poderCard);
+      });
+      
+      secaoPoderes.style.display = 'block';
+      atualizarPreviewPoderes();
+    } else {
+      esconderPoderesRaciais();
+    }
+  }
+  
+  // Função para esconder poderes raciais
+  function esconderPoderesRaciais() {
+    const secaoPoderes = document.querySelector('.poderes-raciais-section');
+    if (secaoPoderes) {
+      secaoPoderes.style.display = 'none';
+    }
+    atualizarPreviewPoderes();
+  }
+  
+  // Função para atualizar preview de poderes
+  function atualizarPreviewPoderes() {
+    const previewPoderes = document.getElementById('previewPoderes');
+    const poderesPreview = document.getElementById('poderesPreview');
+    
+    if (!previewPoderes || !poderesPreview) return;
+    
+    // Coletar poderes selecionados
+    const poderesEscolhidos = [];
+    const checkboxes = document.querySelectorAll('input[name="poderes_selecionados"]:checked');
+    
+    checkboxes.forEach(checkbox => {
+      const card = checkbox.closest('.poder-selecao-card');
+      if (card) {
+        const nome = card.querySelector('.poder-nome').textContent;
+        poderesEscolhidos.push(nome);
+      }
+    });
+    
+    // Combinar poderes raciais e escolhidos
+    const todosPoderes = [];
+    
+    if (poderesRaciaisCarregados.length > 0) {
+      poderesRaciaisCarregados.forEach(poder => {
+        todosPoderes.push(`🧬 ${poder.nome} (Racial)`);
+      });
+    }
+    
+    poderesEscolhidos.forEach(nome => {
+      todosPoderes.push(`⚡ ${nome} (Escolhido)`);
+    });
+    
+    if (todosPoderes.length > 0) {
+      poderesPreview.innerHTML = todosPoderes.map(poder => 
+        `<div class="poder-preview-item">${poder}</div>`
+      ).join('');
+      previewPoderes.style.display = 'block';
+    } else {
+      previewPoderes.style.display = 'none';
+    }
   }
   
   // Criar interface para bônus raciais livres
@@ -373,6 +484,9 @@ document.addEventListener('DOMContentLoaded', function() {
         derivadasPreview.appendChild(div);
       });
     }
+    
+    // Atualizar preview de poderes
+    atualizarPreviewPoderes();
   }
   
   // Event listeners para atributos (sempre funcionais)
@@ -405,6 +519,7 @@ document.addEventListener('DOMContentLoaded', function() {
     bonusRacialAplicado = false;
     bonusLivresDisponiveis = 0;
     bonusLivresUsados = 0;
+    poderesRaciaisCarregados = [];
     
     // RESETAR todos os atributos para valores base antes de aplicar nova raça
     atributos.forEach(attr => {
@@ -429,10 +544,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (this.value) {
       setTimeout(() => {
         aplicarBonusRacial();
+        carregarPoderesRaciais(this.value);
         debugAtributos('Após aplicar bônus');
       }, 100);
     } else {
       // Se nenhuma raça selecionada, apenas atualizar cálculos
+      esconderPoderesRaciais();
       atualizarCalculos();
     }
   });
@@ -458,6 +575,13 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('nivel').addEventListener('input', atualizarCalculos);
   document.getElementById('nome').addEventListener('input', atualizarPreview);
   
+  // Event listeners para seleção de poderes
+  document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('poder-checkbox')) {
+      atualizarPreviewPoderes();
+    }
+  });
+  
   // Reset form
   const resetBtn = document.getElementById('resetForm');
   if (resetBtn) {
@@ -467,6 +591,7 @@ document.addEventListener('DOMContentLoaded', function() {
         bonusRacialAplicado = false;
         bonusLivresDisponiveis = 0;
         bonusLivresUsados = 0;
+        poderesRaciaisCarregados = [];
         
         atributos.forEach(attr => {
           const input = document.getElementById(attr);
@@ -479,6 +604,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (bonusInterface) {
           bonusInterface.remove();
         }
+        
+        // Esconder poderes raciais
+        esconderPoderesRaciais();
         
         atualizarCalculos();
       }
@@ -498,4 +626,5 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('✅ Sistema de criação livre inicializado');
   console.log('🔧 Correção aplicada: Reset automático ao trocar raças');
   console.log('📋 Funcionalidades: Distribuição livre, bônus raciais dobrados, reset correto');
+  console.log('✨ Nova funcionalidade: Poderes raciais automáticos');
 });

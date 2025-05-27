@@ -182,6 +182,123 @@
       </div>
     </div>
 
+    <!-- Poderes -->
+    <% if (typeof poderes !== 'undefined' && poderes && poderes.length > 0) { %>
+      <div class="powers-section">
+        <h3>✨ Poderes do Personagem</h3>
+        
+        <% if (typeof poderesPorTipo !== 'undefined' && poderesPorTipo && Object.keys(poderesPorTipo).length > 0) { %>
+          <div class="powers-by-type">
+            <% Object.entries(poderesPorTipo).forEach(([tipo, poderesTipo]) => { %>
+              <div class="power-type-section">
+                <h4 class="power-type-title">
+                  <% 
+                    let tipoIcon = '✨';
+                    let tipoNome = tipo;
+                    switch(tipo) {
+                      case 'racial': tipoIcon = '🧬'; tipoNome = 'Poderes Raciais'; break;
+                      case 'geral': tipoIcon = '⚡'; tipoNome = 'Poderes Gerais'; break;
+                      case 'combate': tipoIcon = '⚔️'; tipoNome = 'Poderes de Combate'; break;
+                      case 'destino': tipoIcon = '🌟'; tipoNome = 'Poderes de Destino'; break;
+                      case 'magia': tipoIcon = '🔮'; tipoNome = 'Poderes de Magia'; break;
+                      case 'concedido': tipoIcon = '⭐'; tipoNome = 'Poderes Concedidos'; break;
+                      case 'tormenta': tipoIcon = '💀'; tipoNome = 'Poderes da Tormenta'; break;
+                    }
+                  %>
+                  <%= tipoIcon %> <%= tipoNome %> (<%= poderesTipo.length %>)
+                </h4>
+                
+                <div class="powers-grid">
+                  <% poderesTipo.forEach(poder => { %>
+                    <div class="power-card-view">
+                      <div class="power-header-view">
+                        <h5 class="power-name-view"><%= poder.nome %></h5>
+                        <span class="power-source">
+                          <% 
+                            let sourceIcon = '📝';
+                            let sourceText = poder.fonte;
+                            switch(poder.fonte) {
+                              case 'raca': sourceIcon = '🧬'; sourceText = 'Racial'; break;
+                              case 'escolha': sourceIcon = '⚡'; sourceText = 'Escolhido'; break;
+                              case 'classe': sourceIcon = '⚔️'; sourceText = 'Classe'; break;
+                              case 'deus': sourceIcon = '⭐'; sourceText = 'Divino'; break;
+                            }
+                          %>
+                          <%= sourceIcon %> <%= sourceText %>
+                        </span>
+                      </div>
+                      
+                      <div class="power-content-view">
+                        <p class="power-description-view"><%= poder.descricao %></p>
+                        
+                        <% if (poder.pre_requisitos) { %>
+                          <div class="power-detail">
+                            <strong>📋 Pré-requisitos:</strong> <%= poder.pre_requisitos %>
+                          </div>
+                        <% } %>
+                        
+                        <% if (poder.custo_pm && poder.custo_pm > 0) { %>
+                          <div class="power-detail">
+                            <strong>💙 Custo:</strong> <%= poder.custo_pm %> PM
+                          </div>
+                        <% } %>
+                        
+                        <% if (poder.efeito_especial) { %>
+                          <div class="power-detail">
+                            <strong>⚡ Efeito Especial:</strong> <%= poder.efeito_especial %>
+                          </div>
+                        <% } %>
+                        
+                        <% if (poder.observacoes) { %>
+                          <div class="power-detail power-notes">
+                            <strong>📝 Observações:</strong> <%= poder.observacoes %>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  <% }); %>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <!-- Lista simples caso não tenha agrupamento por tipo -->
+          <div class="powers-list">
+            <% poderes.forEach(poder => { %>
+              <div class="power-card-view">
+                <div class="power-header-view">
+                  <h5 class="power-name-view"><%= poder.nome %></h5>
+                  <span class="power-source">
+                    <% 
+                      let sourceIcon = '📝';
+                      let sourceText = poder.fonte;
+                      switch(poder.fonte) {
+                        case 'raca': sourceIcon = '🧬'; sourceText = 'Racial'; break;
+                        case 'escolha': sourceIcon = '⚡'; sourceText = 'Escolhido'; break;
+                        case 'classe': sourceIcon = '⚔️'; sourceText = 'Classe'; break;
+                        case 'deus': sourceIcon = '⭐'; sourceText = 'Divino'; break;
+                      }
+                    %>
+                    <%= sourceIcon %> <%= sourceText %>
+                  </span>
+                </div>
+                
+                <div class="power-content-view">
+                  <p class="power-description-view"><%= poder.descricao %></p>
+                  
+                  <% if (poder.observacoes) { %>
+                    <div class="power-detail power-notes">
+                      <strong>📝 Observações:</strong> <%= poder.observacoes %>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+
     <!-- História e Personalidade -->
     <% if (character.historia_pessoal || character.personalidade || character.objetivos) { %>
       <div class="background-section">
