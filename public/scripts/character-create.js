@@ -1,10 +1,24 @@
-// Script para criação de personagem com todas as raças Tormenta20
+// Script para criação de personagem com sistema atualizado
 document.addEventListener('DOMContentLoaded', function() {
-  let pontosDisponiveis = 27;
+  let pontosDisponiveis = 27; // Pontos para distribuir livremente
   let bonusRacialAplicado = false;
   let bonusLivresDisponiveis = 0;
   let bonusLivresUsados = 0;
-  const custoPorPonto = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9 };
+  
+  // Sistema de custos - agora baseado no valor final do atributo
+  const custoPorPonto = { 
+    8: -2,   // Reduzir de 10 para 8 "devolve" 2 pontos
+    9: -1,   // Reduzir de 10 para 9 "devolve" 1 ponto
+    10: 0,   // Valor base - sem custo
+    11: 1,   // Subir de 10 para 11 custa 1 ponto
+    12: 2,   // Subir de 10 para 12 custa 2 pontos
+    13: 3,   // Subir de 10 para 13 custa 3 pontos
+    14: 5,   // Subir de 10 para 14 custa 5 pontos
+    15: 7,   // Subir de 10 para 15 custa 7 pontos
+    16: 10,  // Subir de 10 para 16 custa 10 pontos
+    17: 13,  // Subir de 10 para 17 custa 13 pontos
+    18: 17   // Subir de 10 para 18 custa 17 pontos
+  };
   
   // Elementos do DOM
   const pontosRestantesEl = document.getElementById('pontosRestantes');
@@ -38,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <p style="margin-bottom: 1rem; color: var(--text-muted);">
         Sua raça permite escolher <span id="bonus-disponiveis">0</span> atributos para receber bônus.
         <br><span id="bonus-restantes">0</span> bônus restantes.
+        <br><strong>⚡ Bônus Dobrado:</strong> Os valores raciais são aplicados em dobro!
       </p>
       <div class="bonus-livres-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.5rem;">
         ${atributos.map(attr => `
@@ -71,6 +86,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Dobrar os modificadores raciais
+  function dobrarModificadores(bonus) {
+    const bonusdobrado = {};
+    
+    for (const [atributo, valor] of Object.entries(bonus)) {
+      if (atributo === 'livre') {
+        bonusdobrado[atributo] = valor; // Número de bônus livres não dobra
+      } else {
+        bonusdobrado[atributo] = valor * 2; // Dobrar o modificador
+      }
+    }
+    
+    return bonusdobrado;
+  }
+  
   // Aplicar bônus raciais automáticos
   function aplicarBonusRacial() {
     if (!racaSelect.value) return;
@@ -81,8 +111,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!bonusData) return;
     
     try {
-      const bonus = JSON.parse(bonusData);
-      console.log('Aplicando bônus racial:', bonus);
+      const bonusOriginal = JSON.parse(bonusData);
+      const bonus = dobrarModificadores(bonusOriginal); // Dobrar os modificadores
+      
+      console.log('Bônus original:', bonusOriginal);
+      console.log('Bônus dobrado aplicado:', bonus);
       
       // Resetar valores base
       atributos.forEach(attr => {
@@ -107,18 +140,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (input) {
               const novoValor = parseInt(input.value) + valor;
               input.value = Math.max(3, novoValor); // Mínimo 3
-              console.log(`Aplicando penalidade: ${atributo} ${valor} = ${input.value}`);
+              console.log(`Aplicando penalidade dobrada: ${atributo} ${valor} = ${input.value}`);
             }
           }
         });
       } else {
-        // Bônus fixos
+        // Bônus fixos dobrados
         Object.entries(bonus).forEach(([atributo, valor]) => {
           const input = document.getElementById(atributo);
           if (input) {
             const novoValor = parseInt(input.value) + valor;
-            input.value = Math.max(3, Math.min(18, novoValor));
-            console.log(`Aplicando bônus: ${atributo} ${valor > 0 ? '+' : ''}${valor} = ${input.value}`);
+            input.value = Math.max(3, Math.min(20, novoValor)); // Min 3, Max 20
+            console.log(`Aplicando bônus dobrado: ${atributo} ${valor > 0 ? '+' : ''}${valor} = ${input.value}`);
           }
         });
         
@@ -138,11 +171,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Aplicar bônus livres escolhidos
+  // Aplicar bônus livres escolhidos (dobrados)
   function aplicarBonusLivres() {
     const checkboxes = document.querySelectorAll('input[name="bonus-livre"]:checked');
     const racaOption = racaSelect.selectedOptions[0];
-    const bonusData = JSON.parse(racaOption.dataset.bonus || '{}');
+    const bonusDataOriginal = JSON.parse(racaOption.dataset.bonus || '{}');
+    const bonusData = dobrarModificadores(bonusDataOriginal);
     
     // Verificar limites
     let bonusPermitidos = bonusLivresDisponiveis;
@@ -177,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
       input.value = parseInt(input.dataset.valorBase || 10);
     });
     
-    // Reaplicar penalidades fixas
+    // Reaplicar penalidades fixas (dobradas)
     Object.entries(bonusData).forEach(([atributo, valor]) => {
       if (atributo !== 'livre' && valor < 0) {
         const input = document.getElementById(atributo);
@@ -188,13 +222,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Aplicar bônus escolhidos
+    // Aplicar bônus escolhidos (+2 para cada bônus livre, dobrado de +1)
     checkboxes.forEach(checkbox => {
       const atributo = checkbox.value;
       const input = document.getElementById(atributo);
       if (input) {
-        const novoValor = parseInt(input.value) + 1; // +1 para cada bônus livre
-        input.value = Math.min(18, novoValor);
+        const novoValor = parseInt(input.value) + 2; // +2 (dobrado do +1 original)
+        input.value = Math.min(20, novoValor);
       }
     });
     
@@ -209,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function recalcularPontos() {
     let pontosUsados = 0;
     atributos.forEach(attr => {
-      const valorBase = parseInt(document.getElementById(attr).dataset.valorBase || 8);
+      const valorBase = parseInt(document.getElementById(attr).dataset.valorBase || 10);
       pontosUsados += custoPorPonto[valorBase] || 0;
     });
     
@@ -226,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('bonus-' + attr).textContent = modificador >= 0 ? '+' + modificador : modificador;
     });
     
-    // Atualizar botões apenas para valores base
+    // Atualizar botões apenas para valores base (quando não há bônus racial aplicado)
     if (!bonusRacialAplicado) {
       atributos.forEach(attr => {
         const input = document.getElementById(attr);
@@ -236,10 +270,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         btnMinus.disabled = valor <= 8;
         
-        if (valor >= 15) {
+        if (valor >= 18) {
           btnPlus.disabled = true;
         } else {
-          const custoProximo = custoPorPonto[valor + 1] - custoPorPonto[valor];
+          const custoProximo = (custoPorPonto[valor + 1] || 0) - (custoPorPonto[valor] || 0);
           btnPlus.disabled = pontosDisponiveis < custoProximo;
         }
       });
@@ -356,8 +390,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const input = document.getElementById(attr);
       const valor = parseInt(input.value);
       
-      if (this.classList.contains('plus') && valor < 15) {
-        const custoProximo = custoPorPonto[valor + 1] - custoPorPonto[valor];
+      if (this.classList.contains('plus') && valor < 18) {
+        const custoProximo = (custoPorPonto[valor + 1] || 0) - (custoPorPonto[valor] || 0);
         if (pontosDisponiveis >= custoProximo) {
           input.value = valor + 1;
           input.dataset.valorBase = input.value;
@@ -436,8 +470,8 @@ document.addEventListener('DOMContentLoaded', function() {
       
       atributos.forEach(attr => {
         const input = document.getElementById(attr);
-        input.value = 8;
-        input.dataset.valorBase = 8;
+        input.value = 10; // Iniciar em 10 ao invés de 8
+        input.dataset.valorBase = 10;
       });
       
       // Esconder interface de bônus livres
@@ -456,14 +490,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Inicializar valores base
+  // Inicializar valores base em 10
   atributos.forEach(attr => {
     const input = document.getElementById(attr);
-    input.dataset.valorBase = input.value;
+    input.value = 10; // Iniciar em 10
+    input.dataset.valorBase = 10;
   });
   
   // Inicializar
   atualizarCalculos();
   
-  console.log('✅ Sistema de criação com todas as raças inicializado');
+  console.log('✅ Sistema de criação atualizado inicializado (início em 10, bônus dobrados)');
 });
