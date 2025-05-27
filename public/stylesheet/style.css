@@ -4848,3 +4848,160 @@ footer > * {
     font-size: 0.7rem;
   }
 }
+
+.bonus-livres-interface {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 300px;
+  }
+}
+
+.bonus-livre-option:hover {
+  background: var(--border-color) !important;
+}
+
+.bonus-livre-option input:checked + span {
+  color: var(--accent-gold);
+  font-weight: bold;
+}
+
+.atributo-card.principal {
+  border-color: var(--accent-gold);
+  background: rgba(212, 175, 55, 0.1);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.attr-btn:disabled {
+  cursor: not-allowed;
+  background: #666;
+}
+
+.bonus-display {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+}
+
+/* Estilos específicos para a página de raças completa */
+.race-filters .filter-btn {
+  background: var(--secondary-bg);
+  color: var(--text-light);
+  border: 2px solid var(--border-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.race-filters .filter-btn:hover,
+.race-filters .filter-btn.active {
+  background: var(--gradient-gold);
+  color: var(--primary-bg);
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+
+.raca-card {
+  transition: all 0.3s ease;
+}
+
+.raca-card.hidden {
+  display: none;
+}
+
+.bonus-item {
+  background: rgba(212, 175, 55, 0.2);
+  border: 1px solid var(--accent-gold);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin: 0.2rem;
+  display: inline-block;
+}
+
+.bonus-item.positive {
+  background: rgba(74, 170, 153, 0.2);
+  border-color: var(--success-green);
+  color: var(--success-green);
+}
+
+.bonus-item.negative {
+  background: rgba(220, 53, 69, 0.2);
+  border-color: var(--error-red);
+  color: var(--error-red);
+}
+
+.bonus-item.special {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: var(--warning-orange);
+  color: var(--warning-orange);
+}
+
+.habilidades-lista li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  padding: 0.6rem;
+  background: rgba(37, 40, 80, 0.6);
+  border-radius: 6px;
+  border-left: 3px solid var(--accent-gold);
+}
+
+.habilidade-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.categoria-card {
+  border-left: 4px solid;
+}
+
+.categoria-card.comuns {
+  border-left-color: var(--success-green);
+}
+
+.categoria-card.raras {
+  border-left-color: var(--warning-orange);
+}
+
+.categoria-card.extraplanares {
+  border-left-color: var(--accent-gold);
+}
+
+.categoria-card.monstruosas {
+  border-left-color: var(--error-red);
+}
+
+.categoria-exemplos {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: rgba(37, 40, 80, 0.4);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.exemplo-calculo {
+  text-align: center;
+}
+
+.tipos-bonus ul li {
+  background: rgba(37, 40, 80, 0.6);
+  padding: 0.6rem;
+  border-radius: 4px;
+  border-left: 3px solid var(--accent-gold);
+}

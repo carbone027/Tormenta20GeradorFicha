@@ -46,7 +46,10 @@
                 <% }); %>
               <% } %>
             </select>
-            <small>Define características físicas e habilidades raciais</small>
+            <small>
+              Define características físicas e habilidades raciais
+              <br><em>⚠️ Bônus raciais são aplicados automaticamente após seleção</em>
+            </small>
           </div>
           
           <div class="form-group">
@@ -91,7 +94,8 @@
       <div class="card">
         <div class="atributos-info">
           <p>📋 <strong>Distribuição de Pontos:</strong> Você tem <span id="pontosRestantes">27</span> pontos para distribuir entre os atributos. Cada atributo começa em 8.</p>
-          <p>💡 <strong>Dica:</strong> Foque no atributo principal da sua classe para maior efetividade!</p>
+          <p>💡 <strong>Dica:</strong> Defina primeiro os valores base, depois escolha a raça para aplicar os bônus raciais!</p>
+          <p>⚠️ <strong>Importante:</strong> Após escolher uma raça, os bônus são aplicados automaticamente e não podem ser alterados manualmente.</p>
         </div>
         
         <div class="atributos-grid">
@@ -99,66 +103,66 @@
             <label for="forca">💪 Força</label>
             <div class="atributo-controls">
               <button type="button" class="attr-btn minus" data-attr="forca">-</button>
-              <input type="number" id="forca" name="forca" value="8" min="8" max="15" readonly>
+              <input type="number" id="forca" name="forca" value="8" min="3" max="18" readonly>
               <button type="button" class="attr-btn plus" data-attr="forca">+</button>
             </div>
             <small>Força física, ataques corpo a corpo</small>
-            <div class="bonus-display" id="bonus-forca">+0</div>
+            <div class="bonus-display" id="bonus-forca">-1</div>
           </div>
           
           <div class="atributo-card">
             <label for="destreza">🏃 Destreza</label>
             <div class="atributo-controls">
               <button type="button" class="attr-btn minus" data-attr="destreza">-</button>
-              <input type="number" id="destreza" name="destreza" value="8" min="8" max="15" readonly>
+              <input type="number" id="destreza" name="destreza" value="8" min="3" max="18" readonly>
               <button type="button" class="attr-btn plus" data-attr="destreza">+</button>
             </div>
             <small>Agilidade, ataques à distância</small>
-            <div class="bonus-display" id="bonus-destreza">+0</div>
+            <div class="bonus-display" id="bonus-destreza">-1</div>
           </div>
           
           <div class="atributo-card">
             <label for="constituicao">❤️ Constituição</label>
             <div class="atributo-controls">
               <button type="button" class="attr-btn minus" data-attr="constituicao">-</button>
-              <input type="number" id="constituicao" name="constituicao" value="8" min="8" max="15" readonly>
+              <input type="number" id="constituicao" name="constituicao" value="8" min="3" max="18" readonly>
               <button type="button" class="attr-btn plus" data-attr="constituicao">+</button>
             </div>
             <small>Resistência, pontos de vida</small>
-            <div class="bonus-display" id="bonus-constituicao">+0</div>
+            <div class="bonus-display" id="bonus-constituicao">-1</div>
           </div>
           
           <div class="atributo-card">
             <label for="inteligencia">🧠 Inteligência</label>
             <div class="atributo-controls">
               <button type="button" class="attr-btn minus" data-attr="inteligencia">-</button>
-              <input type="number" id="inteligencia" name="inteligencia" value="8" min="8" max="15" readonly>
+              <input type="number" id="inteligencia" name="inteligencia" value="8" min="3" max="18" readonly>
               <button type="button" class="attr-btn plus" data-attr="inteligencia">+</button>
             </div>
             <small>Raciocínio, magia arcana</small>
-            <div class="bonus-display" id="bonus-inteligencia">+0</div>
+            <div class="bonus-display" id="bonus-inteligencia">-1</div>
           </div>
           
           <div class="atributo-card">
             <label for="sabedoria">🧙 Sabedoria</label>
             <div class="atributo-controls">
               <button type="button" class="attr-btn minus" data-attr="sabedoria">-</button>
-              <input type="number" id="sabedoria" name="sabedoria" value="8" min="8" max="15" readonly>
+              <input type="number" id="sabedoria" name="sabedoria" value="8" min="3" max="18" readonly>
               <button type="button" class="attr-btn plus" data-attr="sabedoria">+</button>
             </div>
             <small>Percepção, magia divina</small>
-            <div class="bonus-display" id="bonus-sabedoria">+0</div>
+            <div class="bonus-display" id="bonus-sabedoria">-1</div>
           </div>
           
           <div class="atributo-card">
             <label for="carisma">😎 Carisma</label>
             <div class="atributo-controls">
               <button type="button" class="attr-btn minus" data-attr="carisma">-</button>
-              <input type="number" id="carisma" name="carisma" value="8" min="8" max="15" readonly>
+              <input type="number" id="carisma" name="carisma" value="8" min="3" max="18" readonly>
               <button type="button" class="attr-btn plus" data-attr="carisma">+</button>
             </div>
             <small>Personalidade, liderança</small>
-            <div class="bonus-display" id="bonus-carisma">+0</div>
+            <div class="bonus-display" id="bonus-carisma">-1</div>
           </div>
         </div>
       </div>
@@ -183,7 +187,7 @@
           
           <div class="form-group">
             <label for="ca">🛡️ Classe de Armadura</label>
-            <input type="number" id="ca" name="ca" value="10" min="10" readonly>
+            <input type="number" id="ca" name="ca" value="10" min="1" readonly>
             <small>10 + modificador de Destreza (pode ser alterado por equipamentos)</small>
           </div>
         </div>
@@ -235,7 +239,7 @@
           
           <div class="preview-stats">
             <div class="preview-atributos">
-              <h5>Atributos</h5>
+              <h5>Atributos (com bônus raciais)</h5>
               <div class="attrs-preview" id="attrsPreview">
                 <!-- Preenchido via JavaScript -->
               </div>
@@ -261,7 +265,7 @@
   </form>
 </section>
 
-<!-- Script específico para criação de personagem -->
+<!-- Script específico para criação de personagem com todas as raças -->
 <script src="/scripts/character-create.js"></script>
 
 <%- include('../partials/footer') %>

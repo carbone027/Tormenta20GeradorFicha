@@ -1,5 +1,7 @@
 const Character = require('../models/character');
 const pool = require('../config/database');
+const express = require('express');
+const app = express();
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 
