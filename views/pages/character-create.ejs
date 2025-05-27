@@ -1,348 +1,489 @@
-<%- include('../partials/header', { title: 'Criar Personagem', activePage: 'createCharacter' }) %>
+<%- include('../partials/header', { title: 'Criar Personagem' , activePage: 'createCharacter' }) %>
 
-<section class="content-section active">
-  <h2>✨ Criar Novo Personagem</h2>
-  <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
-    Dê vida ao seu herói! Preencha as informações abaixo para criar um personagem único e épico para suas aventuras em Arton.
-  </p>
+  <section class="content-section active">
+    <h2>✨ Criar Novo Personagem</h2>
+    <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
+      Dê vida ao seu herói! Preencha as informações abaixo para criar um personagem único e épico para suas aventuras em
+      Arton.
+    </p>
 
-  <form action="/personagens/criar" method="POST" class="character-form" id="characterForm">
-    <!-- Informações Básicas -->
-    <div class="form-section">
-      <h3>📝 Informações Básicas</h3>
-      <div class="card">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="nome">⚔️ Nome do Personagem *</label>
-            <input type="text" id="nome" name="nome" required 
-                   placeholder="Ex: Alaric Fortaleza, Lyanna Luaverde..." 
-                   maxlength="100">
-            <small>Escolha um nome que reflita a personalidade e origem do seu herói</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="nivel">📊 Nível</label>
-            <input type="number" id="nivel" name="nivel" value="1" min="1" max="20" required>
-            <small>Nível inicial do personagem (geralmente 1)</small>
+    <form action="/personagens/criar" method="POST" class="character-form" id="characterForm">
+      <!-- Informações Básicas -->
+      <div class="form-section">
+        <h3>📝 Informações Básicas</h3>
+        <div class="card">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="nome">⚔️ Nome do Personagem *</label>
+              <input type="text" id="nome" name="nome" required placeholder="Ex: Alaric Fortaleza, Lyanna Luaverde..."
+                maxlength="100">
+              <small>Escolha um nome que reflita a personalidade e origem do seu herói</small>
+            </div>
+
+            <div class="form-group">
+              <label for="nivel">📊 Nível</label>
+              <input type="number" id="nivel" name="nivel" value="1" min="1" max="20" required>
+              <small>Nível inicial do personagem (geralmente 1)</small>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Raça, Classe e Deus -->
-    <div class="form-section">
-      <h3>🧬 Origem e Vocação</h3>
-      <div class="card">
-        <div class="form-grid-three">
-          <div class="form-group">
-            <label for="raca_id">🧝 Raça *</label>
-            <select id="raca_id" name="raca_id" required>
-              <option value="">Escolha uma raça...</option>
-              <% if (racas && racas.length > 0) { %>
-                <% racas.forEach(raca => { %>
-                  <option value="<%= raca.id %>" data-bonus='<%= JSON.stringify(raca.bonus_atributos) %>'>
-                    <%= raca.nome %>
-                  </option>
-                <% }); %>
-              <% } %>
-            </select>
-            <small>
-              Define características físicas e habilidades raciais
-              <br><em>⚠️ Bônus raciais são aplicados automaticamente após seleção</em>
-            </small>
-          </div>
-          
-          <div class="form-group">
-            <label for="classe_id">⚔️ Classe *</label>
-            <select id="classe_id" name="classe_id" required>
-              <option value="">Escolha uma classe...</option>
-              <% if (classes && classes.length > 0) { %>
-                <% classes.forEach(classe => { %>
-                  <option value="<%= classe.id %>" 
-                          data-vida="<%= classe.pontos_vida_base %>"
-                          data-mana="<%= classe.pontos_mana_base || 0 %>"
-                          data-atributo="<%= classe.atributo_principal %>">
-                    <%= classe.nome %>
-                  </option>
-                <% }); %>
-              <% } %>
-            </select>
-            <small>Determina habilidades e papel no grupo</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="deus_id">⭐ Deus Patrono</label>
-            <select id="deus_id" name="deus_id">
-              <option value="">Sem deus específico</option>
-              <% if (deuses && deuses.length > 0) { %>
-                <% deuses.forEach(deus => { %>
-                  <option value="<%= deus.id %>">
-                    <%= deus.nome %> - <%= deus.dominio %>
-                  </option>
-                <% }); %>
-              <% } %>
-            </select>
-            <small>Divindade que seu personagem venera (opcional)</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Atributos -->
-    <div class="form-section">
-      <h3>💪 Atributos</h3>
-      <div class="card">
-        <div class="atributos-info" style="display: none;">
-          <p>📋 <strong>Sistema Livre:</strong> Você pode distribuir os atributos livremente. <span id="pontosRestantes" style="display: none;">27</span></p>
-        </div>
-        
-        <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 1rem; margin-bottom: 2rem; text-align: center;">
-          <p>🎯 <strong>Sistema Livre de Distribuição:</strong> Ajuste os atributos conforme desejar (mínimo 3, máximo 20).</p>
-          <p>💡 <strong>Dica:</strong> Defina primeiro os valores que deseja, depois escolha a raça para aplicar os bônus!</p>
-          <p>⚡ <strong>Novo Sistema:</strong> Bônus raciais são dobrados (+1 vira +2, +2 vira +4) e você pode ajustar livremente!</p>
-        </div>
-        
-        <div class="atributos-grid">
-          <div class="atributo-card">
-            <label for="forca">💪 Força</label>
-            <div class="atributo-controls">
-              <button type="button" class="attr-btn minus" data-attr="forca">-</button>
-              <input type="number" id="forca" name="forca" value="10" min="3" max="20" readonly>
-              <button type="button" class="attr-btn plus" data-attr="forca">+</button>
-            </div>
-            <small>Força física, ataques corpo a corpo</small>
-            <div class="bonus-display" id="bonus-forca">+0</div>
-          </div>
-          
-          <div class="atributo-card">
-            <label for="destreza">🏃 Destreza</label>
-            <div class="atributo-controls">
-              <button type="button" class="attr-btn minus" data-attr="destreza">-</button>
-              <input type="number" id="destreza" name="destreza" value="10" min="3" max="20" readonly>
-              <button type="button" class="attr-btn plus" data-attr="destreza">+</button>
-            </div>
-            <small>Agilidade, ataques à distância</small>
-            <div class="bonus-display" id="bonus-destreza">+0</div>
-          </div>
-          
-          <div class="atributo-card">
-            <label for="constituicao">❤️ Constituição</label>
-            <div class="atributo-controls">
-              <button type="button" class="attr-btn minus" data-attr="constituicao">-</button>
-              <input type="number" id="constituicao" name="constituicao" value="10" min="3" max="20" readonly>
-              <button type="button" class="attr-btn plus" data-attr="constituicao">+</button>
-            </div>
-            <small>Resistência, pontos de vida</small>
-            <div class="bonus-display" id="bonus-constituicao">+0</div>
-          </div>
-          
-          <div class="atributo-card">
-            <label for="inteligencia">🧠 Inteligência</label>
-            <div class="atributo-controls">
-              <button type="button" class="attr-btn minus" data-attr="inteligencia">-</button>
-              <input type="number" id="inteligencia" name="inteligencia" value="10" min="3" max="20" readonly>
-              <button type="button" class="attr-btn plus" data-attr="inteligencia">+</button>
-            </div>
-            <small>Raciocínio, magia arcana</small>
-            <div class="bonus-display" id="bonus-inteligencia">+0</div>
-          </div>
-          
-          <div class="atributo-card">
-            <label for="sabedoria">🧙 Sabedoria</label>
-            <div class="atributo-controls">
-              <button type="button" class="attr-btn minus" data-attr="sabedoria">-</button>
-              <input type="number" id="sabedoria" name="sabedoria" value="10" min="3" max="20" readonly>
-              <button type="button" class="attr-btn plus" data-attr="sabedoria">+</button>
-            </div>
-            <small>Percepção, magia divina</small>
-            <div class="bonus-display" id="bonus-sabedoria">+0</div>
-          </div>
-          
-          <div class="atributo-card">
-            <label for="carisma">😎 Carisma</label>
-            <div class="atributo-controls">
-              <button type="button" class="attr-btn minus" data-attr="carisma">-</button>
-              <input type="number" id="carisma" name="carisma" value="10" min="3" max="20" readonly>
-              <button type="button" class="attr-btn plus" data-attr="carisma">+</button>
-            </div>
-            <small>Personalidade, liderança</small>
-            <div class="bonus-display" id="bonus-carisma">+0</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Poderes -->
-    <div class="form-section">
-      <h3>✨ Poderes</h3>
-      <div class="card">
-        <!-- Poderes Raciais (automáticos) -->
-        <div class="poderes-raciais-section" style="display: none;">
-          <h4>🧬 Poderes Raciais</h4>
-          <p style="color: var(--text-muted); margin-bottom: 1rem;">
-            Estes poderes serão aplicados automaticamente baseados na raça escolhida:
-          </p>
-          <div id="poderesRaciaisLista" class="poderes-raciais-lista">
-            <!-- Preenchido via JavaScript quando raça for selecionada -->
-          </div>
-        </div>
-
-        <!-- Poderes Disponíveis para Seleção -->
-        <% if (poderesDisponiveis && Object.keys(poderesDisponiveis).length > 0) { %>
-          <div class="poderes-selecao-section">
-            <h4>⚡ Poderes Adicionais</h4>
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">
-              Escolha poderes adicionais para personalizar seu personagem (opcional):
-            </p>
-            
-            <% Object.entries(poderesDisponiveis).forEach(([tipo, poderes]) => { %>
-              <% if (poderes && poderes.length > 0) { %>
-                <div class="poder-tipo-group">
-                  <h5 class="poder-tipo-title">
-                    <% 
-                      let tipoIcon = '✨';
-                      let tipoNome = tipo;
-                      switch(tipo) {
-                        case 'geral': tipoIcon = '⚡'; tipoNome = 'Poderes Gerais'; break;
-                        case 'combate': tipoIcon = '⚔️'; tipoNome = 'Poderes de Combate'; break;
-                        case 'destino': tipoIcon = '🌟'; tipoNome = 'Poderes de Destino'; break;
-                        case 'magia': tipoIcon = '🔮'; tipoNome = 'Poderes de Magia'; break;
-                      }
-                    %>
-                    <%= tipoIcon %> <%= tipoNome %>
-                  </h5>
-                  
-                  <div class="poderes-grid">
-                    <% poderes.forEach(poder => { %>
-                      <div class="poder-selecao-card">
-                        <label class="poder-checkbox-label">
-                          <input type="checkbox" name="poderes_selecionados" value="<%= poder.id %>" class="poder-checkbox">
-                          <div class="poder-info">
-                            <span class="poder-nome"><%= poder.nome %></span>
-                            <span class="poder-descricao"><%= poder.descricao %></span>
-                            <% if (poder.pre_requisitos) { %>
-                              <span class="poder-requisitos">📋 <strong>Pré-req:</strong> <%= poder.pre_requisitos %></span>
-                            <% } %>
-                            <% if (poder.custo_pm && poder.custo_pm > 0) { %>
-                              <span class="poder-custo">💙 <strong>Custo:</strong> <%= poder.custo_pm %> PM</span>
-                            <% } %>
-                          </div>
-                        </label>
-                      </div>
+      <!-- Raça, Classe e Deus -->
+      <div class="form-section">
+        <h3>🧬 Origem e Vocação</h3>
+        <div class="card">
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label for="raca_id">🧝 Raça *</label>
+              <select id="raca_id" name="raca_id" required>
+                <option value="">Escolha uma raça...</option>
+                <% if (racas && racas.length> 0) { %>
+                  <% racas.forEach(raca=> { %>
+                    <option value="<%= raca.id %>" data-bonus='<%= JSON.stringify(raca.bonus_atributos) %>'>
+                      <%= raca.nome %>
+                    </option>
                     <% }); %>
-                  </div>
+                      <% } %>
+              </select>
+              <small>
+                Define características físicas e habilidades raciais
+                <br><em>⚠️ Bônus raciais são aplicados automaticamente após seleção</em>
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="classe_id">⚔️ Classe *</label>
+              <select id="classe_id" name="classe_id" required>
+                <option value="">Escolha uma classe...</option>
+                <% if (classes && classes.length> 0) { %>
+                  <% classes.forEach(classe=> { %>
+                    <option value="<%= classe.id %>" data-vida="<%= classe.pontos_vida_base %>"
+                      data-mana="<%= classe.pontos_mana_base || 0 %>" data-atributo="<%= classe.atributo_principal %>">
+                      <%= classe.nome %>
+                    </option>
+                    <% }); %>
+                      <% } %>
+              </select>
+              <small>Determina habilidades e papel no grupo</small>
+            </div>
+
+            <div class="form-group">
+              <label for="deus_id">⭐ Deus Patrono</label>
+              <select id="deus_id" name="deus_id">
+                <option value="">Sem deus específico</option>
+                <% if (deuses && deuses.length> 0) { %>
+                  <% deuses.forEach(deus=> { %>
+                    <option value="<%= deus.id %>">
+                      <%= deus.nome %> - <%= deus.dominio %>
+                    </option>
+                    <% }); %>
+                      <% } %>
+              </select>
+              <small>Divindade que seu personagem venera (opcional)</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Atributos -->
+      <div class="form-section">
+        <h3>💪 Atributos</h3>
+        <div class="card">
+          <div class="atributos-info" style="display: none;">
+            <p>📋 <strong>Sistema Livre:</strong> Você pode distribuir os atributos livremente. <span
+                id="pontosRestantes" style="display: none;">27</span></p>
+          </div>
+
+          <div
+            style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 1rem; margin-bottom: 2rem; text-align: center;">
+            <p>🎯 <strong>Sistema Livre de Distribuição:</strong> Ajuste os atributos conforme desejar (mínimo 3, máximo
+              20).</p>
+            <p>💡 <strong>Dica:</strong> Defina primeiro os valores que deseja, depois escolha a raça para aplicar os
+              bônus!</p>
+            <p>⚡ <strong>Novo Sistema:</strong> Bônus raciais são dobrados (+1 vira +2, +2 vira +4) e você pode ajustar
+              livremente!</p>
+          </div>
+
+          <div class="atributos-grid">
+            <div class="atributo-card">
+              <label for="forca">💪 Força</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="forca">-</button>
+                <input type="number" id="forca" name="forca" value="10" min="3" max="20" readonly>
+                <button type="button" class="attr-btn plus" data-attr="forca">+</button>
+              </div>
+              <small>Força física, ataques corpo a corpo</small>
+              <div class="bonus-display" id="bonus-forca">+0</div>
+            </div>
+
+            <div class="atributo-card">
+              <label for="destreza">🏃 Destreza</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="destreza">-</button>
+                <input type="number" id="destreza" name="destreza" value="10" min="3" max="20" readonly>
+                <button type="button" class="attr-btn plus" data-attr="destreza">+</button>
+              </div>
+              <small>Agilidade, ataques à distância</small>
+              <div class="bonus-display" id="bonus-destreza">+0</div>
+            </div>
+
+            <div class="atributo-card">
+              <label for="constituicao">❤️ Constituição</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="constituicao">-</button>
+                <input type="number" id="constituicao" name="constituicao" value="10" min="3" max="20" readonly>
+                <button type="button" class="attr-btn plus" data-attr="constituicao">+</button>
+              </div>
+              <small>Resistência, pontos de vida</small>
+              <div class="bonus-display" id="bonus-constituicao">+0</div>
+            </div>
+
+            <div class="atributo-card">
+              <label for="inteligencia">🧠 Inteligência</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="inteligencia">-</button>
+                <input type="number" id="inteligencia" name="inteligencia" value="10" min="3" max="20" readonly>
+                <button type="button" class="attr-btn plus" data-attr="inteligencia">+</button>
+              </div>
+              <small>Raciocínio, magia arcana</small>
+              <div class="bonus-display" id="bonus-inteligencia">+0</div>
+            </div>
+
+            <div class="atributo-card">
+              <label for="sabedoria">🧙 Sabedoria</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="sabedoria">-</button>
+                <input type="number" id="sabedoria" name="sabedoria" value="10" min="3" max="20" readonly>
+                <button type="button" class="attr-btn plus" data-attr="sabedoria">+</button>
+              </div>
+              <small>Percepção, magia divina</small>
+              <div class="bonus-display" id="bonus-sabedoria">+0</div>
+            </div>
+
+            <div class="atributo-card">
+              <label for="carisma">😎 Carisma</label>
+              <div class="atributo-controls">
+                <button type="button" class="attr-btn minus" data-attr="carisma">-</button>
+                <input type="number" id="carisma" name="carisma" value="10" min="3" max="20" readonly>
+                <button type="button" class="attr-btn plus" data-attr="carisma">+</button>
+              </div>
+              <small>Personalidade, liderança</small>
+              <div class="bonus-display" id="bonus-carisma">+0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Poderes -->
+      <!-- Seção de Poderes Melhorada para Character Create -->
+      <div class="form-section">
+        <h3>✨ Poderes</h3>
+
+        <div class="powers-main-container">
+          <!-- Header Principal -->
+          <div class="powers-header">
+            <h3>
+              <span>⚡</span>
+              Sistema de Poderes
+              <span>⚡</span>
+            </h3>
+            <p>Escolha poderes para personalizar seu personagem</p>
+          </div>
+
+          <!-- Poderes Raciais (Automáticos) -->
+          <div class="racial-powers-section" id="racialPowersSection" style="display: none;">
+            <div class="racial-powers-header">
+              <h4 class="racial-powers-title">
+                <span>🧬</span>
+                Poderes Raciais
+              </h4>
+              <p class="racial-powers-description">
+                Estes poderes serão aplicados automaticamente baseados na raça escolhida
+              </p>
+            </div>
+
+            <div id="racialPowersList" class="racial-powers-list">
+              <!-- Preenchido via JavaScript quando raça for selecionada -->
+            </div>
+          </div>
+
+          <!-- Poderes Disponíveis para Seleção -->
+          <% if (poderesDisponiveis && Object.keys(poderesDisponiveis).length> 0) { %>
+            <div class="power-selection-section">
+              <div class="power-selection-header">
+                <h4 class="power-selection-title">
+                  <span>⚡</span>
+                  Poderes Adicionais
+                </h4>
+                <p class="power-selection-description">
+                  Escolha poderes adicionais para personalizar seu personagem (opcional)
+                </p>
+              </div>
+
+              <!-- Barra de Busca -->
+              <div class="powers-search-container">
+                <div class="powers-search-box">
+                  <span class="powers-search-icon">🔍</span>
+                  <input type="text" id="powersSearchInput" class="powers-search-input"
+                    placeholder="Buscar poderes por nome, descrição ou tipo..." autocomplete="off">
+                  <div id="powersSearchResults" class="powers-search-results"></div>
                 </div>
+              </div>
+
+              <!-- Filtros Rápidos -->
+              <div class="powers-quick-filters">
+                <div class="quick-filters-title">🎯 Filtros Rápidos</div>
+                <div class="quick-filters-buttons">
+                  <button type="button" class="quick-filter-btn active" data-filter="all">
+                    ✨ Todos
+                  </button>
+                  <button type="button" class="quick-filter-btn" data-filter="geral">
+                    ⚡ Gerais
+                  </button>
+                  <button type="button" class="quick-filter-btn" data-filter="combate">
+                    ⚔️ Combate
+                  </button>
+                  <button type="button" class="quick-filter-btn" data-filter="destino">
+                    🌟 Destino
+                  </button>
+                  <button type="button" class="quick-filter-btn" data-filter="magia">
+                    🔮 Magia
+                  </button>
+                </div>
+              </div>
+
+              <!-- Container dos Poderes -->
+              <div class="powers-sections-container">
+                <% Object.entries(poderesDisponiveis).forEach(([tipo, poderes])=> { %>
+                  <% if (poderes && poderes.length> 0) { %>
+                    <div class="power-type-section" data-type="<%= tipo %>">
+                      <div class="power-type-header">
+                        <h5 class="power-type-title">
+                          <% let tipoIcon='✨' ; let tipoNome=tipo; switch(tipo) { case 'geral' : tipoIcon='⚡' ;
+                            tipoNome='Poderes Gerais' ; break; case 'combate' : tipoIcon='⚔️' ;
+                            tipoNome='Poderes de Combate' ; break; case 'destino' : tipoIcon='🌟' ;
+                            tipoNome='Poderes de Destino' ; break; case 'magia' : tipoIcon='🔮' ;
+                            tipoNome='Poderes de Magia' ; break; } %>
+                            <span>
+                              <%= tipoIcon %>
+                            </span>
+                            <%= tipoNome %>
+                        </h5>
+                        <div class="power-type-count">(<%= poderes.length %> disponíveis)</div>
+                        <button type="button" class="power-type-toggle" data-target="<%= tipo %>">
+                          <span class="toggle-icon">📁</span>
+                        </button>
+                      </div>
+
+                      <div class="powers-grid" id="powersGrid-<%= tipo %>">
+                        <% poderes.forEach(poder=> { %>
+                          <label class="power-checkbox-label">
+                            <input type="checkbox" name="poderes_selecionados" value="<%= poder.id %>"
+                              class="power-checkbox power-checkbox-filter" data-name="<%= poder.nome.toLowerCase() %>"
+                              data-type="<%= tipo %>" data-description="<%= poder.descricao.toLowerCase() %>">
+
+                            <div class="power-card" data-power-id="<%= poder.id %>">
+                              <div class="power-card-header">
+                                <div class="power-card-icon">
+                                  <% let poderIcon='✨'%>
+                                    <%= poderIcon %>
+                                </div>
+
+                                <h6 class="power-card-name">
+                                  <%= poder.nome %>
+                                </h6>
+                                <p class="power-card-type">
+                                  <%= tipoNome %>
+                                </p>
+                              </div>
+
+                              <div class="power-card-content">
+                                <p class="power-card-description">
+                                  <%= poder.descricao %>
+                                </p>
+
+                                <div class="power-card-details">
+                                  <% if (poder.pre_requisitos) { %>
+                                    <div class="power-detail-item">
+                                      <span class="power-detail-label">📋</span>
+                                      <span class="power-detail-value"><strong>Pré-req:</strong>
+                                        <%= poder.pre_requisitos %>
+                                      </span>
+                                    </div>
+                                    <% } %>
+
+                                      <% if (poder.custo_pm && poder.custo_pm> 0) { %>
+                                        <div class="power-detail-item">
+                                          <span class="power-detail-label">💙</span>
+                                          <span class="power-detail-value"><strong>Custo:</strong>
+                                            <%= poder.custo_pm %> PM
+                                          </span>
+                                        </div>
+                                        <% } %>
+
+                                          <% if (poder.alcance && poder.alcance !=='Pessoal' ) { %>
+                                            <div class="power-detail-item">
+                                              <span class="power-detail-label">🎯</span>
+                                              <span class="power-detail-value"><strong>Alcance:</strong>
+                                                <%= poder.alcance %>
+                                              </span>
+                                            </div>
+                                            <% } %>
+
+                                              <% if (poder.duracao && poder.duracao !=='Instantâneo' ) { %>
+                                                <div class="power-detail-item">
+                                                  <span class="power-detail-label">⏱️</span>
+                                                  <span class="power-detail-value"><strong>Duração:</strong>
+                                                    <%= poder.duracao %>
+                                                  </span>
+                                                </div>
+                                                <% } %>
+                                </div>
+
+                                <!-- Tags do Poder -->
+                                <div class="power-tags">
+                                  <span class="power-tag">
+                                    <%= tipoNome %>
+                                  </span>
+                                  <% if (poder.custo_pm && poder.custo_pm> 0) { %>
+                                    <span class="power-tag cost">
+                                      <%= poder.custo_pm %> PM
+                                    </span>
+                                    <% } %>
+                                      <% if (poder.pre_requisitos) { %>
+                                        <span class="power-tag requirement">Pré-req</span>
+                                        <% } %>
+                                </div>
+                              </div>
+                            </div>
+                          </label>
+                          <% }); %>
+                      </div>
+                    </div>
+                    <% } %>
+                      <% }); %>
+              </div>
+            </div>
+            <% } else { %>
+              <!-- Estado vazio -->
+              <div class="powers-empty-state">
+                <div class="powers-empty-icon">📜</div>
+                <h4 class="powers-empty-title">Nenhum Poder Disponível</h4>
+                <p class="powers-empty-description">
+                  Não há poderes disponíveis para seleção no momento.
+                </p>
+              </div>
               <% } %>
-            <% }); %>
-          </div>
-        <% } %>
-      </div>
-    </div>
-
-    <!-- Características Derivadas -->
-    <div class="form-section">
-      <h3>📊 Características Derivadas</h3>
-      <div class="card">
-        <div class="form-grid-three">
-          <div class="form-group">
-            <label for="pontos_vida">❤️ Pontos de Vida</label>
-            <input type="number" id="pontos_vida" name="pontos_vida" value="0" min="1" required readonly>
-            <small>Calculado automaticamente baseado na classe e Constituição</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="pontos_mana">🔵 Pontos de Mana</label>
-            <input type="number" id="pontos_mana" name="pontos_mana" value="0" min="0" readonly>
-            <small>Para classes que usam magia</small>
-          </div>
-          
-          <div class="form-group">
-            <label for="ca">🛡️ Classe de Armadura</label>
-            <input type="number" id="ca" name="ca" value="10" min="1" readonly>
-            <small>10 + modificador de Destreza (pode ser alterado por equipamentos)</small>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="experiencia">⭐ Experiência</label>
-          <input type="number" id="experiencia" name="experiencia" value="0" min="0">
-          <small>Pontos de experiência acumulados (opcional)</small>
         </div>
       </div>
-    </div>
 
-    <!-- Background e Roleplay -->
-    <div class="form-section">
-      <h3>🎭 História e Personalidade</h3>
-      <div class="card">
-        <div class="form-group">
-          <label for="historia_pessoal">📜 História Pessoal</label>
-          <textarea id="historia_pessoal" name="historia_pessoal" rows="4" 
-                    placeholder="Descreva a origem, família, eventos marcantes da vida do personagem..."></textarea>
-          <small>Onde nasceu? Como cresceu? O que o motivou a se tornar um aventureiro?</small>
-        </div>
-        
-        <div class="form-group">
-          <label for="personalidade">🎭 Personalidade</label>
-          <textarea id="personalidade" name="personalidade" rows="3" 
-                    placeholder="Corajoso, sarcástico, tímido, arrogante... Como seu personagem se comporta?"></textarea>
-          <small>Traços de personalidade, maneirismos, medos, vícios...</small>
-        </div>
-        
-        <div class="form-group">
-          <label for="objetivos">🎯 Objetivos e Motivações</label>
-          <textarea id="objetivos" name="objetivos" rows="3" 
-                    placeholder="O que seu personagem busca? Vingança? Conhecimento? Riqueza? Justiça?"></textarea>
-          <small>O que move seu personagem? Quais são seus sonhos e ambições?</small>
+      <!-- Script para funcionalidade dos poderes -->
+
+      <!-- Características Derivadas -->
+      <div class="form-section">
+        <h3>📊 Características Derivadas</h3>
+        <div class="card">
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label for="pontos_vida">❤️ Pontos de Vida</label>
+              <input type="number" id="pontos_vida" name="pontos_vida" value="0" min="1" required readonly>
+              <small>Calculado automaticamente baseado na classe e Constituição</small>
+            </div>
+
+            <div class="form-group">
+              <label for="pontos_mana">🔵 Pontos de Mana</label>
+              <input type="number" id="pontos_mana" name="pontos_mana" value="0" min="0" readonly>
+              <small>Para classes que usam magia</small>
+            </div>
+
+            <div class="form-group">
+              <label for="ca">🛡️ Classe de Armadura</label>
+              <input type="number" id="ca" name="ca" value="10" min="1" readonly>
+              <small>10 + modificador de Destreza (pode ser alterado por equipamentos)</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="experiencia">⭐ Experiência</label>
+            <input type="number" id="experiencia" name="experiencia" value="0" min="0">
+            <small>Pontos de experiência acumulados (opcional)</small>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Preview do Personagem -->
-    <div class="form-section">
-      <h3>👁️ Preview do Personagem</h3>
-      <div class="card character-preview" id="characterPreview">
-        <div class="preview-content">
-          <div class="preview-header">
-            <h4 id="previewNome">Nome do Personagem</h4>
-            <p id="previewClasseRaca">Classe Raça - Nível 1</p>
+      <!-- Background e Roleplay -->
+      <div class="form-section">
+        <h3>🎭 História e Personalidade</h3>
+        <div class="card">
+          <div class="form-group">
+            <label for="historia_pessoal">📜 História Pessoal</label>
+            <textarea id="historia_pessoal" name="historia_pessoal" rows="4"
+              placeholder="Descreva a origem, família, eventos marcantes da vida do personagem..."></textarea>
+            <small>Onde nasceu? Como cresceu? O que o motivou a se tornar um aventureiro?</small>
           </div>
-          
-          <div class="preview-stats">
-            <div class="preview-atributos">
-              <h5>Atributos (com bônus raciais)</h5>
-              <div class="attrs-preview" id="attrsPreview">
+
+          <div class="form-group">
+            <label for="personalidade">🎭 Personalidade</label>
+            <textarea id="personalidade" name="personalidade" rows="3"
+              placeholder="Corajoso, sarcástico, tímido, arrogante... Como seu personagem se comporta?"></textarea>
+            <small>Traços de personalidade, maneirismos, medos, vícios...</small>
+          </div>
+
+          <div class="form-group">
+            <label for="objetivos">🎯 Objetivos e Motivações</label>
+            <textarea id="objetivos" name="objetivos" rows="3"
+              placeholder="O que seu personagem busca? Vingança? Conhecimento? Riqueza? Justiça?"></textarea>
+            <small>O que move seu personagem? Quais são seus sonhos e ambições?</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview do Personagem -->
+      <div class="form-section">
+        <h3>👁️ Preview do Personagem</h3>
+        <div class="card character-preview" id="characterPreview">
+          <div class="preview-content">
+            <div class="preview-header">
+              <h4 id="previewNome">Nome do Personagem</h4>
+              <p id="previewClasseRaca">Classe Raça - Nível 1</p>
+            </div>
+
+            <div class="preview-stats">
+              <div class="preview-atributos">
+                <h5>Atributos (com bônus raciais)</h5>
+                <div class="attrs-preview" id="attrsPreview">
+                  <!-- Preenchido via JavaScript -->
+                </div>
+              </div>
+
+              <div class="preview-derivadas">
+                <h5>Características</h5>
+                <div class="derivadas-preview" id="derivadasPreview">
+                  <!-- Preenchido via JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-poderes" id="previewPoderes" style="display: none;">
+              <h5>Poderes Selecionados</h5>
+              <div class="poderes-preview" id="poderesPreview">
                 <!-- Preenchido via JavaScript -->
               </div>
             </div>
-            
-            <div class="preview-derivadas">
-              <h5>Características</h5>
-              <div class="derivadas-preview" id="derivadasPreview">
-                <!-- Preenchido via JavaScript -->
-              </div>
-            </div>
-          </div>
-          
-          <div class="preview-poderes" id="previewPoderes" style="display: none;">
-            <h5>Poderes Selecionados</h5>
-            <div class="poderes-preview" id="poderesPreview">
-              <!-- Preenchido via JavaScript -->
-            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Botões de Ação -->
-    <div class="form-actions">
-      <button type="submit" class="nav-btn">🎨 Criar Personagem</button>
-      <a href="/personagens" class="btn btn-secondary">📋 Meus Personagens</a>
-      <button type="button" class="btn btn-secondary" id="resetForm">🔄 Resetar</button>
-    </div>
-  </form>
-</section>
+      <!-- Botões de Ação -->
+      <div class="form-actions">
+        <button type="submit" class="nav-btn">🎨 Criar Personagem</button>
+        <a href="/personagens" class="btn btn-secondary">📋 Meus Personagens</a>
+        <button type="button" class="btn btn-secondary" id="resetForm">🔄 Resetar</button>
+      </div>
+    </form>
+  </section>
 
-<script src="/scripts/character-create.js"></script>
+  <script src="/scripts/character-create.js"></script>
 
-<%- include('../partials/footer') %>
+  <%- include('../partials/footer') %>

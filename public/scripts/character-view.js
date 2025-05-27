@@ -212,6 +212,174 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   `;
   document.head.appendChild(style);
+
+    // Elementos principais
+  const quickFilterBtns = document.querySelectorAll('.quick-filter-btn');
+  const powerCards = document.querySelectorAll('.character-power-card');
+  const powerSections = document.querySelectorAll('.character-power-type-section');
+  const toggleBtns = document.querySelectorAll('.power-type-toggle');
+  
+  // Filtros rápidos para visualização
+  function initQuickFilters() {
+    quickFilterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Remover active de todos
+        quickFilterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const filterSource = this.dataset.filter;
+        applySourceFilter(filterSource);
+      });
+    });
+  }
+  
+  function applySourceFilter(filterSource) {
+    powerCards.forEach(card => {
+      const cardSource = card.dataset.source;
+      
+      if (filterSource === 'all' || cardSource === filterSource) {
+        card.style.display = 'block';
+        card.classList.remove('hidden');
+        
+        // Animação de entrada
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(10px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.3s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100);
+      } else {
+        card.style.display = 'none';
+        card.classList.add('hidden');
+      }
+    });
+    
+    // Mostrar/ocultar seções baseado nos cards visíveis
+    powerSections.forEach(section => {
+      const visibleCards = section.querySelectorAll('.character-power-card:not(.hidden)');
+      section.style.display = visibleCards.length > 0 ? 'block' : 'none';
+    });
+  }
+  
+  // Toggle de seções
+  function initToggleButtons() {
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetType = this.dataset.target;
+        const grid = document.getElementById(`powersGrid-${targetType}`);
+        const icon = this.querySelector('.toggle-icon');
+        
+        if (grid) {
+          if (grid.style.display === 'none') {
+            grid.style.display = 'block';
+            icon.textContent = '📂';
+            
+            // Animar cards ao expandir
+            const cards = grid.querySelectorAll('.character-power-card');
+            cards.forEach((card, index) => {
+              card.style.opacity = '0';
+              card.style.transform = 'translateY(20px)';
+              setTimeout(() => {
+                card.style.transition = 'all 0.4s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+              }, index * 100);
+            });
+          } else {
+            grid.style.display = 'none';
+            icon.textContent = '📁';
+          }
+        }
+      });
+    });
+  }
+  
+  // Animações de entrada inicial
+  function initEntryAnimations() {
+    powerCards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      
+      setTimeout(() => {
+        card.style.transition = 'all 0.6s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 150);
+    });
+  }
+  
+  // Hover effects para melhor UX
+  function initHoverEffects() {
+    powerCards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px) scale(1.02)';
+        this.style.boxShadow = '0 8px 20px rgba(212, 175, 55, 0.3)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+        this.style.boxShadow = 'var(--shadow-md)';
+      });
+    });
+  }
+  
+  // Funcionalidade de imprimir apenas poderes
+  function initPrintPowers() {
+    // Adicionar botão de imprimir poderes na seção
+    const powersSection = document.querySelector('.character-powers-section');
+    if (powersSection && powerCards.length > 0) {
+      const printBtn = document.createElement('button');
+      printBtn.className = 'btn btn-secondary';
+      printBtn.style.cssText = 'margin: 1rem auto; display: block;';
+      printBtn.innerHTML = '🖨️ Imprimir Apenas Poderes';
+      
+      printBtn.addEventListener('click', function() {
+        // Criar janela de impressão apenas com os poderes
+        const printContent = powersSection.cloneNode(true);
+        const printWindow = window.open('', '_blank');
+        
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Poderes - ${document.title}</title>
+              <link rel="stylesheet" href="/stylesheet/style.css">
+              <link rel="stylesheet" href="/stylesheet/powers.css">
+              <style>
+                body { padding: 2rem; }
+                .quick-filter-btn, .power-type-toggle { display: none; }
+                .character-power-card { break-inside: avoid; margin-bottom: 1rem; }
+                @media print {
+                  .quick-filter-btn, .power-type-toggle { display: none !important; }
+                }
+              </style>
+            </head>
+            <body>
+              ${printContent.outerHTML}
+            </body>
+          </html>
+        `);
+        
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+          printWindow.print();
+          printWindow.close();
+        }, 500);
+      });
+      
+      powersSection.appendChild(printBtn);
+    }
+  }
+  
+  // Inicializar todas as funcionalidades
+  initQuickFilters();
+  initToggleButtons();
+  initEntryAnimations();
+  initHoverEffects();
+  initPrintPowers();
+  
+  console.log('✅ Sistema de visualização de poderes inicializado');
   
   console.log('✅ Script de visualização de personagem carregado');
 });

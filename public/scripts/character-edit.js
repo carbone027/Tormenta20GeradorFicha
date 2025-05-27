@@ -360,9 +360,280 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarPoderesRaciais(racaSelect.value);
   }
   
+
+// Elementos principais
+  const searchInput = document.getElementById('powersSearchInput');
+  const searchResults = document.getElementById('powersSearchResults');
+  const quickFilterBtns = document.querySelectorAll('.quick-filter-btn');
+  const powerCards = document.querySelectorAll('.power-card');
+  const powerSections = document.querySelectorAll('.power-type-section');
+  const toggleBtns = document.querySelectorAll('.power-type-toggle');
+  const checkboxes = document.querySelectorAll('.power-checkbox-filter');
+  
+  // Função de busca em tempo real
+  function initSearch() {
+    if (!searchInput) return;
+    
+    let searchTimeout;
+    
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchTimeout);
+      const query = this.value.toLowerCase().trim();
+      
+      searchTimeout = setTimeout(() => {
+        if (query.length >= 2) {
+          performSearch(query);
+          showSearchResults(query);
+        } else {
+          hideSearchResults();
+          showAllPowers();
+        }
+      }, 300);
+    });
+    
+    // Fechar resultados ao clicar fora
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.powers-search-box')) {
+        hideSearchResults();
+      }
+    });
+  }
+  
+  function performSearch(query) {
+    let hasResults = false;
+    
+    powerCards.forEach(card => {
+      const checkbox = card.closest('label').querySelector('.power-checkbox-filter');
+      const name = checkbox.dataset.name || '';
+      const description = checkbox.dataset.description || '';
+      const type = checkbox.dataset.type || '';
+      
+      const matches = name.includes(query) || 
+                     description.includes(query) || 
+                     type.includes(query);
+      
+      if (matches) {
+        card.closest('label').style.display = 'block';
+        card.classList.remove('hidden');
+        hasResults = true;
+      } else {
+        card.closest('label').style.display = 'none';
+        card.classList.add('hidden');
+      }
+    });
+    
+    // Mostrar/ocultar seções baseado nos resultados
+    powerSections.forEach(section => {
+      const visibleCards = section.querySelectorAll('.power-card:not(.hidden)');
+      section.style.display = visibleCards.length > 0 ? 'block' : 'none';
+    });
+    
+    return hasResults;
+  }
+  
+  function showSearchResults(query) {
+    if (!searchResults) return;
+    
+    const hasResults = performSearch(query);
+    
+    if (!hasResults) {
+      searchResults.innerHTML = `
+        <div class="search-result-item">
+          <span style="color: var(--text-muted); font-style: italic;">
+            🔍 Nenhum poder encontrado para "${query}"
+          </span>
+        </div>
+      `;
+      searchResults.classList.add('active');
+    } else {
+      hideSearchResults();
+    }
+  }
+  
+  function hideSearchResults() {
+    if (searchResults) {
+      searchResults.classList.remove('active');
+    }
+  }
+  
+  function showAllPowers() {
+    powerCards.forEach(card => {
+      card.closest('label').style.display = 'block';
+      card.classList.remove('hidden');
+    });
+    
+    powerSections.forEach(section => {
+      section.style.display = 'block';
+    });
+  }
+  
+  // Filtros rápidos com lógica específica para edição
+  function initQuickFilters() {
+    quickFilterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Remover active de todos
+        quickFilterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const filterType = this.dataset.filter;
+        
+        // Limpar busca
+        if (searchInput) {
+          searchInput.value = '';
+          hideSearchResults();
+        }
+        
+        // Aplicar filtro
+        applyFilter(filterType);
+      });
+    });
+  }
+  
+  function applyFilter(filterType) {
+    powerCards.forEach(card => {
+      const checkbox = card.closest('label').querySelector('.power-checkbox-filter');
+      const type = checkbox.dataset.type;
+      const isSelected = checkbox.checked;
+      let show = false;
+      
+      switch(filterType) {
+        case 'all':
+          show = true;
+          break;
+        case 'selected':
+          show = isSelected;
+          break;
+        case 'available':
+          show = !isSelected;
+          break;
+        default:
+          show = type === filterType;
+      }
+      
+      if (show) {
+        card.closest('label').style.display = 'block';
+        card.classList.remove('hidden');
+      } else {
+        card.closest('label').style.display = 'none';
+        card.classList.add('hidden');
+      }
+    });
+    
+    // Mostrar/ocultar seções
+    powerSections.forEach(section => {
+      const visibleCards = section.querySelectorAll('.power-card:not(.hidden)');
+      section.style.display = visibleCards.length > 0 ? 'block' : 'none';
+    });
+  }
+  
+  // Toggle de seções
+  function initToggleButtons() {
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetType = this.dataset.target;
+        const grid = document.getElementById(`powersGrid-${targetType}`);
+        const icon = this.querySelector('.toggle-icon');
+        
+        if (grid) {
+          if (grid.style.display === 'none') {
+            grid.style.display = 'grid';
+            icon.textContent = '📂';
+            grid.parentElement.classList.add('expanding');
+          } else {
+            grid.style.display = 'none';
+            icon.textContent = '📁';
+            grid.parentElement.classList.remove('expanding');
+          }
+        }
+      });
+    });
+  }
+  
+  // Atualizar visual quando checkbox mudar
+  function initCheckboxHandlers() {
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const card = this.closest('label').querySelector('.power-card');
+        const sourceDiv = card.querySelector('.power-card-source');
+        const tagsContainer = card.querySelector('.power-tags');
+        
+        if (this.checked) {
+          card.classList.add('selected');
+          
+          // Adicionar ou atualizar badge de ativo
+          if (!sourceDiv) {
+            const newSource = document.createElement('div');
+            newSource.className = 'power-card-source';
+            newSource.textContent = '✅ Ativo';
+            card.querySelector('.power-card-header').appendChild(newSource);
+          } else {
+            sourceDiv.textContent = '✅ Ativo';
+          }
+          
+          // Adicionar tag de ativo
+          if (!tagsContainer.querySelector('.power-tag[data-active]')) {
+            const activeTag = document.createElement('span');
+            activeTag.className = 'power-tag';
+            activeTag.setAttribute('data-active', 'true');
+            activeTag.style.cssText = 'background: var(--success-green); color: white; border-color: var(--success-green);';
+            activeTag.textContent = 'Ativo';
+            tagsContainer.insertBefore(activeTag, tagsContainer.firstChild);
+          }
+        } else {
+          card.classList.remove('selected');
+          
+          // Remover badge de ativo
+          if (sourceDiv) {
+            sourceDiv.remove();
+          }
+          
+          // Remover tag de ativo
+          const activeTag = tagsContainer.querySelector('.power-tag[data-active]');
+          if (activeTag) {
+            activeTag.remove();
+          }
+        }
+        
+        // Atualizar contadores
+        updateTypeCounters();
+        
+        // Atualizar preview (se função existir)
+        if (typeof atualizarPreviewPoderes === 'function') {
+          atualizarPreviewPoderes();
+        }
+      });
+    });
+  }
+  
+  function updateTypeCounters() {
+    powerSections.forEach(section => {
+      const type = section.dataset.type;
+      const counter = section.querySelector('.power-type-count');
+      const checkboxesInSection = section.querySelectorAll('.power-checkbox-filter');
+      
+      const selectedCount = Array.from(checkboxesInSection).filter(cb => cb.checked).length;
+      const totalCount = checkboxesInSection.length;
+      
+      if (counter) {
+        counter.textContent = `(${selectedCount}/${totalCount} selecionados)`;
+      }
+    });
+  }
+  
+  // Inicializar todas as funcionalidades
+  initSearch();
+  initQuickFilters();
+  initToggleButtons();
+  initCheckboxHandlers();
+  
+  // Atualizar contadores iniciais
+  updateTypeCounters();
+  
+  
   // Inicialização
   atualizarCalculos();
   
+  console.log('✅ Sistema de poderes avançado (edição) inicializado');
   console.log('✅ Editor de personagem livre inicializado');
   console.log('🔧 Correção aplicada: Reset opcional ao trocar raças na edição');
   console.log('📋 Funcionalidades: Distribuição livre, sem limitação de pontos');

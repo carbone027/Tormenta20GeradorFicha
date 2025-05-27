@@ -3,132 +3,15 @@
 <section class="content-section active">
   <h2>🧝 Raças de Arton</h2>
   <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
-    As raças de Arton são muito variadas entre si. Na maior parte do mundo civilizado um personagem não será hostilizado por pertencer a qualquer raça. Contudo, algumas raças são mais numerosas que outras, e há aquelas consideradas míticas ou extintas.
+    Escolha a raça que definirá a herança e características naturais do seu personagem. Cada raça possui bônus únicos de atributos e habilidades especiais que moldarão sua jornada em Arton.
   </p>
-
-  <!-- Filtros de Raças -->
-  <div class="race-filters" style="margin-bottom: 3rem;">
-    <div class="card" style="text-align: center; padding: 1.5rem;">
-      <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">🔍 Filtrar Raças</h3>
-      <div class="filter-buttons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem;">
-        <button class="filter-btn active" data-filter="all">Todas as Raças</button>
-        <button class="filter-btn" data-filter="comuns">🏘️ Comuns</button>
-        <button class="filter-btn" data-filter="raras">✨ Raras</button>
-        <button class="filter-btn" data-filter="extraplanares">🌟 Extraplanares</button>
-        <button class="filter-btn" data-filter="monstruosas">👹 Monstruosas</button>
-      </div>
-    </div>
-  </div>
 
   <% if (racas && racas.length > 0) { %>
     <div class="racas-grid">
       <% racas.forEach(raca => { %>
-        <% 
-          // Categorizar raças
-          let categoria = 'comuns';
-          let iconeRaca = '👤';
-          
-          switch(raca.nome.toLowerCase()) {
-            case 'humano':
-              categoria = 'comuns';
-              iconeRaca = '👤';
-              break;
-            case 'anão':
-              categoria = 'comuns';
-              iconeRaca = '⛏️';
-              break;
-            case 'elfo':
-              categoria = 'comuns';
-              iconeRaca = '🧝';
-              break;
-            case 'dahllan':
-              categoria = 'comuns';
-              iconeRaca = '🌿';
-              break;
-            case 'goblin':
-              categoria = 'comuns';
-              iconeRaca = '👺';
-              break;
-            case 'minotauro':
-              categoria = 'comuns';
-              iconeRaca = '🐂';
-              break;
-            case 'qareen':
-              categoria = 'comuns';
-              iconeRaca = '🧞';
-              break;
-            case 'lefou':
-              categoria = 'comuns';
-              iconeRaca = '😈';
-              break;
-            case 'hynne':
-              categoria = 'raras';
-              iconeRaca = '🍀';
-              break;
-            case 'golem':
-              categoria = 'raras';
-              iconeRaca = '🗿';
-              break;
-            case 'kliren':
-              categoria = 'raras';
-              iconeRaca = '🔧';
-              break;
-            case 'sereia/tritão':
-              categoria = 'raras';
-              iconeRaca = '🧜';
-              break;
-            case 'sílfide':
-              categoria = 'extraplanares';
-              iconeRaca = '🧚';
-              break;
-            case 'suraggel (aggelus)':
-              categoria = 'extraplanares';
-              iconeRaca = '😇';
-              break;
-            case 'suraggel (sulfure)':
-              categoria = 'extraplanares';
-              iconeRaca = '😈';
-              break;
-            case 'medusa':
-              categoria = 'monstruosas';
-              iconeRaca = '🐍';
-              break;
-            case 'osteon':
-              categoria = 'monstruosas';
-              iconeRaca = '💀';
-              break;
-            case 'trog':
-              categoria = 'monstruosas';
-              iconeRaca = '🦎';
-              break;
-            default:
-              categoria = 'raras';
-              iconeRaca = '❓';
-          }
-        %>
-        
-        <div class="raca-card" data-categoria="<%= categoria %>">
+        <div class="raca-card">
           <div class="raca-header">
-            <div class="raca-icon" style="font-size: 3rem; margin-bottom: 0.5rem;"><%= iconeRaca %></div>
             <h3><%= raca.nome %></h3>
-            <div class="raca-categoria-badge" style="
-              background: <%= categoria === 'comuns' ? 'var(--success-green)' : 
-                            categoria === 'raras' ? 'var(--warning-orange)' : 
-                            categoria === 'extraplanares' ? 'var(--accent-gold)' : 
-                            'var(--error-red)' %>;
-              color: white;
-              padding: 0.2rem 0.8rem;
-              border-radius: 15px;
-              font-size: 0.7rem;
-              font-weight: bold;
-              text-transform: uppercase;
-              margin-top: 0.5rem;
-            ">
-              <%= categoria === 'comuns' ? 'Comum' : 
-                  categoria === 'raras' ? 'Rara' : 
-                  categoria === 'extraplanares' ? 'Extraplanar' : 
-                  'Monstruosa' %>
-            </div>
           </div>
           
           <div class="raca-content">
@@ -136,40 +19,19 @@
             
             <% if (raca.bonus_atributos) { %>
               <div class="bonus-atributos">
-                <h4>💪 Modificadores de Atributo</h4>
+                <h4>💪 Bônus de Atributos</h4>
                 <div class="atributos-lista">
                   <% 
                     const bonus = typeof raca.bonus_atributos === 'string' ? 
                       JSON.parse(raca.bonus_atributos) : raca.bonus_atributos;
                     
-                    if (bonus.livre) {
+                    Object.entries(bonus).forEach(([atributo, valor]) => {
                   %>
-                    <span class="bonus-item special">
-                      <strong>Livre:</strong> +1 em <%= bonus.livre %> atributos diferentes
-                      <% if (bonus.carisma && bonus.carisma < 0) { %>
-                        (exceto Carisma)
-                      <% } else if (bonus.constituicao && bonus.constituicao < 0) { %>
-                        (exceto Constituição)
-                      <% } %>
+                    <span class="bonus-item">
+                      <strong><%= atributo.charAt(0).toUpperCase() + atributo.slice(1) %>:</strong> 
+                      +<%= valor %>
                     </span>
-                    <% if (Object.keys(bonus).length > 1) { %>
-                      <% Object.entries(bonus).forEach(([atributo, valor]) => { %>
-                        <% if (atributo !== 'livre' && valor !== 0) { %>
-                          <span class="bonus-item <%= valor > 0 ? 'positive' : 'negative' %>">
-                            <strong><%= atributo.charAt(0).toUpperCase() + atributo.slice(1) %>:</strong> 
-                            <%= valor > 0 ? '+' : '' %><%= valor %>
-                          </span>
-                        <% } %>
-                      <% }); %>
-                    <% } %>
-                  <% } else { %>
-                    <% Object.entries(bonus).forEach(([atributo, valor]) => { %>
-                      <span class="bonus-item <%= valor > 0 ? 'positive' : 'negative' %>">
-                        <strong><%= atributo.charAt(0).toUpperCase() + atributo.slice(1) %>:</strong> 
-                        <%= valor > 0 ? '+' : '' %><%= valor %>
-                      </span>
-                    <% }); %>
-                  <% } %>
+                  <% }); %>
                 </div>
               </div>
             <% } %>
@@ -179,55 +41,11 @@
                 <h4>✨ Habilidades Raciais</h4>
                 <ul class="habilidades-lista">
                   <% raca.habilidades_raciais.forEach(habilidade => { %>
-                    <li>
-                      <% 
-                        // Adicionar ícones específicos para habilidades conhecidas
-                        let iconeHabilidade = '⚡';
-                        if (habilidade.toLowerCase().includes('visão')) iconeHabilidade = '👁️';
-                        else if (habilidade.toLowerCase().includes('magia')) iconeHabilidade = '🔮';
-                        else if (habilidade.toLowerCase().includes('armadura')) iconeHabilidade = '🛡️';
-                        else if (habilidade.toLowerCase().includes('voo') || habilidade.toLowerCase().includes('asas')) iconeHabilidade = '🦋';
-                        else if (habilidade.toLowerCase().includes('água') || habilidade.toLowerCase().includes('aquático')) iconeHabilidade = '🌊';
-                        else if (habilidade.toLowerCase().includes('morte') || habilidade.toLowerCase().includes('esqueleto')) iconeHabilidade = '💀';
-                        else if (habilidade.toLowerCase().includes('fogo') || habilidade.toLowerCase().includes('elemental')) iconeHabilidade = '🔥';
-                        else if (habilidade.toLowerCase().includes('natureza') || habilidade.toLowerCase().includes('planta')) iconeHabilidade = '🌿';
-                        else if (habilidade.toLowerCase().includes('chifre') || habilidade.toLowerCase().includes('mordida')) iconeHabilidade = '⚔️';
-                        else if (habilidade.toLowerCase().includes('sorte')) iconeHabilidade = '🍀';
-                        else if (habilidade.toLowerCase().includes('engenhoso') || habilidade.toLowerCase().includes('invenção')) iconeHabilidade = '🔧';
-                      %>
-                      <span class="habilidade-icon"><%= iconeHabilidade %></span>
-                      <%= habilidade %>
-                    </li>
+                    <li><%= habilidade %></li>
                   <% }); %>
                 </ul>
               </div>
             <% } %>
-            
-            <div class="raca-tips">
-              <h4>💡 Ideal Para</h4>
-              <p class="ideal-text">
-                <% 
-                  // Sugestões baseadas nos bônus de atributos
-                  let sugestoes = [];
-                  const bonus = typeof raca.bonus_atributos === 'string' ? 
-                    JSON.parse(raca.bonus_atributos) : raca.bonus_atributos;
-                  
-                  if (bonus.livre) {
-                    sugestoes.push('Qualquer classe (muito versátil)');
-                  } else {
-                    if (bonus.forca && bonus.forca > 0) sugestoes.push('Guerreiros', 'Bárbaros');
-                    if (bonus.destreza && bonus.destreza > 0) sugestoes.push('Ladinos', 'Arqueiros');
-                    if (bonus.constituicao && bonus.constituicao > 0) sugestoes.push('Tanques', 'Defensores');
-                    if (bonus.inteligencia && bonus.inteligencia > 0) sugestoes.push('Arcanistas', 'Estudiosos');
-                    if (bonus.sabedoria && bonus.sabedoria > 0) sugestoes.push('Cléricos', 'Druidas');
-                    if (bonus.carisma && bonus.carisma > 0) sugestoes.push('Bardos', 'Diplomatas');
-                  }
-                  
-                  if (sugestoes.length === 0) sugestoes.push('Personagens únicos e especializados');
-                %>
-                <%= sugestoes.slice(0, 4).join(', ') %>
-              </p>
-            </div>
           </div>
         </div>
       <% }); %>
@@ -241,131 +59,109 @@
     </div>
   <% } %>
 
-  <!-- Guia Detalhado por Categoria -->
-  <div class="categorias-guide">
-    <h2>📚 Guia das Categorias Raciais</h2>
-    
+  <!-- Guia de Escolha -->
+  <div class="raca-guide">
+    <h2>🎯 Guia para Escolha de Raça</h2>
     <div class="content-grid">
-      <div class="card categoria-card comuns">
-        <h3>🏘️ Raças Comuns</h3>
-        <p><strong>Mais numerosas e aceitas</strong></p>
+      <div class="card guide-card">
+        <h3>👤 Humanos</h3>
+        <p><strong>Versáteis e Adaptativos</strong></p>
         <ul>
-          <li>🌍 <strong>Bem integradas:</strong> Aceitas em toda Arton</li>
-          <li>🤝 <strong>Sociais:</strong> Fácil interação com outras raças</li>
-          <li>📈 <strong>Recomendadas:</strong> Ideais para iniciantes</li>
-          <li>⚖️ <strong>Equilibradas:</strong> Boas em várias classes</li>
+          <li>🎯 <strong>Ideal para:</strong> Qualquer classe</li>
+          <li>💪 <strong>Força:</strong> Flexibilidade total</li>
+          <li>🎭 <strong>Roleplay:</strong> Ambiciosos e determinados</li>
+          <li>⭐ <strong>Recomendado para:</strong> Iniciantes</li>
         </ul>
-        <div class="categoria-exemplos">
-          <strong>Incluem:</strong> Humanos, Elfos, Anões, Goblins, Minotauros...
-        </div>
       </div>
       
-      <div class="card categoria-card raras">
-        <h3>✨ Raças Raras</h3>
-        <p><strong>Menos comuns, mais exóticas</strong></p>
+      <div class="card guide-card">
+        <h3>🧝 Elfos</h3>
+        <p><strong>Mágicos e Longevos</strong></p>
         <ul>
-          <li>👀 <strong>Curiosidade:</strong> Atraem atenção por onde passam</li>
-          <li>🎭 <strong>Roleplay:</strong> Oportunidades narrativas únicas</li>
-          <li>⚡ <strong>Especializadas:</strong> Habilidades muito específicas</li>
-          <li>🎯 <strong>Avançadas:</strong> Para jogadores experientes</li>
+          <li>🎯 <strong>Ideal para:</strong> Arcanistas, Bardos</li>
+          <li>💪 <strong>Força:</strong> Magia e percepção</li>
+          <li>🎭 <strong>Roleplay:</strong> Sábios e refinados</li>
+          <li>⭐ <strong>Recomendado para:</strong> Fãs de magia</li>
         </ul>
-        <div class="categoria-exemplos">
-          <strong>Incluem:</strong> Hynne, Golems, Kliren, Sereias...
-        </div>
       </div>
       
-      <div class="card categoria-card extraplanares">
-        <h3>🌟 Raças Extraplanares</h3>
-        <p><strong>Origens divinas ou mágicas</strong></p>
+      <div class="card guide-card">
+        <h3>⛏️ Anões</h3>
+        <p><strong>Resistentes e Artesãos</strong></p>
         <ul>
-          <li>✨ <strong>Poderes únicos:</strong> Habilidades sobrenaturais</li>
-          <li>🌌 <strong>Origem exótica:</strong> De outros planos de existência</li>
-          <li>🎭 <strong>Complexas:</strong> Requerem interpretação cuidadosa</li>
-          <li>⚖️ <strong>Balanceadas:</strong> Poderes x limitações</li>
+          <li>🎯 <strong>Ideal para:</strong> Guerreiros, Cléricos</li>
+          <li>💪 <strong>Força:</strong> Resistência e artesanato</li>
+          <li>🎭 <strong>Roleplay:</strong> Honrados e teimosos</li>
+          <li>⭐ <strong>Recomendado para:</strong> Defensores</li>
         </ul>
-        <div class="categoria-exemplos">
-          <strong>Incluem:</strong> Sílfides, Suraggel, Qareen...
-        </div>
       </div>
       
-      <div class="card categoria-card monstruosas">
-        <h3>👹 Raças Monstruosas</h3>
-        <p><strong>Aparência intimidadora</strong></p>
+      <div class="card guide-card">
+        <h3>🍀 Halflings</h3>
+        <p><strong>Sortudos e Ágeis</strong></p>
         <ul>
-          <li>😰 <strong>Temidas:</strong> Podem assustar NPCs</li>
-          <li>💪 <strong>Poderosas:</strong> Habilidades combativas únicas</li>
-          <li>🎭 <strong>Desafiadoras:</strong> Roleplay complexo</li>
-          <li>⚔️ <strong>Especializadas:</strong> Excelentes em nichos específicos</li>
+          <li>🎯 <strong>Ideal para:</strong> Ladinos, Bardos</li>
+          <li>💪 <strong>Força:</strong> Agilidade e sorte</li>
+          <li>🎭 <strong>Roleplay:</strong> Otimistas e corajosos</li>
+          <li>⭐ <strong>Recomendado para:</strong> Aventureiros astutos</li>
         </ul>
-        <div class="categoria-exemplos">
-          <strong>Incluem:</strong> Medusas, Osteon, Trogs...
-        </div>
       </div>
     </div>
   </div>
 
-  <!-- Dicas de Criação -->
-  <div class="creation-tips">
-    <h2>🎯 Dicas para Escolha de Raça</h2>
+  <!-- Combinações Recomendadas -->
+  <div class="combinacoes-section">
+    <h2>🎲 Combinações Clássicas</h2>
     <div class="content-grid">
-      <div class="card tip-card">
-        <h4>🎭 Conceito Primeiro</h4>
-        <p>Pense na <strong>personalidade e história</strong> do personagem antes de escolher a raça. A mecânica deve servir à narrativa, não o contrário.</p>
+      <div class="card combo-card">
+        <h4>⚔️ Guerreiro Humano</h4>
+        <p>A combinação mais equilibrada. Versatilidade para qualquer situação de combate.</p>
+        <span class="combo-rating">⭐⭐⭐⭐⭐ Clássico</span>
       </div>
       
-      <div class="card tip-card">
-        <h4>⚖️ Equilibrio é Fundamental</h4>
-        <p>Todas as raças são <strong>viáveis e equilibradas</strong>. Não há escolhas certas ou erradas, apenas estilos diferentes de jogo.</p>
+      <div class="card combo-card">
+        <h4>🔮 Arcanista Élfico</h4>
+        <p>Máximo potencial mágico. Perfeito para dominar as artes arcanas.</p>
+        <span class="combo-rating">⭐⭐⭐⭐⭐ Poderoso</span>
       </div>
       
-      <div class="card tip-card">
-        <h4>🤝 Considere o Grupo</h4>
-        <p>Pense em como sua raça se <strong>relacionará com outros personagens</strong> e NPCs na campanha do seu Mestre.</p>
+      <div class="card combo-card">
+        <h4>🛡️ Clérico Anão</h4>
+        <p>Resistência incomparável. Ideal para curar e proteger a party.</p>
+        <span class="combo-rating">⭐⭐⭐⭐⭐ Confiável</span>
       </div>
       
-      <div class="card tip-card">
-        <h4>📈 Evolução do Personagem</h4>
-        <p>Considere como as <strong>habilidades raciais evoluirão</strong> com o tempo e como se complementarão com sua classe escolhida.</p>
+      <div class="card combo-card">
+        <h4>🎭 Bardo Halfling</h4>
+        <p>Carisma e sorte combinados. Perfeito para diplomacia e suporte.</p>
+        <span class="combo-rating">⭐⭐⭐⭐⭐ Carismático</span>
       </div>
     </div>
   </div>
 
-  <!-- Sistema de Modificadores -->
-  <div class="modificadores-guide">
-    <h2>📊 Como Funcionam os Modificadores Raciais</h2>
+  <!-- Dicas Importantes -->
+  <div class="dicas-raca">
+    <h2>💡 Dicas Importantes</h2>
     <div class="card">
       <div class="content-grid">
-        <div class="exemplo-calculo">
-          <h4>💡 Exemplo Prático</h4>
-          <div style="background: rgba(37, 40, 80, 0.6); padding: 1rem; border-radius: 6px; margin: 1rem 0;">
-            <p><strong>Antes do modificador racial:</strong></p>
-            <p>🎯 Carisma = 12 (+1)</p>
-            
-            <p style="margin: 1rem 0;"><strong>Qareen (+2 Carisma):</strong></p>
-            <p style="color: var(--accent-gold);">✨ Carisma = 14 (+2)</p>
-            
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem;">
-              <em>O bônus é aplicado diretamente ao valor do atributo, não como bônus separado!</em>
-            </p>
-          </div>
+        <div class="dica-item">
+          <h4>🎯 Foco no Conceito</h4>
+          <p>Escolha a raça que melhor se alinha com o conceito do seu personagem, não apenas pelos bônus mecânicos.</p>
         </div>
         
-        <div class="tipos-bonus">
-          <h4>🔄 Tipos de Modificadores</h4>
-          <ul style="list-style: none; padding: 0;">
-            <li style="margin: 0.5rem 0;">
-              <span style="color: var(--success-green);">✅ <strong>Bônus Fixos:</strong></span> 
-              Aplicados automaticamente
-            </li>
-            <li style="margin: 0.5rem 0;">
-              <span style="color: var(--warning-orange);">⚡ <strong>Bônus Livres:</strong></span> 
-              Você escolhe os atributos
-            </li>
-            <li style="margin: 0.5rem 0;">
-              <span style="color: var(--error-red);">❌ <strong>Penalidades:</strong></span> 
-              Reduzem o valor do atributo
-            </li>
-          </ul>
+        <div class="dica-item">
+          <h4>⚖️ Equilíbrio</h4>
+          <p>Todas as raças são viáveis. O mais importante é como você interpreta e desenvolve seu personagem.</p>
+        </div>
+        
+        <div class="dica-item">
+          <h4>🎭 Roleplay</h4>
+          <p>Considere como a cultura e história da raça influenciarão a personalidade do seu herói.</p>
+        </div>
+        
+        <div class="dica-item">
+          <h4>🤝 Party</h4>
+          <p>Pense em como sua escolha se complementará com os outros membros do grupo.</p>
         </div>
       </div>
     </div>
@@ -376,7 +172,7 @@
     <div class="cta-section">
       <div class="card">
         <h3>🎨 Pronto para Criar?</h3>
-        <p>Agora que você conhece todas as raças de Arton, que tal criar seu personagem épico?</p>
+        <p>Agora que você conhece as raças disponíveis, que tal criar seu primeiro personagem?</p>
         <div class="cta-buttons">
           <a href="/personagens/criar" class="nav-btn">✨ Criar Personagem</a>
           <a href="/classes" class="btn btn-secondary">⚔️ Ver Classes</a>
@@ -387,7 +183,7 @@
     <div class="cta-section">
       <div class="card">
         <h3>🚀 Comece Sua Aventura</h3>
-        <p>Faça login para começar a criar seus personagens épicos de Arton!</p>
+        <p>Faça login para começar a criar seus personagens épicos!</p>
         <div class="cta-buttons">
           <a href="/register" class="nav-btn">✨ Criar Conta</a>
           <a href="/login" class="btn btn-secondary">🔐 Login</a>
@@ -398,37 +194,5 @@
 </section>
 
 
-
-<script>
-// Script para filtros de raça
-document.addEventListener('DOMContentLoaded', function() {
-  const filterButtons = document.querySelectorAll('.filter-btn');
-  const racaCards = document.querySelectorAll('.raca-card');
-  
-  filterButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      // Remover classe active de todos os botões
-      filterButtons.forEach(btn => btn.classList.remove('active'));
-      
-      // Adicionar classe active ao botão clicado
-      this.classList.add('active');
-      
-      // Filtrar raças
-      const categoria = this.dataset.filter;
-      
-      racaCards.forEach(card => {
-        if (categoria === 'all' || card.dataset.categoria === categoria) {
-          card.classList.remove('hidden');
-          card.style.animation = 'fadeInUp 0.5s ease-out';
-        } else {
-          card.classList.add('hidden');
-        }
-      });
-    });
-  });
-  
-  console.log('✅ Sistema de filtros de raças carregado');
-});
-</script>
 
 <%- include('../partials/footer') %>
