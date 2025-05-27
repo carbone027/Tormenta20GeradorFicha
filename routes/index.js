@@ -9,6 +9,7 @@ const raceController = require('../controllers/RaceController');
 const classController = require('../controllers/ClassController');
 const godsController = require('../controllers/GodsController');
 const equipmentController = require('../controllers/EquipmentController');
+const PowerController = require('../controllers/PowerController');
 
 // Middleware para verificar autenticação
 const checkAuth = (req, res, next) => {
@@ -27,6 +28,9 @@ router.get('/classes', classController.index);
 router.get('/deuses', godsController.index);
 router.get('/equipamentos', equipmentController.index);
 
+// Nova rota para poderes
+router.get('/poderes', PowerController.index);
+
 // Rotas de autenticação
 router.get('/login', authController.loginForm);
 router.post('/login', authController.login);
@@ -42,5 +46,9 @@ router.get('/personagens/:id', characterController.view);
 router.get('/personagens/:id/editar', characterController.editForm);
 router.put('/personagens/:id', characterController.update);
 router.delete('/personagens/:id', characterController.delete);
+
+// Novas rotas para API de poderes
+router.get('/api/poderes', PowerController.apiGetPowers);
+router.get('/api/racas/:raca_id/poderes', characterController.getRacialPowers);
 
 module.exports = router;

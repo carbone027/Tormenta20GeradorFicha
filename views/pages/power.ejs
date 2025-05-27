@@ -1,0 +1,232 @@
+<%- include('../partials/header', { title: 'Poderes de Tormenta20', activePage: 'powers' }) %>
+
+<section class="content-section active">
+  <h2>✨ Poderes de Tormenta20</h2>
+  <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
+    Os poderes definem as habilidades especiais que seus personagens podem desenvolver. De habilidades raciais naturais a técnicas de combate avançadas, cada poder oferece novas possibilidades táticas e narrativas.
+  </p>
+
+  <!-- Filtros de Poderes -->
+  <div class="power-filters">
+    <div class="card" style="text-align: center; padding: 1.5rem; margin-bottom: 3rem;">
+      <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">🔍 Filtrar Poderes</h3>
+      <div class="filter-buttons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem;">
+        <button class="filter-btn active" data-filter="all">Todos os Poderes</button>
+        <button class="filter-btn" data-filter="racial">🧬 Raciais</button>
+        <button class="filter-btn" data-filter="geral">⚡ Gerais</button>
+        <button class="filter-btn" data-filter="combate">⚔️ Combate</button>
+        <button class="filter-btn" data-filter="destino">🌟 Destino</button>
+        <button class="filter-btn" data-filter="magia">🔮 Magia</button>
+        <button class="filter-btn" data-filter="concedido">⭐ Concedidos</button>
+        <button class="filter-btn" data-filter="tormenta">💀 Tormenta</button>
+      </div>
+    </div>
+  </div>
+
+  <% if (poderesPorTipo && Object.keys(poderesPorTipo).length > 0) { %>
+    <div class="powers-container">
+      <% Object.entries(poderesPorTipo).forEach(([tipo, poderes]) => { %>
+        <div class="power-section" data-tipo="<%= tipo %>">
+          <div class="section-header">
+            <h3 class="section-title">
+              <% 
+                let tipoIcon = '✨';
+                let tipoNome = tipo;
+                switch(tipo) {
+                  case 'racial': tipoIcon = '🧬'; tipoNome = 'Poderes Raciais'; break;
+                  case 'geral': tipoIcon = '⚡'; tipoNome = 'Poderes Gerais'; break;
+                  case 'combate': tipoIcon = '⚔️'; tipoNome = 'Poderes de Combate'; break;
+                  case 'destino': tipoIcon = '🌟'; tipoNome = 'Poderes de Destino'; break;
+                  case 'magia': tipoIcon = '🔮'; tipoNome = 'Poderes de Magia'; break;
+                  case 'concedido': tipoIcon = '⭐'; tipoNome = 'Poderes Concedidos'; break;
+                  case 'tormenta': tipoIcon = '💀'; tipoNome = 'Poderes da Tormenta'; break;
+                }
+              %>
+              <%= tipoIcon %> <%= tipoNome %>
+            </h3>
+            <span class="items-count">(<%= poderes.length %> poderes)</span>
+          </div>
+          
+          <div class="powers-grid">
+            <% poderes.forEach(poder => { %>
+              <div class="power-card" data-tipo="<%= poder.tipo %>" data-grupo="<%= poder.grupo || '' %>">
+                <div class="power-header">
+                  <div class="power-icon">
+                    <% 
+                      let poderIcon = '✨';
+                      if (poder.tipo === 'racial') poderIcon = '🧬';
+                      else if (poder.tipo === 'combate') poderIcon = '⚔️';
+                      else if (poder.tipo === 'magia') poderIcon = '🔮';
+                      else if (poder.tipo === 'destino') poderIcon = '🌟';
+                      else if (poder.tipo === 'concedido') poderIcon = '⭐';
+                      else if (poder.tipo === 'tormenta') poderIcon = '💀';
+                      else if (poder.nome.toLowerCase().includes('ataque')) poderIcon = '⚔️';
+                      else if (poder.nome.toLowerCase().includes('magia')) poderIcon = '🔮';
+                      else if (poder.nome.toLowerCase().includes('defesa') || poder.nome.toLowerCase().includes('armadura')) poderIcon = '🛡️';
+                      else if (poder.nome.toLowerCase().includes('movimento') || poder.nome.toLowerCase().includes('voo')) poderIcon = '🏃';
+                    %>
+                    <%= poderIcon %>
+                  </div>
+                  <h4 class="power-name"><%= poder.nome %></h4>
+                  <p class="power-type">
+                    <%= poder.tipo.charAt(0).toUpperCase() + poder.tipo.slice(1) %>
+                    <% if (poder.grupo) { %>
+                      - <%= poder.grupo.charAt(0).toUpperCase() + poder.grupo.slice(1) %>
+                    <% } %>
+                  </p>
+                </div>
+                
+                <div class="power-content">
+                  <div class="power-description">
+                    <p><%= poder.descricao %></p>
+                  </div>
+                  
+                  <% if (poder.pre_requisitos) { %>
+                    <div class="power-requirements">
+                      <h5>📋 Pré-requisitos</h5>
+                      <p class="requirements-text"><%= poder.pre_requisitos %></p>
+                    </div>
+                  <% } %>
+                  
+                  <% if (poder.custo_pm && poder.custo_pm > 0) { %>
+                    <div class="power-cost">
+                      <h5>💙 Custo</h5>
+                      <p class="cost-text"><%= poder.custo_pm %> PM</p>
+                    </div>
+                  <% } %>
+                  
+                  <% if (poder.efeito_especial) { %>
+                    <div class="power-special">
+                      <h5>⚡ Efeito Especial</h5>
+                      <p class="special-text"><%= poder.efeito_especial %></p>
+                    </div>
+                  <% } %>
+                  
+                  <% if (poder.restricoes) { %>
+                    <div class="power-restrictions">
+                      <h5>⚠️ Restrições</h5>
+                      <p class="restrictions-text"><%= poder.restricoes %></p>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="empty-state">
+      <div class="card">
+        <h3>📋 Nenhum poder encontrado</h3>
+        <p>Não foi possível carregar os poderes disponíveis. Tente novamente mais tarde.</p>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Guia de Poderes -->
+  <div class="powers-guide">
+    <h2>📚 Guia dos Tipos de Poderes</h2>
+    
+    <div class="content-grid">
+      <div class="card guide-card">
+        <h3>🧬 Poderes Raciais</h3>
+        <p><strong>Habilidades naturais da sua raça</strong></p>
+        <ul>
+          <li>🎯 <strong>Automáticos:</strong> Obtidos ao nascer</li>
+          <li>🔄 <strong>Sempre ativos:</strong> Não precisam ser ativados</li>
+          <li>🎭 <strong>Definem identidade:</strong> Características únicas</li>
+          <li>⚖️ <strong>Equilibrados:</strong> Vantagens e limitações</li>
+        </ul>
+      </div>
+      
+      <div class="card guide-card">
+        <h3>⚔️ Poderes de Combate</h3>
+        <p><strong>Técnicas e manobras para batalha</strong></p>
+        <ul>
+          <li>💪 <strong>Melhoram ataques:</strong> Dano e precisão</li>
+          <li>🛡️ <strong>Aumentam defesa:</strong> Proteção e resistência</li>
+          <li>⚡ <strong>Táticas especiais:</strong> Manobras únicas</li>
+          <li>📈 <strong>Escaláveis:</strong> Melhoram com nível</li>
+        </ul>
+      </div>
+      
+      <div class="card guide-card">
+        <h3>🌟 Poderes de Destino</h3>
+        <p><strong>Habilidades de perícia e roleplay</strong></p>
+        <ul>
+          <li>🎲 <strong>Melhoram perícias:</strong> Testes e habilidades</li>
+          <li>🎭 <strong>Narrativos:</strong> Focam no roleplay</li>
+          <li>🔧 <strong>Utilitários:</strong> Situações específicas</li>
+          <li>💡 <strong>Criativos:</strong> Soluções inovadoras</li>
+        </ul>
+      </div>
+      
+      <div class="card guide-card">
+        <h3>🔮 Poderes de Magia</h3>
+        <p><strong>Aprimoramentos para conjuradores</strong></p>
+        <ul>
+          <li>✨ <strong>Melhoram magias:</strong> Potência e eficiência</li>
+          <li>💙 <strong>Gerenciam PM:</strong> Economia de recursos</li>
+          <li>📚 <strong>Novas opções:</strong> Magias adicionais</li>
+          <li>🎯 <strong>Especializações:</strong> Estilos únicos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dicas de Seleção -->
+  <div class="selection-tips">
+    <h2>💡 Como Escolher Poderes</h2>
+    <div class="content-grid">
+      <div class="card tip-card">
+        <h4>🎯 Foque no Conceito</h4>
+        <p>Escolha poderes que <strong>complementem a personalidade</strong> e estilo do seu personagem. A narrativa deve guiar as escolhas mecânicas.</p>
+      </div>
+      
+      <div class="card tip-card">
+        <h4>⚖️ Balance Poder e Roleplay</h4>
+        <p>Nem sempre o poder mais forte é a melhor escolha. <strong>Poderes únicos</strong> podem criar oportunidades narrativas interessantes.</p>
+      </div>
+      
+      <div class="card tip-card">
+        <h4>🤝 Considere o Grupo</h4>
+        <p>Pense em como seus poderes <strong>interagem com os aliados</strong>. Sinergia de grupo pode ser mais valiosa que poder individual.</p>
+      </div>
+      
+      <div class="card tip-card">
+        <h4>📈 Planeje a Evolução</h4>
+        <p>Alguns poderes <strong>se tornam pré-requisitos</strong> para outros. Planeje a progressão do seu personagem a longo prazo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <% if (user) { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>⚡ Hora de Construir Seu Herói!</h3>
+        <p>Agora que conhece os poderes disponíveis, crie um personagem épico!</p>
+        <div class="cta-buttons">
+          <a href="/personagens/criar" class="nav-btn">✨ Criar Personagem</a>
+          <a href="/personagens" class="btn btn-secondary">📋 Meus Personagens</a>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="cta-section">
+      <div class="card">
+        <h3>🚀 Desenvolva Seus Poderes</h3>
+        <p>Cadastre-se para criar personagens e explorar todos os poderes de Tormenta20!</p>
+        <div class="cta-buttons">
+          <a href="/register" class="nav-btn">✨ Criar Conta</a>
+          <a href="/login" class="btn btn-secondary">🔐 Login</a>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<script src="/scripts/power.js"></script>
+
+<%- include('../partials/footer') %>
