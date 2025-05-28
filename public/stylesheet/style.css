@@ -1073,9 +1073,11 @@ footer {
 
 .stat-row {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin: 0.5rem 0;
+  gap: 1rem;
 }
 
 .stat-label {
@@ -2200,13 +2202,6 @@ footer {
 .character-stats {
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
-}
-
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.8rem;
 }
 
 .character-stats .stat-item {
