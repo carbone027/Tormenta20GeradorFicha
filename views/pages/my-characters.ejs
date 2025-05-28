@@ -176,7 +176,7 @@
               <a href="/personagens/<%= character.id %>/editar" class="action-btn edit-btn">
                 ✏️ Editar
               </a>
-              <button class="action-btn delete-btn" data-id="<%= character.id %>" data-name="<%= character.nome %>">
+              <button class="action-btn delete-btn" data-id="<%= character.id %>" data-name="<%= character.nome %>" onclick="deleteCharacter('<%= character.id %>')">
                 🗑️ Excluir
               </button>
             </div>
@@ -233,7 +233,7 @@
 </section>
 
 <!-- Modal de Confirmação de Exclusão -->
-<div id="deleteModal" class="modal">
+<div id="deleteModal" class="modal" style="display: none;">
   <div class="modal-content">
     <div class="modal-header">
       <h3>⚠️ Confirmar Exclusão</h3>
@@ -251,5 +251,94 @@
 
 <!-- Script específico para meus personagens -->
 <script src="/scripts/my-characters.js"></script>
+
+<script>
+// Solução de emergência para botões de delete
+function initEmergencyDelete() {
+  console.log('🚨 Iniciando correção de emergência para delete');
+  
+  // Função para deletar personagem
+  window.deleteCharacter = async function(characterId, characterName) {
+    console.log(`🗑️ Tentando deletar: ${characterName} (ID: ${characterId})`);
+    
+    // Confirmação simples
+    const confirmed = confirm(`Tem certeza que deseja excluir o personagem "${characterName}"?\n\nEsta ação não pode ser desfeita!`);
+    
+    if (!confirmed) {
+      console.log('❌ Exclusão cancelada pelo usuário');
+      return;
+    }
+    
+    try {
+      console.log(`📡 Enviando requisição DELETE para /personagens/${characterId}`);
+      
+      const response = await fetch(`/personagens/${characterId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log(`📡 Resposta: ${response.status} ${response.statusText}`);
+      
+      if (response.ok) {
+        console.log('✅ Personagem excluído com sucesso');
+        alert('Personagem excluído com sucesso!');
+        
+        // Recarregar a página para atualizar a lista
+        window.location.reload();
+      } else {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('❌ Erro ao excluir personagem:', error);
+      alert('Erro ao excluir personagem. Tente novamente.');
+    }
+  };
+  
+  // Anexar eventos aos botões existentes
+  const deleteButtons = document.querySelectorAll('.delete-btn, button[data-id]');
+  console.log(`🔍 Encontrados ${deleteButtons.length} botões de delete`);
+  
+  deleteButtons.forEach((btn, index) => {
+    const characterId = btn.dataset.id || btn.getAttribute('data-id');
+    const characterName = btn.dataset.name || btn.getAttribute('data-name') || 'Personagem';
+    
+    console.log(`Configurando botão ${index + 1}: ID=${characterId}, Nome=${characterName}`);
+    
+    if (characterId) {
+      // Remover eventos existentes
+      btn.onclick = null;
+      
+      // Adicionar novo evento
+      btn.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        deleteCharacter(characterId, characterName);
+      };
+      
+      // Garantir que o botão seja visível e clicável
+      btn.style.cursor = 'pointer';
+      btn.style.pointerEvents = 'auto';
+      
+      console.log(`✅ Evento anexado ao botão ${index + 1}`);
+    } else {
+      console.warn(`⚠️ Botão ${index + 1} não tem data-id`);
+    }
+  });
+  
+  console.log('✅ Correção de emergência aplicada');
+}
+
+// Executar quando DOM estiver pronto
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initEmergencyDelete);
+} else {
+  initEmergencyDelete();
+}
+
+// Executar novamente após um delay para garantir
+setTimeout(initEmergencyDelete, 1000);
+</script>
 
 <%- include('../partials/footer') %>
