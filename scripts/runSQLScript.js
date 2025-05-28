@@ -15,7 +15,7 @@ const pool = new Pool({
 });
 
 const runSQLScript = async () => {
-  const filePath = path.join(__dirname, 'BD4.sql');
+  const filePath = path.join(__dirname, 'BD5.sql');
   const sql = fs.readFileSync(filePath, 'utf8');
 
   try {
