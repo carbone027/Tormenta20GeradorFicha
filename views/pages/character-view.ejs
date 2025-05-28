@@ -3,6 +3,114 @@
   activePage: 'characterView' 
 }) %>
 
+<%
+// ===== ADICIONAR A FUNÇÃO AQUI, LOGO APÓS O INCLUDE DO HEADER =====
+// Função para gerar ícones de poderes
+function getPowerIcon(poder, tipo) {
+  const nome = (poder.nome || '').toLowerCase();
+  const tipoLower = (tipo || poder.tipo || '').toLowerCase();
+  const descricao = (poder.descricao || '').toLowerCase();
+  
+  // Ícones específicos por palavra-chave no nome
+  if (nome.includes('ataque') || nome.includes('golpe')) return '⚔️';
+  if (nome.includes('defesa') || nome.includes('proteção')) return '🛡️';
+  if (nome.includes('cura') || nome.includes('curar')) return '💚';
+  if (nome.includes('fogo') || nome.includes('chamas')) return '🔥';
+  if (nome.includes('gelo') || nome.includes('frio')) return '❄️';
+  if (nome.includes('raio') || nome.includes('elétrico')) return '⚡';
+  if (nome.includes('vento') || nome.includes('ar')) return '💨';
+  if (nome.includes('terra') || nome.includes('pedra')) return '🌍';
+  if (nome.includes('água') || nome.includes('aquático')) return '💧';
+  if (nome.includes('luz') || nome.includes('sagrado')) return '☀️';
+  if (nome.includes('trevas') || nome.includes('sombra')) return '🌑';
+  if (nome.includes('movimento') || nome.includes('velocidade')) return '🏃';
+  if (nome.includes('voo') || nome.includes('voar')) return '🦅';
+  if (nome.includes('salto') || nome.includes('pular')) return '🦘';
+  if (nome.includes('furtividade') || nome.includes('stealth')) return '👤';
+  if (nome.includes('percepção') || nome.includes('visão')) return '👁️';
+  if (nome.includes('força') || nome.includes('poder')) return '💪';
+  if (nome.includes('garras') || nome.includes('presas')) return '🐾';
+  if (nome.includes('asas')) return '🦅';
+  if (nome.includes('cauda') || nome.includes('rabo')) return '🦎';
+  if (nome.includes('chifres') || nome.includes('cornos')) return '🐂';
+  if (nome.includes('pelo') || nome.includes('pelagem')) return '🐺';
+  if (nome.includes('escamas') || nome.includes('escamoso')) return '🐍';
+  if (nome.includes('veneno') || nome.includes('tóxico')) return '☣️';
+  if (nome.includes('maldição') || nome.includes('amaldiçoar')) return '🖤';
+  if (nome.includes('bênção') || nome.includes('abençoar')) return '🙏';
+  if (nome.includes('sorte') || nome.includes('fortuna')) return '🍀';
+  if (nome.includes('conhecimento') || nome.includes('saber')) return '📚';
+  if (nome.includes('liderança') || nome.includes('comando')) return '👑';
+  if (nome.includes('intimidação') || nome.includes('medo')) return '😠';
+  if (nome.includes('persuasão') || nome.includes('convencer')) return '💬';
+  if (nome.includes('diplomacia') || nome.includes('negociar')) return '🤝';
+  if (nome.includes('tiro') || nome.includes('disparo')) return '🏹';
+  if (nome.includes('crítico') || nome.includes('mortal')) return '💀';
+  if (nome.includes('regeneração') || nome.includes('recuperar')) return '🌿';
+  if (nome.includes('aura') || nome.includes('presença')) return '🌟';
+  if (nome.includes('ritual') || nome.includes('cerimônia')) return '🕯️';
+  if (nome.includes('runa') || nome.includes('marca')) return '📜';
+  if (nome.includes('animal') || nome.includes('besta')) return '🐺';
+  if (nome.includes('natureza') || nome.includes('selvagem')) return '🌿';
+  if (nome.includes('caça') || nome.includes('rastrear')) return '🏹';
+  if (nome.includes('heroico') || nome.includes('épico')) return '🏆';
+  if (nome.includes('lendário') || nome.includes('mítico')) return '👑';
+  if (nome.includes('tormenta') || nome.includes('corrupção')) return '💀';
+  if (nome.includes('investida') || nome.includes('carga')) return '🏇';
+  if (nome.includes('combo') || nome.includes('sequência')) return '🌀';
+  if (nome.includes('rajada') || nome.includes('múltiplo')) return '💨';
+  if (nome.includes('bloqueio') || nome.includes('parar')) return '🚫';
+  if (nome.includes('esquiva') || nome.includes('desviar')) return '💨';
+  if (nome.includes('absorção') || nome.includes('absorver')) return '🌀';
+  if (nome.includes('teleporte') || nome.includes('transportar')) return '⚡';
+  if (nome.includes('escalada') || nome.includes('escalar')) return '🧗';
+  if (nome.includes('natação') || nome.includes('nadar')) return '🏊';
+  if (nome.includes('acrobacia') || nome.includes('acrobático')) return '🤸';
+  if (nome.includes('atletismo') || nome.includes('atlético')) return '💪';
+  if (nome.includes('investigação') || nome.includes('investigar')) return '🔍';
+  if (nome.includes('enganação') || nome.includes('enganar')) return '🎭';
+  if (nome.includes('faro') || nome.includes('olfato')) return '👃';
+  if (nome.includes('audição') || nome.includes('ouvir')) return '👂';
+  
+  // Ícones por tipo com variação
+  const iconsByType = {
+    'combate': ['⚔️', '🗡️', '🏹', '💪', '👊', '🛡️', '💥', '⚡'],
+    'magia': ['🔮', '✨', '🪄', '🌟', '⚡', '🔥', '❄️', '💫'],
+    'destino': ['🌟', '🎯', '💫', '🍀', '📈', '🎲', '💎', '⭐'],
+    'racial': ['🧬', '👁️', '🦅', '🐺', '🌿', '⚡', '🐾', '💪'],
+    'geral': ['⚡', '💡', '🔧', '🎯', '📚', '🏃', '💪', '🌟'],
+    'concedido': ['⭐', '🙏', '✨', '💫', '🌟', '👑', '💎', '🔸'],
+    'tormenta': ['💀', '☠️', '🖤', '👻', '🌑', '⚡', '💥', '🔥']
+  };
+  
+  if (iconsByType[tipoLower]) {
+    const icons = iconsByType[tipoLower];
+    let hash = 0;
+    for (let i = 0; i < nome.length; i++) {
+      hash = ((hash << 5) - hash + nome.charCodeAt(i)) & 0xffffffff;
+    }
+    return icons[Math.abs(hash) % icons.length];
+  }
+  
+  // Análise da descrição
+  if (descricao.includes('dano') || descricao.includes('ataque')) return '⚔️';
+  if (descricao.includes('cura') || descricao.includes('recupera')) return '💚';
+  if (descricao.includes('movimento') || descricao.includes('mover')) return '🏃';
+  if (descricao.includes('defesa') || descricao.includes('ca')) return '🛡️';
+  if (descricao.includes('magia')) return '🔮';
+  if (descricao.includes('perícia')) return '🎯';
+  
+  // Ícone padrão único
+  const fallbackIcons = ['⚡', '✨', '🌟', '💫', '🔸', '🔹', '💎', '🎭', '🎯', '🔧'];
+  let charSum = 0;
+  for (let i = 0; i < nome.length; i++) {
+    charSum += nome.charCodeAt(i);
+  }
+  return fallbackIcons[charSum % fallbackIcons.length];
+}
+// ===== FIM DA FUNÇÃO =====
+%>
+
 <% if (typeof character !== 'undefined' && character) { %>
   <section class="content-section active character-sheet">
     <!-- Header do Personagem -->
@@ -198,26 +306,62 @@
     </div>
     
     <!-- Filtros para Visualização -->
-    <div class="powers-quick-filters" style="margin-bottom: 2rem;">
-      <div class="quick-filters-title">🎯 Filtrar por Fonte</div>
-      <div class="quick-filters-buttons">
-        <button type="button" class="quick-filter-btn active" data-filter="all">
-          ✨ Todos
-        </button>
-        <button type="button" class="quick-filter-btn" data-filter="raca">
-          🧬 Raciais
-        </button>
-        <button type="button" class="quick-filter-btn" data-filter="escolha">
-          ⚡ Escolhidos
-        </button>
-        <button type="button" class="quick-filter-btn" data-filter="classe">
-          ⚔️ Classe
-        </button>
-        <button type="button" class="quick-filter-btn" data-filter="deus">
-          ⭐ Divinos
-        </button>
-      </div>
-    </div>
+    <div class="powers-quick-filters">
+  <div class="quick-filters-title">🎯 Filtros Rápidos</div>
+  <div class="quick-filters-buttons">
+    <button type="button" class="quick-filter-btn active" data-filter="all">
+      ✨ Todos
+    </button>
+    
+    <!-- Verificar se existe cada tipo antes de mostrar o filtro -->
+    <% if (typeof poderesDisponiveis !== 'undefined' && poderesDisponiveis) { %>
+      <% Object.keys(poderesDisponiveis).forEach(tipo => { %>
+        <% if (poderesDisponiveis[tipo] && poderesDisponiveis[tipo].length > 0) { %>
+          <button type="button" class="quick-filter-btn" data-filter="<%= tipo %>">
+            <% 
+              let tipoIcon = '✨';
+              let tipoNome = tipo;
+              switch(tipo.toLowerCase()) {
+                case 'geral': 
+                  tipoIcon = '⚡'; 
+                  tipoNome = 'Gerais'; 
+                  break;
+                case 'combate': 
+                  tipoIcon = '⚔️'; 
+                  tipoNome = 'Combate'; 
+                  break;
+                case 'destino': 
+                  tipoIcon = '🌟'; 
+                  tipoNome = 'Destino'; 
+                  break;
+                case 'magia': 
+                  tipoIcon = '🔮'; 
+                  tipoNome = 'Magia'; 
+                  break;
+                case 'racial':
+                  tipoIcon = '🧬'; 
+                  tipoNome = 'Raciais'; 
+                  break;
+                case 'concedido':
+                  tipoIcon = '⭐'; 
+                  tipoNome = 'Concedidos'; 
+                  break;
+                case 'tormenta':
+                  tipoIcon = '💀'; 
+                  tipoNome = 'Tormenta'; 
+                  break;
+                default:
+                  tipoIcon = '✨';
+                  tipoNome = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+              }
+            %>
+            <%= tipoIcon %> <%= tipoNome %>
+          </button>
+        <% } %>
+      <% }); %>
+    <% } %>
+  </div>
+</div>
     
     <% if (typeof poderesPorTipo !== 'undefined' && poderesPorTipo && Object.keys(poderesPorTipo).length > 0) { %>
       <!-- Organização por Tipo -->
@@ -382,17 +526,7 @@
             
             <div class="character-power-header">
               <h5 class="character-power-name">
-                <% 
-                  // Ícone baseado na fonte
-                  let poderIcon = '✨';
-                  switch(poder.fonte) {
-                    case 'raca': poderIcon = '🧬'; break;
-                    case 'escolha': poderIcon = '⚡'; break;
-                    case 'classe': poderIcon = '⚔️'; break;
-                    case 'deus': poderIcon = '⭐'; break;
-                  }
-                %>
-                <%= poderIcon %> <%= poder.nome %>
+                <%= getPowerIcon(poder) %> <%= poder.nome %>
               </h5>
               
               <span class="character-power-source-badge">
