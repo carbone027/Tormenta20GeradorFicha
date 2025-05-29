@@ -108,7 +108,6 @@ function getPowerIcon(poder, tipo) {
 // ===== FIM DA FUNÇÃO =====
 %>
 
-
   <section class="content-section active">
     <h2>✨ Criar Novo Personagem</h2>
     <p style="text-align: center; margin-bottom: 2rem; color: #b8b8b8;">
@@ -300,6 +299,8 @@ function getPowerIcon(poder, tipo) {
             <p>Escolha poderes para personalizar seu personagem</p>
           </div>
 
+          <!-- A seção de Poderes de Classe será inserida aqui via JavaScript -->
+
           <!-- Poderes Raciais (Automáticos) -->
           <div class="racial-powers-section" id="racialPowersSection" style="display: none;">
             <div class="racial-powers-header">
@@ -323,10 +324,10 @@ function getPowerIcon(poder, tipo) {
               <div class="power-selection-header">
                 <h4 class="power-selection-title">
                   <span>⚡</span>
-                  Poderes Adicionais
+                  Poderes Gerais
                 </h4>
                 <p class="power-selection-description">
-                  Escolha poderes adicionais para personalizar seu personagem (opcional)
+                  Escolha poderes gerais para personalizar seu personagem (opcional)
                 </p>
               </div>
 
@@ -342,61 +343,62 @@ function getPowerIcon(poder, tipo) {
 
               <!-- Filtros Rápidos -->
               <div class="powers-quick-filters">
-  <div class="quick-filters-title">🎯 Filtros Rápidos</div>
-  <div class="quick-filters-buttons">
-    <button type="button" class="quick-filter-btn active" data-filter="all">
-      ✨ Todos
-    </button>
-    
-    <!-- Verificar se existe cada tipo antes de mostrar o filtro -->
-    <% if (typeof poderesDisponiveis !== 'undefined' && poderesDisponiveis) { %>
-      <% Object.keys(poderesDisponiveis).forEach(tipo => { %>
-        <% if (poderesDisponiveis[tipo] && poderesDisponiveis[tipo].length > 0) { %>
-          <button type="button" class="quick-filter-btn" data-filter="<%= tipo %>">
-            <% 
-              let tipoIcon = '✨';
-              let tipoNome = tipo;
-              switch(tipo.toLowerCase()) {
-                case 'geral': 
-                  tipoIcon = '⚡'; 
-                  tipoNome = 'Gerais'; 
-                  break;
-                case 'combate': 
-                  tipoIcon = '⚔️'; 
-                  tipoNome = 'Combate'; 
-                  break;
-                case 'destino': 
-                  tipoIcon = '🌟'; 
-                  tipoNome = 'Destino'; 
-                  break;
-                case 'magia': 
-                  tipoIcon = '🔮'; 
-                  tipoNome = 'Magia'; 
-                  break;
-                case 'racial':
-                  tipoIcon = '🧬'; 
-                  tipoNome = 'Raciais'; 
-                  break;
-                case 'concedido':
-                  tipoIcon = '⭐'; 
-                  tipoNome = 'Concedidos'; 
-                  break;
-                case 'tormenta':
-                  tipoIcon = '💀'; 
-                  tipoNome = 'Tormenta'; 
-                  break;
-                default:
-                  tipoIcon = '✨';
-                  tipoNome = tipo.charAt(0).toUpperCase() + tipo.slice(1);
-              }
-            %>
-            <%= tipoIcon %> <%= tipoNome %>
-          </button>
-        <% } %>
-      <% }); %>
-    <% } %>
-  </div>
-</div>
+                <div class="quick-filters-title">🎯 Filtros Rápidos</div>
+                <div class="quick-filters-buttons">
+                  <button type="button" class="quick-filter-btn active" data-filter="all">
+                    ✨ Todos
+                  </button>
+                  
+                  <!-- Verificar se existe cada tipo antes de mostrar o filtro -->
+                  <% if (typeof poderesDisponiveis !== 'undefined' && poderesDisponiveis) { %>
+                    <% Object.keys(poderesDisponiveis).forEach(tipo => { %>
+                      <% if (poderesDisponiveis[tipo] && poderesDisponiveis[tipo].length > 0) { %>
+                        <button type="button" class="quick-filter-btn" data-filter="<%= tipo %>">
+                          <% 
+                            let tipoIcon = '✨';
+                            let tipoNome = tipo;
+                            switch(tipo.toLowerCase()) {
+                              case 'geral': 
+                                tipoIcon = '⚡'; 
+                                tipoNome = 'Gerais'; 
+                                break;
+                              case 'combate': 
+                                tipoIcon = '⚔️'; 
+                                tipoNome = 'Combate'; 
+                                break;
+                              case 'destino': 
+                                tipoIcon = '🌟'; 
+                                tipoNome = 'Destino'; 
+                                break;
+                              case 'magia': 
+                                tipoIcon = '🔮'; 
+                                tipoNome = 'Magia'; 
+                                break;
+                              case 'racial':
+                                tipoIcon = '🧬'; 
+                                tipoNome = 'Raciais'; 
+                                break;
+                              case 'concedido':
+                                tipoIcon = '⭐'; 
+                                tipoNome = 'Concedidos'; 
+                                break;
+                              case 'tormenta':
+                                tipoIcon = '💀'; 
+                                tipoNome = 'Tormenta'; 
+                                break;
+                              default:
+                                tipoIcon = '✨';
+                                tipoNome = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+                            }
+                          %>
+                          <%= tipoIcon %> <%= tipoNome %>
+                        </button>
+                      <% } %>
+                    <% }); %>
+                  <% } %>
+                </div>
+              </div>
+
               <!-- Container dos Poderes -->
               <div class="powers-sections-container">
                 <% Object.entries(poderesDisponiveis).forEach(([tipo, poderes])=> { %>
@@ -521,8 +523,6 @@ function getPowerIcon(poder, tipo) {
         </div>
       </div>
 
-      <!-- Script para funcionalidade dos poderes -->
-
       <!-- Características Derivadas -->
       <div class="form-section">
         <h3>📊 Características Derivadas</h3>
@@ -627,6 +627,9 @@ function getPowerIcon(poder, tipo) {
     </form>
   </section>
 
+  
+  <!-- Scripts -->
   <script src="/scripts/character-create.js"></script>
+  <script src="/scripts/class-powers.js"></script>
 
   <%- include('../partials/footer') %>
