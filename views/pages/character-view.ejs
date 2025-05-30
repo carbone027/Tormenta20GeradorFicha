@@ -617,6 +617,168 @@ function getPowerIcon(poder, tipo) {
   </div>
 <% } %>
 
+<!-- Poderes de Classe -->
+<div class="class-powers-section">
+  <h3>⚔️ Poderes de Classe</h3>
+  
+  <% 
+    // Buscar poderes de classe específicos
+    let poderesClasse = [];
+    
+    if (typeof poderes !== 'undefined' && poderes) {
+      poderesClasse = poderes.filter(poder => poder.fonte === 'classe');
+    }
+    
+    // Se não há poderes na variável, tentar buscar via API ou criar mock
+    if (poderesClasse.length === 0 && character && character.classe_nome) {
+      // Poderes mock baseados na classe (removar após implementar API)
+      const poderesMockPorClasse = {
+        'guerreiro': [
+          { nome: 'Especialização em Armas', descricao: 'Proficiência com todas as armas marciais', nivel_minimo: 1 },
+          { nome: 'Ataque Extra', descricao: 'Pode realizar ataques adicionais', nivel_minimo: 2 },
+          { nome: 'Maestria em Combate', descricao: 'Bônus em ataques corpo a corpo', nivel_minimo: 3 }
+        ],
+        'arcanista': [
+          { nome: 'Missil Mágico', descricao: 'Projétil mágico que sempre acerta', nivel_minimo: 1 },
+          { nome: 'Escudo Arcano', descricao: 'Proteção mágica contra ataques', nivel_minimo: 2 },
+          { nome: 'Bola de Fogo', descricao: 'Explosão de chamas em área', nivel_minimo: 3 }
+        ],
+        'clérigo': [
+          { nome: 'Cura Básica', descricao: 'Restaura pontos de vida do alvo', nivel_minimo: 1 },
+          { nome: 'Bênção', descricao: 'Concede bônus temporários', nivel_minimo: 2 },
+          { nome: 'Proteção Divina', descricao: 'Resistência contra forças malignas', nivel_minimo: 3 }
+        ]
+      };
+      
+      const classeNome = character.classe_nome.toLowerCase();
+      if (poderesMockPorClasse[classeNome]) {
+        poderesClasse = poderesMockPorClasse[classeNome].filter(poder => 
+          poder.nivel_minimo <= (character.nivel || 1)
+        );
+      }
+    }
+  %>
+  
+  <% if (poderesClasse && poderesClasse.length > 0) { %>
+    <div class="class-powers-container">
+      <div class="class-powers-header">
+        <div class="class-powers-info">
+          <h4>⚔️ <%= character.classe_nome || 'Classe' %></h4>
+          <p class="class-powers-description">
+            Poderes automáticos da sua classe. Estes poderes são concedidos automaticamente 
+            conforme você avança de nível.
+          </p>
+          <div class="class-powers-stats">
+            <span class="stat-badge">
+              📊 <%= poderesClasse.length %> <%= poderesClasse.length === 1 ? 'poder ativo' : 'poderes ativos' %>
+            </span>
+            <span class="stat-badge">
+              🎯 Nível <%= character.nivel || 1 %>
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="class-powers-grid">
+        <% poderesClasse.forEach((poder, index) => { %>
+          <div class="class-power-card">
+            <div class="class-power-header">
+              <div class="class-power-icon">⚔️</div>
+              <div class="class-power-info">
+                <h5 class="class-power-name"><%= poder.nome %></h5>
+                <% if (poder.nivel_minimo) { %>
+                  <span class="class-power-level">Nível <%= poder.nivel_minimo %>+</span>
+                <% } %>
+              </div>
+              <div class="class-power-badge">Automático</div>
+            </div>
+            
+            <div class="class-power-content">
+              <p class="class-power-description">
+                <%= poder.descricao %>
+              </p>
+              
+              <% if (poder.pre_requisitos || poder.custo_pm || poder.efeito_especial) { %>
+                <div class="class-power-details">
+                  <% if (poder.pre_requisitos) { %>
+                    <div class="power-detail-item">
+                      <span class="detail-label">📋 Pré-requisitos:</span>
+                      <span class="detail-value"><%= poder.pre_requisitos %></span>
+                    </div>
+                  <% } %>
+                  
+                  <% if (poder.custo_pm && poder.custo_pm > 0) { %>
+                    <div class="power-detail-item">
+                      <span class="detail-label">💙 Custo:</span>
+                      <span class="detail-value"><%= poder.custo_pm %> PM</span>
+                    </div>
+                  <% } %>
+                  
+                  <% if (poder.efeito_especial) { %>
+                    <div class="power-detail-item">
+                      <span class="detail-label">⚡ Efeito:</span>
+                      <span class="detail-value"><%= poder.efeito_especial %></span>
+                    </div>
+                  <% } %>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+      
+      <!-- Progressão de Poderes Futuros -->
+      <% if (character.nivel && character.nivel < 20) { %>
+        <div class="class-powers-progression">
+          <h5>🔮 Próximos Poderes</h5>
+          <p class="progression-hint">
+            Conforme você avança de nível, novos poderes de classe serão desbloqueados automaticamente.
+          </p>
+          <div class="progression-preview">
+            <div class="progression-item">
+              <span class="progression-level">Nível <%= character.nivel + 1 %></span>
+              <span class="progression-text">Novos poderes disponíveis</span>
+            </div>
+            <% if (character.nivel < 5) { %>
+              <div class="progression-item">
+                <span class="progression-level">Nível 5</span>
+                <span class="progression-text">Poderes avançados</span>
+              </div>
+            <% } %>
+            <% if (character.nivel < 10) { %>
+              <div class="progression-item">
+                <span class="progression-level">Nível 10</span>
+                <span class="progression-text">Poderes épicos</span>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } else { %>
+    <!-- Estado vazio - Nenhum poder de classe -->
+    <div class="class-powers-empty">
+      <div class="empty-state-card">
+        <div class="empty-state-icon">⚔️</div>
+        <h4 class="empty-state-title">Poderes de Classe</h4>
+        <p class="empty-state-description">
+          <% if (character.classe_nome) { %>
+            Os poderes específicos da classe <strong><%= character.classe_nome %></strong> 
+            aparecerão aqui conforme você avança de nível.
+          <% } else { %>
+            Defina uma classe para ver os poderes específicos disponíveis.
+          <% } %>
+        </p>
+        <div class="empty-state-actions">
+          <a href="/personagens/<%= character.id %>/editar" class="btn btn-secondary">
+            ✏️ Editar Personagem
+          </a>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+
     <!-- História e Personalidade -->
     <% if (character.historia_pessoal || character.personalidade || character.objetivos) { %>
       <div class="background-section">

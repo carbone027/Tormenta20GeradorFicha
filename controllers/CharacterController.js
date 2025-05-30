@@ -115,56 +115,79 @@ exports.create = async (req, res) => {
 
 exports.view = async (req, res) => {
   try {
-    const { id } = req.params;
-    console.log('🔍 Buscando personagem com ID:', id);
-
-    const character = await Character.findById(id);
-    console.log('📋 Personagem encontrado:', character ? 'SIM' : 'NÃO');
-
+    const characterId = parseInt(req.params.id, 10);
+    const character = await Character.findById(characterId);
+    
     if (!character) {
-      console.log('❌ Personagem não encontrado');
-      return res.status(404).render('error', {
-        message: 'Personagem não encontrado',
-        error: { status: 404 },
-        user: req.session.user
-      });
+      return res.status(404).render('pages/error', { message: 'Personagem não encontrado' });
     }
 
-    // Buscar poderes do personagem
+    // Carregar poderes incluindo os de classe
     let poderes = [];
+    let poderesPorTipo = {};
+
     try {
-      poderes = await PowerController.getCharacterPowers(id);
-      console.log('✨ Poderes carregados:', poderes.length);
-    } catch (powerError) {
-      console.log('⚠️ Erro ao carregar poderes do personagem:', powerError.message);
-    }
+      // Buscar poderes já associados
+      const poderesQuery = `
+        SELECT p.*, pp.fonte, pp.observacoes
+        FROM poderes p
+        INNER JOIN personagem_poderes pp ON p.id = pp.poder_id
+        WHERE pp.personagem_id = $1
+        ORDER BY pp.fonte, p.nome
+      `;
+      
+      const result = await require('../config/database').query(poderesQuery, [characterId]);
+      poderes = result.rows;
 
-    // Agrupar poderes por tipo
-    const poderesPorTipo = {};
-    poderes.forEach(poder => {
-      if (!poderesPorTipo[poder.tipo]) {
-        poderesPorTipo[poder.tipo] = [];
+      // Se não há poderes de classe, buscar e associar automaticamente
+      const temPoderesClasse = poderes.some(p => p.fonte === 'classe');
+      
+      if (!temPoderesClasse && character.classe_id && character.nivel) {
+        console.log('🏛️ Associando poderes de classe automaticamente...');
+        
+        // Buscar poderes de classe disponíveis
+        const poderesClasseQuery = `
+          SELECT p.*, cp.nivel_minimo
+          FROM poderes p
+          INNER JOIN classe_poderes cp ON p.id = cp.poder_id
+          WHERE cp.classe_id = $1 AND cp.nivel_minimo <= $2
+          ORDER BY cp.nivel_minimo, p.nome
+        `;
+        
+        const poderesClasseResult = await require('../config/database').query(poderesClasseQuery, [character.classe_id, character.nivel]);
+        
+        // Adicionar à lista com fonte 'classe'
+        poderesClasseResult.rows.forEach(poder => {
+          poderes.push({
+            ...poder,
+            fonte: 'classe',
+            observacoes: `Poder de classe - Nível ${poder.nivel_minimo}+`
+          });
+        });
       }
-      poderesPorTipo[poder.tipo].push(poder);
-    });
 
-    console.log('✅ Renderizando template com personagem:', character.nome);
+      // Organizar por tipo
+      poderes.forEach(poder => {
+        const fonte = poder.fonte || 'geral';
+        if (!poderesPorTipo[fonte]) {
+          poderesPorTipo[fonte] = [];
+        }
+        poderesPorTipo[fonte].push(poder);
+      });
+
+    } catch (error) {
+      console.error('❌ Erro ao carregar poderes:', error);
+    }
 
     res.render('pages/character-view', {
-      title: `${character.nome} - Ficha`,
-      activePage: 'characterView',
-      user: req.session.user,
-      character: character,
-      poderes: poderes,
-      poderesPorTipo: poderesPorTipo
+      character,
+      poderes,
+      poderesPorTipo
     });
+
   } catch (error) {
-    console.error('💥 Erro ao visualizar personagem:', error);
-    res.status(500).render('error', {
-      message: 'Erro ao carregar personagem',
-      error,
-      user: req.session.user
-    });
+    console.error('❌ Erro ao visualizar personagem:', error);
+    res.status(500).render('pages/error', { message: 'Erro interno do servidor' });
   }
 };
 

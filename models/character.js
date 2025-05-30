@@ -30,7 +30,7 @@ class Character {
         LEFT JOIN deuses d ON p.deus_id = d.id
         WHERE p.id = $1
       `;
-      
+
       let params = [id];
       if (userId) {
         query += ' AND p.usuario_id = $2';
@@ -68,11 +68,24 @@ class Character {
         pontos_vida, pontos_mana, ca, nivel, experiencia,
         historia_pessoal, personalidade, objetivos
       ]);
+
+      // No final da função create, após criar o personagem:
+      if (character.classe_id && character.nivel) {
+        try {
+          await this.associateClassPowers(client, character.id, character.classe_id, character.nivel);
+        } catch (error) {
+          console.warn('⚠️ Erro ao associar poderes de classe:', error.message);
+        }
+      }
+      
       return result.rows[0];
     } catch (error) {
       console.error('Erro ao criar personagem:', error);
       throw error;
     }
+
+
+
   }
 
   static async update(id, userId, characterData) {
@@ -88,9 +101,9 @@ class Character {
         RETURNING *
       `, [
         id, userId, characterData.nome, characterData.raca_id, characterData.classe_id, characterData.deus_id,
-        characterData.forca, characterData.destreza, characterData.constituicao, 
+        characterData.forca, characterData.destreza, characterData.constituicao,
         characterData.inteligencia, characterData.sabedoria, characterData.carisma,
-        characterData.pontos_vida, characterData.pontos_mana, characterData.ca, 
+        characterData.pontos_vida, characterData.pontos_mana, characterData.ca,
         characterData.nivel, characterData.experiencia,
         characterData.historia_pessoal, characterData.personalidade, characterData.objetivos
       ]);
@@ -113,6 +126,43 @@ class Character {
       throw error;
     }
   }
+
+  // Adicionar no final da classe Character
+  static async associateClassPowers(client, characterId, classeId, nivel) {
+    try {
+      console.log(`🏛️ Associando poderes de classe para personagem ${characterId}`);
+
+      const poderesClasseQuery = `
+      SELECT p.id, p.nome, cp.nivel_minimo
+      FROM poderes p
+      INNER JOIN classe_poderes cp ON p.id = cp.poder_id
+      WHERE cp.classe_id = $1 AND cp.nivel_minimo <= $2 AND cp.automatico = true
+      ORDER BY cp.nivel_minimo, p.nome
+    `;
+
+      const result = await client.query(poderesClasseQuery, [classeId, nivel]);
+
+      const insertPowerQuery = `
+      INSERT INTO personagem_poderes (personagem_id, poder_id, fonte, observacoes)
+      VALUES ($1, $2, 'classe', $3)
+      ON CONFLICT (personagem_id, poder_id) DO NOTHING
+    `;
+
+      for (const poder of result.rows) {
+        await client.query(insertPowerQuery, [
+          characterId,
+          poder.id,
+          `Poder de classe - Nível ${poder.nivel_minimo}+`
+        ]);
+      }
+
+      return result.rows.length;
+    } catch (error) {
+      console.error('❌ Erro ao associar poderes de classe:', error);
+      throw error;
+    }
+  }
+
 }
 
 module.exports = Character;

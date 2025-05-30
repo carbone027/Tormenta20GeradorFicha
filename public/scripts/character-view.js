@@ -371,6 +371,22 @@ document.addEventListener('DOMContentLoaded', function() {
       powersSection.appendChild(printBtn);
     }
   }
+
+    // Animação de entrada para os cards de poderes
+  const powerCards = document.querySelectorAll('.class-power-card');
+  
+  powerCards.forEach((card, index) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    
+    setTimeout(() => {
+      card.style.transition = 'all 0.6s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, index * 150);
+  });
+  
+  // Log para debug
   
   // Inicializar todas as funcionalidades
   initQuickFilters();
@@ -380,6 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initPrintPowers();
   
   console.log('✅ Sistema de visualização de poderes inicializado');
+  console.log('⚔️ Seção de poderes de classe carregada:', powerCards.length, 'poderes');
   
   console.log('✅ Script de visualização de personagem carregado');
 });
