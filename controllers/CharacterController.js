@@ -196,9 +196,6 @@ exports.editForm = async (req, res) => {
     return res.redirect('/login');
   }
 
-  if (req.body.deus_id === '') req.body.deus_id = null;
-  if (req.body.experiencia === '') req.body.experiencia = 0;
-
   try {
     const { id } = req.params;
     const character = await Character.findById(id, req.session.user.id);

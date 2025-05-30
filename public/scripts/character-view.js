@@ -372,10 +372,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-    // Animação de entrada para os cards de poderes
-  const powerCards = document.querySelectorAll('.class-power-card');
+    // Animação de entrada para os cards de poderes de classe
+  const classPowerCards = document.querySelectorAll('.class-power-card');
   
-  powerCards.forEach((card, index) => {
+  classPowerCards.forEach((card, index) => {
     card.style.opacity = '0';
     card.style.transform = 'translateY(20px)';
     
@@ -396,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initPrintPowers();
   
   console.log('✅ Sistema de visualização de poderes inicializado');
-  console.log('⚔️ Seção de poderes de classe carregada:', powerCards.length, 'poderes');
+  console.log('⚔️ Seção de poderes de classe carregada:', classPowerCards.length, 'poderes');
   
   console.log('✅ Script de visualização de personagem carregado');
 });
