@@ -10,10 +10,10 @@ exports.myCharacters = async (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  
+
   try {
     const characters = await Character.findAllByUser(req.session.user.id);
-    
+
     res.render('pages/my-characters', {
       title: 'Meus Personagens',
       activePage: 'myCharacters',
@@ -33,16 +33,16 @@ exports.createForm = async (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  
+
   try {
     // Buscar raças, classes, deuses e poderes disponíveis
     const racas = await pool.query('SELECT * FROM racas ORDER BY nome');
     const classes = await pool.query('SELECT * FROM classes ORDER BY nome');
     const deuses = await pool.query('SELECT * FROM deuses ORDER BY nome');
-    
+
     // Buscar poderes disponíveis para seleção (não raciais)
     const poderesDisponiveis = await PowerController.getAvailablePowers();
-    
+
     res.render('pages/character-create', {
       title: 'Criar Personagem',
       activePage: 'createCharacter',
@@ -65,17 +65,19 @@ exports.create = async (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
-  
+
   try {
     const characterData = {
       usuario_id: req.session.user.id,
       ...req.body
     };
-    
+
     // Criar o personagem
     const character = await Character.create(characterData);
     console.log('✅ Personagem criado:', character.nome);
-    
+    if (!req.body.deus_id || req.body.deus_id === '') {
+        throw new Error('Deus patrono é obrigatório - Todo herói de Arton precisa de fé divina!');
+    }
     // Aplicar poderes raciais automaticamente se uma raça foi selecionada
     if (character.raca_id) {
       try {
@@ -85,14 +87,14 @@ exports.create = async (req, res) => {
         console.log('⚠️ Erro ao aplicar poderes raciais (continuando):', powerError.message);
       }
     }
-    
+
     // Aplicar poderes selecionados pelo usuário
     if (req.body.poderes_selecionados) {
       try {
-        const poderesSelecionados = Array.isArray(req.body.poderes_selecionados) 
-          ? req.body.poderes_selecionados 
+        const poderesSelecionados = Array.isArray(req.body.poderes_selecionados)
+          ? req.body.poderes_selecionados
           : [req.body.poderes_selecionados];
-        
+
         for (const poderId of poderesSelecionados) {
           if (poderId && !isNaN(poderId)) {
             await PowerController.addToCharacter(character.id, parseInt(poderId), 'escolha', 'Poder escolhido na criação');
@@ -103,7 +105,7 @@ exports.create = async (req, res) => {
         console.log('⚠️ Erro ao aplicar poderes selecionados:', powerError.message);
       }
     }
-    
+
     res.redirect(`/personagens/${character.id}`);
   } catch (error) {
     console.error('Erro ao criar personagem:', error);
@@ -115,10 +117,10 @@ exports.view = async (req, res) => {
   try {
     const { id } = req.params;
     console.log('🔍 Buscando personagem com ID:', id);
-    
+
     const character = await Character.findById(id);
     console.log('📋 Personagem encontrado:', character ? 'SIM' : 'NÃO');
-    
+
     if (!character) {
       console.log('❌ Personagem não encontrado');
       return res.status(404).render('error', {
@@ -127,7 +129,7 @@ exports.view = async (req, res) => {
         user: req.session.user
       });
     }
-    
+
     // Buscar poderes do personagem
     let poderes = [];
     try {
@@ -136,7 +138,7 @@ exports.view = async (req, res) => {
     } catch (powerError) {
       console.log('⚠️ Erro ao carregar poderes do personagem:', powerError.message);
     }
-    
+
     // Agrupar poderes por tipo
     const poderesPorTipo = {};
     poderes.forEach(poder => {
@@ -145,9 +147,9 @@ exports.view = async (req, res) => {
       }
       poderesPorTipo[poder.tipo].push(poder);
     });
-    
+
     console.log('✅ Renderizando template com personagem:', character.nome);
-    
+
     res.render('pages/character-view', {
       title: `${character.nome} - Ficha`,
       activePage: 'characterView',
@@ -170,34 +172,37 @@ exports.editForm = async (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  
+
+  if (req.body.deus_id === '') req.body.deus_id = null;
+  if (req.body.experiencia === '') req.body.experiencia = 0;
+
   try {
     const { id } = req.params;
     const character = await Character.findById(id, req.session.user.id);
-    
+
     if (!character) {
       return res.status(404).render('error', {
         message: 'Personagem não encontrado',
         error: { status: 404 }
       });
     }
-    
+
     // Buscar dados para o formulário
     const racas = await pool.query('SELECT * FROM racas ORDER BY nome');
     const classes = await pool.query('SELECT * FROM classes ORDER BY nome');
     const deuses = await pool.query('SELECT * FROM deuses ORDER BY nome');
-    
+
     // Buscar poderes do personagem
     let poderesPersonagem = [];
     let poderesDisponiveis = {};
-    
+
     try {
       poderesPersonagem = await PowerController.getCharacterPowers(id);
       poderesDisponiveis = await PowerController.getAvailablePowers();
     } catch (powerError) {
       console.log('⚠️ Erro ao carregar poderes para edição:', powerError.message);
     }
-    
+
     res.render('pages/character-edit', {
       title: `Editar ${character.nome}`,
       activePage: 'editCharacter',
@@ -222,19 +227,19 @@ exports.update = async (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
-  
+
   try {
     const { id } = req.params;
     console.log('📝 Atualizando personagem ID:', id);
     console.log('📊 Dados recebidos:', req.body);
-    
+
     // Verificar se a raça mudou
     const personagemAtual = await Character.findById(id, req.session.user.id);
     const racaMudou = personagemAtual && personagemAtual.raca_id != req.body.raca_id;
-    
+
     // Atualizar dados básicos do personagem
     const updated = await Character.update(id, req.session.user.id, req.body);
-    
+
     if (!updated) {
       return res.status(404).render('error', {
         message: 'Personagem não encontrado',
@@ -242,7 +247,7 @@ exports.update = async (req, res) => {
         user: req.session.user
       });
     }
-    
+
     // Se a raça mudou, atualizar poderes raciais
     if (racaMudou && req.body.raca_id) {
       try {
@@ -251,7 +256,7 @@ exports.update = async (req, res) => {
           DELETE FROM personagem_poderes 
           WHERE personagem_id = $1 AND fonte = 'raca'
         `, [id]);
-        
+
         // Aplicar novos poderes raciais
         await PowerController.applyRacialPowers(id, req.body.raca_id);
         console.log('✅ Poderes raciais atualizados devido à mudança de raça');
@@ -259,7 +264,7 @@ exports.update = async (req, res) => {
         console.log('⚠️ Erro ao atualizar poderes raciais:', powerError.message);
       }
     }
-    
+
     // Atualizar poderes selecionados
     if (req.body.poderes_selecionados !== undefined) {
       try {
@@ -268,13 +273,13 @@ exports.update = async (req, res) => {
           DELETE FROM personagem_poderes 
           WHERE personagem_id = $1 AND fonte = 'escolha'
         `, [id]);
-        
+
         // Adicionar novos poderes selecionados
         if (req.body.poderes_selecionados) {
-          const poderesSelecionados = Array.isArray(req.body.poderes_selecionados) 
-            ? req.body.poderes_selecionados 
+          const poderesSelecionados = Array.isArray(req.body.poderes_selecionados)
+            ? req.body.poderes_selecionados
             : [req.body.poderes_selecionados];
-          
+
           for (const poderId of poderesSelecionados) {
             if (poderId && !isNaN(poderId)) {
               await PowerController.addToCharacter(id, parseInt(poderId), 'escolha', 'Poder escolhido na edição');
@@ -286,7 +291,7 @@ exports.update = async (req, res) => {
         console.log('⚠️ Erro ao atualizar poderes selecionados:', powerError.message);
       }
     }
-    
+
     console.log('✅ Personagem atualizado com sucesso');
     res.redirect(`/personagens/${id}`);
   } catch (error) {
@@ -303,17 +308,17 @@ exports.delete = async (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ error: 'Não autorizado' });
   }
-  
+
   try {
     const { id } = req.params;
-    
+
     // Os poderes do personagem serão removidos automaticamente devido ao CASCADE
     const deleted = await Character.delete(id, req.session.user.id);
-    
+
     if (!deleted) {
       return res.status(404).json({ error: 'Personagem não encontrado' });
     }
-    
+
     console.log('✅ Personagem e seus poderes removidos com sucesso');
     res.json({ success: true });
   } catch (error) {
@@ -326,11 +331,11 @@ exports.delete = async (req, res) => {
 exports.getRacialPowers = async (req, res) => {
   try {
     const { raca_id } = req.params;
-    
+
     if (!raca_id || isNaN(raca_id)) {
       return res.status(400).json({ error: 'ID da raça inválido' });
     }
-    
+
     const poderes = await PowerController.getByRace(raca_id);
     res.json({ success: true, poderes });
   } catch (error) {
