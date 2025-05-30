@@ -11,6 +11,94 @@ document.addEventListener('DOMContentLoaded', function () {
   const atributos = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'];
   const racaSelect = document.getElementById('raca_id');
 
+  const CARACTERISTICAS_CLASSES = {
+    'arcanista': {
+      pv_inicial: 8,
+      pv_por_nivel: 2,
+      pm_por_nivel: 6
+    },
+    'bárbaro': {
+      pv_inicial: 24,
+      pv_por_nivel: 6,
+      pm_por_nivel: 3
+    },
+    'barbaro': { // Alias sem acento
+      pv_inicial: 24,
+      pv_por_nivel: 6,
+      pm_por_nivel: 3
+    },
+    'bardo': {
+      pv_inicial: 12,
+      pv_por_nivel: 3,
+      pm_por_nivel: 4
+    },
+    'bucaneiro': {
+      pv_inicial: 16,
+      pv_por_nivel: 4,
+      pm_por_nivel: 3
+    },
+    'caçador': {
+      pv_inicial: 16,
+      pv_por_nivel: 4,
+      pm_por_nivel: 3
+    },
+    'cacador': { // Alias sem acento
+      pv_inicial: 16,
+      pv_por_nivel: 4,
+      pm_por_nivel: 3
+    },
+    'cavaleiro': {
+      pv_inicial: 20,
+      pv_por_nivel: 5,
+      pm_por_nivel: 3
+    },
+    'clérigo': {
+      pv_inicial: 16,
+      pv_por_nivel: 4,
+      pm_por_nivel: 5
+    },
+    'clerigo': { // Alias sem acento
+      pv_inicial: 16,
+      pv_por_nivel: 4,
+      pm_por_nivel: 5
+    },
+    'druida': {
+      pv_inicial: 16,
+      pv_por_nivel: 4,
+      pm_por_nivel: 4
+    },
+    'guerreiro': {
+      pv_inicial: 20,
+      pv_por_nivel: 5,
+      pm_por_nivel: 3
+    },
+    'inventor': {
+      pv_inicial: 12,
+      pv_por_nivel: 3,
+      pm_por_nivel: 4
+    },
+    'ladino': {
+      pv_inicial: 12,
+      pv_por_nivel: 3,
+      pm_por_nivel: 4
+    },
+    'lutador': {
+      pv_inicial: 20,
+      pv_por_nivel: 5,
+      pm_por_nivel: 3
+    },
+    'nobre': {
+      pv_inicial: 16,
+      pv_por_nivel: 4,
+      pm_por_nivel: 4
+    },
+    'paladino': {
+      pv_inicial: 20,
+      pv_por_nivel: 5,
+      pm_por_nivel: 3
+    }
+  };
+
   // Esconder/remover o sistema de pontos
   if (pontosRestantesEl && pontosRestantesEl.parentElement) {
     pontosRestantesEl.parentElement.style.display = 'none';
@@ -389,33 +477,105 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Calcular PV, PM, CA
   function calcularCaracteristicasDerivadas() {
-    const classeSelect = document.getElementById('classe_id');
-    const constituicao = parseInt(document.getElementById('constituicao').value);
-    const destreza = parseInt(document.getElementById('destreza').value);
-    const nivel = parseInt(document.getElementById('nivel').value) || 1;
+    try {
+      console.log('🧮 Calculando características derivadas (CORRIGIDO)...');
 
-    if (classeSelect.selectedOptions.length > 0) {
-      const option = classeSelect.selectedOptions[0];
-      const vidaBase = parseInt(option.dataset.vida) || 0;
-      const manaBase = parseInt(option.dataset.mana) || 0;
+      const classeSelect = document.getElementById('classe_id');
+      const constituicao = parseInt(document.getElementById('constituicao').value) || 10;
+      const destreza = parseInt(document.getElementById('destreza').value) || 10;
+      const nivel = parseInt(document.getElementById('nivel').value) || 1;
 
-      // Calcular PV
-      const modCon = Math.floor((constituicao - 10) / 2);
-      const pv = vidaBase + modCon + ((nivel - 1) * (Math.floor(vidaBase / 4) + modCon));
-      document.getElementById('pontos_vida').value = Math.max(1, pv);
+      console.log(`Dados para cálculo: CON=${constituicao}, DES=${destreza}, Nível=${nivel}`);
 
-      // Calcular PM
-      if (manaBase > 0) {
-        const pm = manaBase + ((nivel - 1) * Math.floor(manaBase / 4));
-        document.getElementById('pontos_mana').value = pm;
-      } else {
+      // Verificar se uma classe está selecionada
+      if (!classeSelect.value || classeSelect.selectedOptions.length === 0) {
+        console.log('⚠️ Nenhuma classe selecionada, usando valores padrão');
+
+        // Valores padrão quando não há classe
+        const modCon = Math.floor((constituicao - 10) / 2);
+        const modDes = Math.floor((destreza - 10) / 2);
+
+        document.getElementById('pontos_vida').value = Math.max(1, 8 + modCon);
         document.getElementById('pontos_mana').value = 0;
+        document.getElementById('ca').value = 10 + modDes;
+        return;
       }
-    }
 
-    // Calcular CA
-    const modDes = Math.floor((destreza - 10) / 2);
-    document.getElementById('ca').value = 10 + modDes;
+      const option = classeSelect.selectedOptions[0];
+      const classeNome = option.textContent.toLowerCase().trim();
+
+      console.log(`Classe selecionada: "${classeNome}"`);
+
+      // Buscar características da classe no mapeamento
+      const caracteristicasClasse = CARACTERISTICAS_CLASSES[classeNome];
+
+      if (!caracteristicasClasse) {
+        console.warn(`⚠️ Características não encontradas para a classe "${classeNome}"`);
+        console.log('Classes disponíveis:', Object.keys(CARACTERISTICAS_CLASSES));
+
+        // Fallback para valores padrão
+        const modCon = Math.floor((constituicao - 10) / 2);
+        const modDes = Math.floor((destreza - 10) / 2);
+
+        document.getElementById('pontos_vida').value = Math.max(1, 12 + modCon);
+        document.getElementById('pontos_mana').value = 12;
+        document.getElementById('ca').value = 10 + modDes;
+        return;
+      }
+
+      console.log(`Características da classe encontradas:`, caracteristicasClasse);
+
+      // Calcular modificador de Constituição
+      const modCon = Math.floor((constituicao - 10) / 2);
+      const modDes = Math.floor((destreza - 10) / 2);
+
+      // ============================================
+      // CÁLCULO CORRETO DOS PONTOS DE VIDA
+      // ============================================
+      // Fórmula: PV iniciais + mod CON + ((nível - 1) × (PV por nível + mod CON))
+      const pvIniciais = caracteristicasClasse.pv_inicial + modCon;
+      const pvPorNivel = caracteristicasClasse.pv_por_nivel + modCon;
+      const pvTotal = pvIniciais + ((nivel - 1) * pvPorNivel);
+      const pvFinal = Math.max(1, pvTotal);
+
+      console.log(`Cálculo PV: ${caracteristicasClasse.pv_inicial} + ${modCon} + ((${nivel} - 1) × (${caracteristicasClasse.pv_por_nivel} + ${modCon})) = ${pvFinal}`);
+
+      // ============================================
+      // CÁLCULO CORRETO DOS PONTOS DE MANA
+      // ============================================
+      // Fórmula: PM por nível × nível atual
+      const pmTotal = caracteristicasClasse.pm_por_nivel * nivel;
+
+      console.log(`Cálculo PM: ${caracteristicasClasse.pm_por_nivel} × ${nivel} = ${pmTotal}`);
+
+      // ============================================
+      // CÁLCULO DA CLASSE DE ARMADURA
+      // ============================================
+      // Fórmula: 10 + modificador de Destreza
+      const caFinal = 10 + modDes;
+
+      console.log(`Cálculo CA: 10 + ${modDes} = ${caFinal}`);
+
+      // Atualizar os campos no formulário
+      document.getElementById('pontos_vida').value = pvFinal;
+      document.getElementById('pontos_mana').value = pmTotal;
+      document.getElementById('ca').value = caFinal;
+
+      console.log(`✅ Características calculadas: PV=${pvFinal}, PM=${pmTotal}, CA=${caFinal}`);
+
+    } catch (error) {
+      console.error('❌ Erro ao calcular características derivadas:', error);
+
+      // Valores de fallback em caso de erro
+      const constituicao = parseInt(document.getElementById('constituicao').value) || 10;
+      const destreza = parseInt(document.getElementById('destreza').value) || 10;
+      const modCon = Math.floor((constituicao - 10) / 2);
+      const modDes = Math.floor((destreza - 10) / 2);
+
+      document.getElementById('pontos_vida').value = Math.max(1, 8 + modCon);
+      document.getElementById('pontos_mana').value = 0;
+      document.getElementById('ca').value = 10 + modDes;
+    }
   }
 
   // Atualizar preview

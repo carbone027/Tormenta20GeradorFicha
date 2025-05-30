@@ -137,64 +137,7 @@ function getPowerIcon(poder, tipo) {
         </div>
       </div>
 
-      <!-- Raça, Classe e Deus -->
-      <div class="form-section">
-        <h3>🧬 Origem e Vocação</h3>
-        <div class="card">
-          <div class="form-grid-three">
-            <div class="form-group">
-              <label for="raca_id">🧝 Raça *</label>
-              <select id="raca_id" name="raca_id" required>
-                <option value="">Escolha uma raça...</option>
-                <% if (racas && racas.length> 0) { %>
-                  <% racas.forEach(raca=> { %>
-                    <option value="<%= raca.id %>" data-bonus='<%= JSON.stringify(raca.bonus_atributos) %>'>
-                      <%= raca.nome %>
-                    </option>
-                    <% }); %>
-                      <% } %>
-              </select>
-              <small>
-                Define características físicas e habilidades raciais
-                <br><em>⚠️ Bônus raciais são aplicados automaticamente após seleção</em>
-              </small>
-            </div>
-
-            <div class="form-group">
-              <label for="classe_id">⚔️ Classe *</label>
-              <select id="classe_id" name="classe_id" required>
-                <option value="">Escolha uma classe...</option>
-                <% if (classes && classes.length> 0) { %>
-                  <% classes.forEach(classe=> { %>
-                    <option value="<%= classe.id %>" data-vida="<%= classe.pontos_vida_base %>"
-                      data-mana="<%= classe.pontos_mana_base || 0 %>" data-atributo="<%= classe.atributo_principal %>">
-                      <%= classe.nome %>
-                    </option>
-                    <% }); %>
-                      <% } %>
-              </select>
-              <small>Determina habilidades e papel no grupo</small>
-            </div>
-
-            <div class="form-group">
-              <label for="deus_id">⭐ Deus Patrono</label>
-              <select id="deus_id" name="deus_id">
-                <option value="">Sem deus específico</option>
-                <% if (deuses && deuses.length> 0) { %>
-                  <% deuses.forEach(deus=> { %>
-                    <option value="<%= deus.id %>">
-                      <%= deus.nome %> - <%= deus.dominio %>
-                    </option>
-                    <% }); %>
-                      <% } %>
-              </select>
-              <small>Divindade que seu personagem venera (opcional)</small>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Atributos -->
+<!-- Atributos -->
       <div class="form-section">
         <h3>💪 Atributos</h3>
         <div class="card">
@@ -278,6 +221,63 @@ function getPowerIcon(poder, tipo) {
               </div>
               <small>Personalidade, liderança</small>
               <div class="bonus-display" id="bonus-carisma">+0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raça, Classe e Deus -->
+      <div class="form-section">
+        <h3>🧬 Origem e Vocação</h3>
+        <div class="card">
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label for="raca_id">🧝 Raça *</label>
+              <select id="raca_id" name="raca_id" required>
+                <option value="">Escolha uma raça...</option>
+                <% if (racas && racas.length> 0) { %>
+                  <% racas.forEach(raca=> { %>
+                    <option value="<%= raca.id %>" data-bonus='<%= JSON.stringify(raca.bonus_atributos) %>'>
+                      <%= raca.nome %>
+                    </option>
+                    <% }); %>
+                      <% } %>
+              </select>
+              <small>
+                Define características físicas e habilidades raciais
+                <br><em>⚠️ Bônus raciais são aplicados automaticamente após seleção</em>
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="classe_id">⚔️ Classe *</label>
+              <select id="classe_id" name="classe_id" required>
+                <option value="">Escolha uma classe...</option>
+                <% if (classes && classes.length> 0) { %>
+                  <% classes.forEach(classe=> { %>
+                    <option value="<%= classe.id %>" data-vida="<%= classe.pontos_vida_base %>"
+                      data-mana="<%= classe.pontos_mana_base || 0 %>" data-atributo="<%= classe.atributo_principal %>">
+                      <%= classe.nome %>
+                    </option>
+                    <% }); %>
+                      <% } %>
+              </select>
+              <small>Determina habilidades e papel no grupo</small>
+            </div>
+
+            <div class="form-group">
+              <label for="deus_id">⭐ Deus Patrono</label>
+              <select id="deus_id" name="deus_id">
+                <option value="">Sem deus específico</option>
+                <% if (deuses && deuses.length> 0) { %>
+                  <% deuses.forEach(deus=> { %>
+                    <option value="<%= deus.id %>">
+                      <%= deus.nome %> - <%= deus.dominio %>
+                    </option>
+                    <% }); %>
+                      <% } %>
+              </select>
+              <small>Divindade que seu personagem venera (opcional)</small>
             </div>
           </div>
         </div>
