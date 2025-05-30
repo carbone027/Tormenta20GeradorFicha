@@ -387,75 +387,107 @@ document.addEventListener('DOMContentLoaded', function () {
     atualizarPreview();
   }
 
-  // CORREÇÃO: Função melhorada para calcular características derivadas
+  // Calcular PV, PM, CA
   function calcularCaracteristicasDerivadas() {
-    try {
-      console.log('🧮 Calculando características derivadas...');
+    const classeSelect = document.getElementById('classe_id');
+    const constituicao = parseInt(document.getElementById('constituicao').value);
+    const destreza = parseInt(document.getElementById('destreza').value);
+    const nivel = parseInt(document.getElementById('nivel').value) || 1;
 
-      const classeSelect = document.getElementById('classe_id');
-      const constituicao = parseInt(document.getElementById('constituicao').value) || 10;
-      const destreza = parseInt(document.getElementById('destreza').value) || 10;
-      const nivel = parseInt(document.getElementById('nivel').value) || 1;
-
-      console.log(`Dados para cálculo: CON=${constituicao}, DES=${destreza}, Nível=${nivel}`);
-
-      // Verificar se uma classe está selecionada
-      if (!classeSelect.value || classeSelect.selectedOptions.length === 0) {
-        console.log('⚠️ Nenhuma classe selecionada, usando valores padrão');
-        // Valores padrão quando não há classe
-        document.getElementById('pontos_vida').value = Math.max(1, 6 + Math.floor((constituicao - 10) / 2));
-        document.getElementById('pontos_mana').value = 0;
-        document.getElementById('ca').value = 10 + Math.floor((destreza - 10) / 2);
-        return;
-      }
-
+    if (classeSelect.selectedOptions.length > 0) {
       const option = classeSelect.selectedOptions[0];
-      const vidaBase = parseInt(option.dataset.vida) || 6;
+      const vidaBase = parseInt(option.dataset.vida) || 0;
       const manaBase = parseInt(option.dataset.mana) || 0;
-
-      console.log(`Dados da classe: Vida Base=${vidaBase}, Mana Base=${manaBase}`);
 
       // Calcular PV
       const modCon = Math.floor((constituicao - 10) / 2);
-      const vidaPorNivel = Math.max(1, Math.floor(vidaBase / 4)); // Ganho por nível após o 1º
-      const pv = vidaBase + modCon + ((nivel - 1) * (vidaPorNivel + modCon));
-      const pvFinal = Math.max(1, pv);
-
-      console.log(`Cálculo PV: ${vidaBase} + ${modCon} + ((${nivel}-1) * (${vidaPorNivel} + ${modCon})) = ${pvFinal}`);
-      document.getElementById('pontos_vida').value = pvFinal;
+      const pv = vidaBase + modCon + ((nivel - 1) * (Math.floor(vidaBase / 4) + modCon));
+      document.getElementById('pontos_vida').value = Math.max(1, pv);
 
       // Calcular PM
-      let pmFinal = 0;
       if (manaBase > 0) {
-        const manaPorNivel = Math.max(1, Math.floor(manaBase / 4)); // Ganho por nível após o 1º
-        pmFinal = manaBase + ((nivel - 1) * manaPorNivel);
-        console.log(`Cálculo PM: ${manaBase} + ((${nivel}-1) * ${manaPorNivel}) = ${pmFinal}`);
+        const pm = manaBase + ((nivel - 1) * Math.floor(manaBase / 4));
+        document.getElementById('pontos_mana').value = pm;
       } else {
-        console.log('Classe sem mana');
+        document.getElementById('pontos_mana').value = 0;
       }
-      document.getElementById('pontos_mana').value = pmFinal;
-
-      // Calcular CA
-      const modDes = Math.floor((destreza - 10) / 2);
-      const caFinal = 10 + modDes;
-      console.log(`Cálculo CA: 10 + ${modDes} = ${caFinal}`);
-      document.getElementById('ca').value = caFinal;
-
-      console.log(`✅ Características calculadas: PV=${pvFinal}, PM=${pmFinal}, CA=${caFinal}`);
-
-    } catch (error) {
-      console.error('❌ Erro ao calcular características derivadas:', error);
-      
-      // Valores de fallback em caso de erro
-      const constituicao = parseInt(document.getElementById('constituicao').value) || 10;
-      const destreza = parseInt(document.getElementById('destreza').value) || 10;
-      
-      document.getElementById('pontos_vida').value = Math.max(1, 8 + Math.floor((constituicao - 10) / 2));
-      document.getElementById('pontos_mana').value = 0;
-      document.getElementById('ca').value = 10 + Math.floor((destreza - 10) / 2);
     }
+
+    // Calcular CA
+    const modDes = Math.floor((destreza - 10) / 2);
+    document.getElementById('ca').value = 10 + modDes;
   }
 
+  // Atualizar preview
+  function atualizarPreview() {
+    const nome = document.getElementById('nome').value || 'Nome do Personagem';
+    const racaSelect = document.getElementById('raca_id');
+    const classeSelect = document.getElementById('classe_id');
+    const nivel = document.getElementById('nivel').value || 1;
+
+    let classeNome = 'Classe';
+    let racaNome = 'Raça';
+
+    if (classeSelect.selectedOptions.length > 0) {
+      classeNome = classeSelect.selectedOptions[0].textContent;
+    }
+
+    if (racaSelect.selectedOptions.length > 0) {
+      racaNome = racaSelect.selectedOptions[0].textContent;
+    }
+
+    const previewNome = document.getElementById('previewNome');
+    const previewClasseRaca = document.getElementById('previewClasseRaca');
+
+    if (previewNome) previewNome.textContent = nome;
+    if (previewClasseRaca) previewClasseRaca.textContent = `${classeNome} ${racaNome} - Nível ${nivel}`;
+
+    // Atualizar atributos no preview
+    const attrsPreview = document.getElementById('attrsPreview');
+    if (attrsPreview) {
+      attrsPreview.innerHTML = '';
+
+      atributos.forEach(attr => {
+        const valor = document.getElementById(attr).value;
+        const bonusElement = document.getElementById('bonus-' + attr);
+        const modificador = bonusElement ? bonusElement.textContent : '+0';
+        const nome = attr.charAt(0).toUpperCase() + attr.slice(1);
+
+        const div = document.createElement('div');
+        div.className = 'attr-preview';
+        div.innerHTML = `
+          <span class="label">${nome}:</span>
+          <span class="value">${valor} (${modificador})</span>
+        `;
+        attrsPreview.appendChild(div);
+      });
+    }
+
+    // Atualizar características derivadas no preview
+    const derivadasPreview = document.getElementById('derivadasPreview');
+    if (derivadasPreview) {
+      derivadasPreview.innerHTML = '';
+
+      const derivadas = [
+        { label: 'Pontos de Vida', value: document.getElementById('pontos_vida').value },
+        { label: 'Pontos de Mana', value: document.getElementById('pontos_mana').value },
+        { label: 'Classe de Armadura', value: document.getElementById('ca').value }
+      ];
+
+      derivadas.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'stat-preview';
+        div.innerHTML = `
+          <span class="label">${item.label}:</span>
+          <span class="value">${item.value}</span>
+        `;
+        derivadasPreview.appendChild(div);
+      });
+    }
+
+    // Atualizar preview de poderes
+    atualizarPreviewPoderes();
+  }
 
   // Event listeners para atributos (sempre funcionais)
   document.querySelectorAll('.attr-btn').forEach(btn => {
@@ -757,7 +789,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
-
 
   // Carregar poderes raciais via AJAX
   function loadRacialPowers(racaId) {

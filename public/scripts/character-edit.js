@@ -1,4 +1,4 @@
-// Script corrigido para edição de personagem - Sistema livre com características derivadas funcionais
+// Script para edição de personagem - Sistema livre com reset correto de raças + Poderes
 document.addEventListener('DOMContentLoaded', function() {
   // Verificar se há dados do personagem disponíveis
   const characterForm = document.getElementById('characterForm');
@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const pontosRestantesEl = document.getElementById('pontosRestantes');
   const atributos = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'];
   const racaSelect = document.getElementById('raca_id');
-  const classeSelect = document.getElementById('classe_id');
   let poderesRaciaisCarregados = [];
   
   // Esconder/remover o sistema de pontos
@@ -69,16 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Coletar poderes atuais do personagem
     const poderesAtuais = [];
-    const poderesCards = document.querySelectorAll('.character-power-card');
+    const poderesCards = document.querySelectorAll('.poder-atual-card');
     
     poderesCards.forEach(card => {
-      const nomeElement = card.querySelector('.character-power-name');
-      const fonteElement = card.querySelector('.character-power-source-badge');
-      if (nomeElement && fonteElement) {
-        const nome = nomeElement.textContent;
-        const fonte = fonteElement.textContent;
-        poderesAtuais.push(`${fonte} ${nome}`);
-      }
+      const nome = card.querySelector('.poder-nome').textContent;
+      const fonte = card.querySelector('.poder-fonte').textContent;
+      poderesAtuais.push(`${fonte} ${nome}`);
     });
     
     // Coletar poderes selecionados adicionais
@@ -86,10 +81,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkboxes = document.querySelectorAll('input[name="poderes_selecionados"]:checked');
     
     checkboxes.forEach(checkbox => {
-      const card = checkbox.closest('label');
+      const card = checkbox.closest('.poder-selecao-card');
       if (card) {
-        const nomeElement = card.querySelector('.power-card-name');
-        const nome = nomeElement ? nomeElement.textContent : 'Poder';
+        const nome = card.querySelector('.poder-nome').textContent;
         poderesEscolhidos.push(`⚡ ${nome} (Escolhido)`);
       }
     });
@@ -104,98 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
       previewPoderes.style.display = 'block';
     } else {
       previewPoderes.style.display = 'none';
-    }
-  }
-  
-  // CORREÇÃO: Função melhorada para calcular características derivadas
-  function calcularCaracteristicasDerivadas() {
-    try {
-      console.log('🧮 Calculando características derivadas na edição...');
-
-      const constituicao = parseInt(document.getElementById('constituicao').value) || 10;
-      const destreza = parseInt(document.getElementById('destreza').value) || 10;
-      const nivel = parseInt(document.getElementById('nivel').value) || 1;
-
-      console.log(`Dados para cálculo: CON=${constituicao}, DES=${destreza}, Nível=${nivel}`);
-
-      // Verificar se uma classe está selecionada
-      if (!classeSelect.value || classeSelect.selectedOptions.length === 0) {
-        console.log('⚠️ Nenhuma classe selecionada na edição');
-        
-        // Manter valores atuais ou usar cálculo básico se zerados
-        const pvAtual = parseInt(document.getElementById('pontos_vida').value);
-        const pmAtual = parseInt(document.getElementById('pontos_mana').value);
-        const caAtual = parseInt(document.getElementById('ca').value);
-        
-        if (pvAtual <= 0) {
-          const modCon = Math.floor((constituicao - 10) / 2);
-          document.getElementById('pontos_vida').value = Math.max(1, 8 + modCon);
-        }
-        
-        if (caAtual < 10) {
-          const modDes = Math.floor((destreza - 10) / 2);
-          document.getElementById('ca').value = 10 + modDes;
-        }
-        
-        return;
-      }
-
-      const option = classeSelect.selectedOptions[0];
-      const vidaBase = parseInt(option.dataset.vida) || 6;
-      const manaBase = parseInt(option.dataset.mana) || 0;
-
-      console.log(`Dados da classe: Vida Base=${vidaBase}, Mana Base=${manaBase}`);
-
-      // Obter valores atuais
-      const pvAtual = parseInt(document.getElementById('pontos_vida').value) || 0;
-      const pmAtual = parseInt(document.getElementById('pontos_mana').value) || 0;
-      const caAtual = parseInt(document.getElementById('ca').value) || 10;
-
-      // Calcular valores sugeridos
-      const modCon = Math.floor((constituicao - 10) / 2);
-      const vidaPorNivel = Math.max(1, Math.floor(vidaBase / 4));
-      const pvSugerido = vidaBase + modCon + ((nivel - 1) * (vidaPorNivel + modCon));
-      const pvFinal = Math.max(1, pvSugerido);
-
-      console.log(`PV Sugerido: ${pvFinal}, PV Atual: ${pvAtual}`);
-
-      // Atualizar PV apenas se for muito baixo ou zero
-      if (pvAtual <= 0 || pvAtual < Math.floor(pvFinal * 0.5)) {
-        console.log(`Atualizando PV de ${pvAtual} para ${pvFinal}`);
-        document.getElementById('pontos_vida').value = pvFinal;
-      }
-
-      // Calcular PM sugerido
-      let pmSugerido = 0;
-      if (manaBase > 0) {
-        const manaPorNivel = Math.max(1, Math.floor(manaBase / 4));
-        pmSugerido = manaBase + ((nivel - 1) * manaPorNivel);
-        
-        console.log(`PM Sugerido: ${pmSugerido}, PM Atual: ${pmAtual}`);
-        
-        // Atualizar PM apenas se for muito baixo
-        if (pmAtual < Math.floor(pmSugerido * 0.5)) {
-          console.log(`Atualizando PM de ${pmAtual} para ${pmSugerido}`);
-          document.getElementById('pontos_mana').value = pmSugerido;
-        }
-      }
-
-      // Calcular CA base
-      const modDes = Math.floor((destreza - 10) / 2);
-      const caBase = 10 + modDes;
-      
-      console.log(`CA Base: ${caBase}, CA Atual: ${caAtual}`);
-      
-      // Atualizar CA apenas se for menor que a base
-      if (caAtual < caBase) {
-        console.log(`Atualizando CA de ${caAtual} para ${caBase}`);
-        document.getElementById('ca').value = caBase;
-      }
-
-      console.log(`✅ Características na edição: PV=${document.getElementById('pontos_vida').value}, PM=${document.getElementById('pontos_mana').value}, CA=${document.getElementById('ca').value}`);
-
-    } catch (error) {
-      console.error('❌ Erro ao calcular características derivadas na edição:', error);
     }
   }
   
@@ -231,6 +133,49 @@ document.addEventListener('DOMContentLoaded', function() {
     // Calcular características derivadas automaticamente
     calcularCaracteristicasDerivadas();
     atualizarPreview();
+  }
+  
+  // Calcular PV, PM, CA automaticamente
+  function calcularCaracteristicasDerivadas() {
+    const classeSelect = document.getElementById('classe_id');
+    const constituicao = parseInt(document.getElementById('constituicao').value);
+    const destreza = parseInt(document.getElementById('destreza').value);
+    const nivel = parseInt(document.getElementById('nivel').value) || 1;
+    
+    if (classeSelect.selectedOptions.length > 0) {
+      const option = classeSelect.selectedOptions[0];
+      const vidaBase = parseInt(option.dataset.vida) || 0;
+      const manaBase = parseInt(option.dataset.mana) || 0;
+      
+      // Calcular PV (opcional - só se o usuário quiser auto-cálculo)
+      const modCon = Math.floor((constituicao - 10) / 2);
+      const pvCalculado = vidaBase + modCon + ((nivel - 1) * (Math.floor(vidaBase / 4) + modCon));
+      
+      // Não forçar o cálculo, apenas sugerir se for muito baixo
+      const pvAtual = parseInt(document.getElementById('pontos_vida').value);
+      if (pvAtual === 0 || pvAtual < Math.max(1, pvCalculado)) {
+        document.getElementById('pontos_vida').value = Math.max(1, pvCalculado);
+      }
+      
+      // Calcular PM
+      if (manaBase > 0) {
+        const pmCalculado = manaBase + ((nivel - 1) * Math.floor(manaBase / 4));
+        const pmAtual = parseInt(document.getElementById('pontos_mana').value);
+        if (pmAtual === 0 || pmAtual < pmCalculado) {
+          document.getElementById('pontos_mana').value = pmCalculado;
+        }
+      }
+    }
+    
+    // Calcular CA base (10 + mod Destreza)
+    const modDes = Math.floor((destreza - 10) / 2);
+    const caBase = 10 + modDes;
+    const caAtual = parseInt(document.getElementById('ca').value);
+    
+    // Só atualizar se a CA atual é menor que a base
+    if (caAtual < caBase) {
+      document.getElementById('ca').value = caBase;
+    }
   }
   
   // Atualizar preview
@@ -322,8 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   // Event listeners para selects
-  classeSelect.addEventListener('change', function() {
-    console.log('🔄 Classe alterada na edição para:', this.selectedOptions[0]?.textContent || 'Nenhuma');
+  document.getElementById('classe_id').addEventListener('change', function() {
     atualizarCalculos();
     
     // Destacar atributo principal
@@ -340,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Event listener para mudança de raça (com reset opcional)
+  // Event listener para mudança de raça (com reset correto)
   if (racaSelect) {
     racaSelect.addEventListener('change', function() {
       console.log('🔄 Trocando raça na edição para:', this.selectedOptions[0]?.textContent || 'Nenhuma');
@@ -371,12 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Event listeners para campos que afetam características derivadas
-  document.getElementById('nivel').addEventListener('input', function() {
-    console.log('🔄 Nível alterado na edição para:', this.value);
-    atualizarCalculos();
-  });
-  
+  document.getElementById('nivel').addEventListener('input', atualizarCalculos);
   document.getElementById('nome').addEventListener('input', atualizarPreview);
   
   // Event listeners para características derivadas
@@ -389,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Event listeners para seleção de poderes
   document.addEventListener('change', function(e) {
-    if (e.target.classList.contains('poder-checkbox') || e.target.name === 'poderes_selecionados') {
+    if (e.target.classList.contains('poder-checkbox')) {
       atualizarPreviewPoderes();
     }
   });
@@ -413,23 +352,290 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.disabled = true;
     
     // Permitir o submit normal
-    console.log('✅ Formulário de edição sendo enviado');
+    console.log('✅ Formulário sendo enviado');
   });
   
   // Carregar poderes raciais iniciais se raça já estiver selecionada
   if (racaSelect.value) {
     carregarPoderesRaciais(racaSelect.value);
   }
+  
 
-  // Tornar a função global para uso pelos scripts de poderes
-  window.atualizarPreviewPoderes = atualizarPreviewPoderes;
+// Elementos principais
+  const searchInput = document.getElementById('powersSearchInput');
+  const searchResults = document.getElementById('powersSearchResults');
+  const quickFilterBtns = document.querySelectorAll('.quick-filter-btn');
+  const powerCards = document.querySelectorAll('.power-card');
+  const powerSections = document.querySelectorAll('.power-type-section');
+  const toggleBtns = document.querySelectorAll('.power-type-toggle');
+  const checkboxes = document.querySelectorAll('.power-checkbox-filter');
+  
+  // Função de busca em tempo real
+  function initSearch() {
+    if (!searchInput) return;
+    
+    let searchTimeout;
+    
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchTimeout);
+      const query = this.value.toLowerCase().trim();
+      
+      searchTimeout = setTimeout(() => {
+        if (query.length >= 2) {
+          performSearch(query);
+          showSearchResults(query);
+        } else {
+          hideSearchResults();
+          showAllPowers();
+        }
+      }, 300);
+    });
+    
+    // Fechar resultados ao clicar fora
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.powers-search-box')) {
+        hideSearchResults();
+      }
+    });
+  }
+  
+  function performSearch(query) {
+    let hasResults = false;
+    
+    powerCards.forEach(card => {
+      const checkbox = card.closest('label').querySelector('.power-checkbox-filter');
+      const name = checkbox.dataset.name || '';
+      const description = checkbox.dataset.description || '';
+      const type = checkbox.dataset.type || '';
+      
+      const matches = name.includes(query) || 
+                     description.includes(query) || 
+                     type.includes(query);
+      
+      if (matches) {
+        card.closest('label').style.display = 'block';
+        card.classList.remove('hidden');
+        hasResults = true;
+      } else {
+        card.closest('label').style.display = 'none';
+        card.classList.add('hidden');
+      }
+    });
+    
+    // Mostrar/ocultar seções baseado nos resultados
+    powerSections.forEach(section => {
+      const visibleCards = section.querySelectorAll('.power-card:not(.hidden)');
+      section.style.display = visibleCards.length > 0 ? 'block' : 'none';
+    });
+    
+    return hasResults;
+  }
+  
+  function showSearchResults(query) {
+    if (!searchResults) return;
+    
+    const hasResults = performSearch(query);
+    
+    if (!hasResults) {
+      searchResults.innerHTML = `
+        <div class="search-result-item">
+          <span style="color: var(--text-muted); font-style: italic;">
+            🔍 Nenhum poder encontrado para "${query}"
+          </span>
+        </div>
+      `;
+      searchResults.classList.add('active');
+    } else {
+      hideSearchResults();
+    }
+  }
+  
+  function hideSearchResults() {
+    if (searchResults) {
+      searchResults.classList.remove('active');
+    }
+  }
+  
+  function showAllPowers() {
+    powerCards.forEach(card => {
+      card.closest('label').style.display = 'block';
+      card.classList.remove('hidden');
+    });
+    
+    powerSections.forEach(section => {
+      section.style.display = 'block';
+    });
+  }
+  
+  // Filtros rápidos com lógica específica para edição
+  function initQuickFilters() {
+    quickFilterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Remover active de todos
+        quickFilterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const filterType = this.dataset.filter;
+        
+        // Limpar busca
+        if (searchInput) {
+          searchInput.value = '';
+          hideSearchResults();
+        }
+        
+        // Aplicar filtro
+        applyFilter(filterType);
+      });
+    });
+  }
+  
+  function applyFilter(filterType) {
+    powerCards.forEach(card => {
+      const checkbox = card.closest('label').querySelector('.power-checkbox-filter');
+      const type = checkbox.dataset.type;
+      const isSelected = checkbox.checked;
+      let show = false;
+      
+      switch(filterType) {
+        case 'all':
+          show = true;
+          break;
+        case 'selected':
+          show = isSelected;
+          break;
+        case 'available':
+          show = !isSelected;
+          break;
+        default:
+          show = type === filterType;
+      }
+      
+      if (show) {
+        card.closest('label').style.display = 'block';
+        card.classList.remove('hidden');
+      } else {
+        card.closest('label').style.display = 'none';
+        card.classList.add('hidden');
+      }
+    });
+    
+    // Mostrar/ocultar seções
+    powerSections.forEach(section => {
+      const visibleCards = section.querySelectorAll('.power-card:not(.hidden)');
+      section.style.display = visibleCards.length > 0 ? 'block' : 'none';
+    });
+  }
+  
+  // Toggle de seções
+  function initToggleButtons() {
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetType = this.dataset.target;
+        const grid = document.getElementById(`powersGrid-${targetType}`);
+        const icon = this.querySelector('.toggle-icon');
+        
+        if (grid) {
+          if (grid.style.display === 'none') {
+            grid.style.display = 'grid';
+            icon.textContent = '📂';
+            grid.parentElement.classList.add('expanding');
+          } else {
+            grid.style.display = 'none';
+            icon.textContent = '📁';
+            grid.parentElement.classList.remove('expanding');
+          }
+        }
+      });
+    });
+  }
+  
+  // Atualizar visual quando checkbox mudar
+  function initCheckboxHandlers() {
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const card = this.closest('label').querySelector('.power-card');
+        const sourceDiv = card.querySelector('.power-card-source');
+        const tagsContainer = card.querySelector('.power-tags');
+        
+        if (this.checked) {
+          card.classList.add('selected');
+          
+          // Adicionar ou atualizar badge de ativo
+          if (!sourceDiv) {
+            const newSource = document.createElement('div');
+            newSource.className = 'power-card-source';
+            newSource.textContent = '✅ Ativo';
+            card.querySelector('.power-card-header').appendChild(newSource);
+          } else {
+            sourceDiv.textContent = '✅ Ativo';
+          }
+          
+          // Adicionar tag de ativo
+          if (!tagsContainer.querySelector('.power-tag[data-active]')) {
+            const activeTag = document.createElement('span');
+            activeTag.className = 'power-tag';
+            activeTag.setAttribute('data-active', 'true');
+            activeTag.style.cssText = 'background: var(--success-green); color: white; border-color: var(--success-green);';
+            activeTag.textContent = 'Ativo';
+            tagsContainer.insertBefore(activeTag, tagsContainer.firstChild);
+          }
+        } else {
+          card.classList.remove('selected');
+          
+          // Remover badge de ativo
+          if (sourceDiv) {
+            sourceDiv.remove();
+          }
+          
+          // Remover tag de ativo
+          const activeTag = tagsContainer.querySelector('.power-tag[data-active]');
+          if (activeTag) {
+            activeTag.remove();
+          }
+        }
+        
+        // Atualizar contadores
+        updateTypeCounters();
+        
+        // Atualizar preview (se função existir)
+        if (typeof atualizarPreviewPoderes === 'function') {
+          atualizarPreviewPoderes();
+        }
+      });
+    });
+  }
+  
+  function updateTypeCounters() {
+    powerSections.forEach(section => {
+      const type = section.dataset.type;
+      const counter = section.querySelector('.power-type-count');
+      const checkboxesInSection = section.querySelectorAll('.power-checkbox-filter');
+      
+      const selectedCount = Array.from(checkboxesInSection).filter(cb => cb.checked).length;
+      const totalCount = checkboxesInSection.length;
+      
+      if (counter) {
+        counter.textContent = `(${selectedCount}/${totalCount} selecionados)`;
+      }
+    });
+  }
+  
+  // Inicializar todas as funcionalidades
+  initSearch();
+  initQuickFilters();
+  initToggleButtons();
+  initCheckboxHandlers();
+  
+  // Atualizar contadores iniciais
+  updateTypeCounters();
+  
   
   // Inicialização
-  console.log('🚀 Inicializando sistema de edição de personagem...');
   atualizarCalculos();
   
-  console.log('✅ Editor de personagem livre inicializado e corrigido');
-  console.log('🔧 Correção aplicada: Reset opcional ao trocar raças na edição, características derivadas funcionais');
-  console.log('📋 Funcionalidades: Distribuição livre, sem limitação de pontos, cálculo automático inteligente');
-  console.log('✨ Funcionalidades: Poderes raciais e seleção de poderes, preview atualizado');
+  console.log('✅ Sistema de poderes avançado (edição) inicializado');
+  console.log('✅ Editor de personagem livre inicializado');
+  console.log('🔧 Correção aplicada: Reset opcional ao trocar raças na edição');
+  console.log('📋 Funcionalidades: Distribuição livre, sem limitação de pontos');
+  console.log('✨ Nova funcionalidade: Poderes raciais e seleção de poderes');
 });
