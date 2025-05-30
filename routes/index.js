@@ -95,6 +95,101 @@ router.get('/api/poderes', PowerController.apiGetPowers);
 router.get('/api/racas/:raca_id/poderes', characterController.getRacialPowers);
 
 // ========================================
+// NOVAS ROTAS PARA PODERES DE CLASSE
+// ========================================
+
+// Buscar poderes de uma classe específica (para o sistema de poderes de classe)
+router.get('/api/classes/:classId/poderes', async (req, res) => {
+  try {
+    const { classId } = req.params;
+    const { nivel = 20 } = req.query; // Default nível 20 para pegar todos os poderes
+    
+    console.log(`📡 Requisição de poderes para classe ${classId}, nível máximo ${nivel}`);
+    
+    // Buscar poderes específicos da classe
+    const query = `
+      SELECT 
+        p.id,
+        p.nome,
+        p.tipo,
+        p.grupo,
+        p.descricao,
+        p.pre_requisitos,
+        p.efeito_especial,
+        p.custo_pm,
+        p.alcance,
+        p.duracao,
+        cp.nivel_minimo,
+        cp.pre_requisitos as pre_requisitos_classe
+      FROM poderes p
+      INNER JOIN classe_poderes cp ON p.id = cp.poder_id
+      WHERE cp.classe_id = $1 AND cp.nivel_minimo <= $2
+      ORDER BY cp.nivel_minimo, p.nome
+    `;
+    
+    const result = await require('../config/database').query(query, [classId, nivel]);
+    
+    console.log(`✅ Encontrados ${result.rows.length} poderes para a classe`);
+    
+    res.json({
+      success: true,
+      poderes: result.rows,
+      total: result.rows.length,
+      classId: classId,
+      nivelMaximo: nivel
+    });
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar poderes da classe:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      poderes: []
+    });
+  }
+});
+
+// Buscar informações básicas de uma classe (fallback)
+router.get('/api/classes/:classId/info', async (req, res) => {
+  try {
+    const { classId } = req.params;
+    
+    const query = `
+      SELECT 
+        id,
+        nome,
+        descricao,
+        atributo_principal,
+        pontos_vida_base,
+        pontos_mana_base
+      FROM classes 
+      WHERE id = $1
+    `;
+    
+    const result = await require('../config/database').query(query, [classId]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Classe não encontrada'
+      });
+    }
+    
+    res.json({
+      success: true,
+      classe: result.rows[0]
+    });
+    
+  } catch (error) {
+    console.error('Erro ao buscar informações da classe:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ========================================
 // ROTAS DE INTEGRAÇÃO ENTRE SISTEMAS
 // ========================================
 
@@ -299,6 +394,64 @@ router.get('/api/classes/:classId/progressao/:nivelAtual/:nivelDesejado', async 
     res.status(500).json({
       success: false,
       error: error.message
+    });
+  }
+});
+
+// ========================================
+// ROTA DE DEBUG PARA VERIFICAR PODERES DE CLASSE
+// ========================================
+router.get('/debug/classe/:classId/poderes', async (req, res) => {
+  try {
+    const { classId } = req.params;
+    
+    // Verificar se a classe existe
+    const classeQuery = 'SELECT * FROM classes WHERE id = $1';
+    const classeResult = await require('../config/database').query(classeQuery, [classId]);
+    
+    if (classeResult.rows.length === 0) {
+      return res.json({
+        error: 'Classe não encontrada',
+        classId: classId
+      });
+    }
+    
+    const classe = classeResult.rows[0];
+    
+    // Verificar se há poderes de classe
+    const poderesQuery = `
+      SELECT 
+        p.nome as poder_nome,
+        p.tipo,
+        cp.nivel_minimo,
+        cp.pre_requisitos
+      FROM poderes p
+      INNER JOIN classe_poderes cp ON p.id = cp.poder_id
+      WHERE cp.classe_id = $1
+      ORDER BY cp.nivel_minimo, p.nome
+    `;
+    const poderesResult = await require('../config/database').query(poderesQuery, [classId]);
+    
+    // Verificar estrutura das tabelas
+    const tabelasQuery = `
+      SELECT table_name, column_name, data_type
+      FROM information_schema.columns
+      WHERE table_name IN ('classes', 'poderes', 'classe_poderes')
+      ORDER BY table_name, ordinal_position
+    `;
+    const tabelasResult = await require('../config/database').query(tabelasQuery);
+    
+    res.json({
+      classe: classe,
+      totalPoderes: poderesResult.rows.length,
+      poderes: poderesResult.rows,
+      estruturaBanco: tabelasResult.rows
+    });
+    
+  } catch (error) {
+    res.json({
+      error: error.message,
+      stack: error.stack
     });
   }
 });

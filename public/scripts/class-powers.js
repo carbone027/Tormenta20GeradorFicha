@@ -1,5 +1,5 @@
 /**
- * SISTEMA DE PODERES DE CLASSE
+ * SISTEMA DE PODERES DE CLASSE - CORRIGIDO
  * Gerencia os poderes específicos de cada classe durante criação/edição
  */
 
@@ -141,7 +141,7 @@ class ClassPowersManager {
   }
 
   /**
-   * Carrega poderes da classe via API
+   * Carrega poderes da classe via API - CORRIGIDO
    */
   async loadClassPowers(classeId) {
     try {
@@ -149,10 +149,26 @@ class ClassPowersManager {
 
       this.showLoading();
 
-      const response = await fetch(`/api/classes/${classeId}/poderes`);
+      // CORREÇÃO: Usar a rota correta com nível 20 para pegar todos os poderes
+      const response = await fetch(`/api/classes/${classeId}/poderes/20`);
 
       if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status}`);
+        // Se a rota não existir, tentar rota alternativa
+        console.log('Tentando rota alternativa...');
+        const alternativeResponse = await fetch(`/api/classes/${classeId}/completo?nivel=20`);
+        
+        if (!alternativeResponse.ok) {
+          throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        
+        const alternativeData = await alternativeResponse.json();
+        if (alternativeData.success && alternativeData.poderes) {
+          this.classPowers = alternativeData.poderes;
+          this.displayClassPowers();
+          this.showClassPowers();
+          console.log(`✅ ${this.classPowers.length} poderes de classe carregados (via rota alternativa)`);
+          return;
+        }
       }
 
       const data = await response.json();
@@ -209,16 +225,17 @@ class ClassPowersManager {
   }
 
   /**
-   * Exibe estado de erro
+   * Exibe estado de erro - MELHORADO
    */
   showErrorState() {
     if (this.elements.classPowersList) {
       this.elements.classPowersList.innerHTML = `
         <div class="class-powers-empty-state">
-          <div class="class-powers-empty-icon">❌</div>
-          <h4 class="class-powers-empty-title">Erro ao Carregar</h4>
+          <div class="class-powers-empty-icon">⚠️</div>
+          <h4 class="class-powers-empty-title">Poderes em Desenvolvimento</h4>
           <p class="class-powers-empty-description">
-            Não foi possível carregar os poderes de classe. Tente novamente.
+            Os poderes específicos desta classe estão sendo implementados. 
+            <br>Por enquanto, você pode usar os poderes gerais disponíveis abaixo.
           </p>
         </div>
       `;
@@ -494,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function () {
       };
     }
 
-    console.log('✅ Sistema de Poderes de Classe integrado');
+    console.log('✅ Sistema de Poderes de Classe integrado e corrigido');
   }, 500);
 });
 

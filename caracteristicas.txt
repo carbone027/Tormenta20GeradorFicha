@@ -1,0 +1,70 @@
+Arcanista:
+PV iniciais: 8 + modificador de Constituição.
+PV por nível: 2 + modificador de Constituição.
+PM iniciais: 6 por nível de arcanista.
+PM por nível: 6 por nível de arcanista.
+Bárbaro:
+PV iniciais: 24 + modificador de Constituição.
+PV por nível: 6 + modificador de Constituição.
+PM iniciais: 3 por nível de bárbaro.
+PM por nível: 3 por nível de bárbaro.
+Bardo:
+PV iniciais: 12 + modificador de Constituição.
+PV por nível: 3 + modificador de Constituição.
+PM iniciais: 4 por nível de bardo.
+PM por nível: 4 por nível de bardo.
+Bucaneiro:
+PV iniciais: 16 + modificador de Constituição.
+PV por nível: 4 + modificador de Constituição.
+PM iniciais: 3 por nível de bucaneiro.
+PM por nível: 3 por nível de bucaneiro.
+Caçador:
+PV iniciais: 16 + modificador de Constituição.
+PV por nível: 4 + modificador de Constituição.
+PM iniciais: 3 por nível de caçador.
+PM por nível: 3 por nível de caçador.
+Cavaleiro:
+PV iniciais: 20 + modificador de Constituição.
+PV por nível: 5 + modificador de Constituição.
+PM iniciais: 3 por nível de cavaleiro.
+PM por nível: 3 por nível de cavaleiro.
+Clérigo:
+PV iniciais: 16 + modificador de Constituição.
+PV por nível: 4 + modificador de Constituição.
+PM iniciais: 5 por nível de clérigo.
+PM por nível: 5 por nível de clérigo.
+Druida:
+PV iniciais: 16 + modificador de Constituição.
+PV por nível: 4 + modificador de Constituição.
+PM iniciais: 4 por nível de druida.
+PM por nível: 4 por nível de druida.
+Guerreiro:
+PV iniciais: 20 + modificador de Constituição.
+PV por nível: 5 + modificador de Constituição.
+PM iniciais: 3 por nível de guerreiro.
+PM por nível: 3 por nível de guerreiro.
+Inventor:
+PV iniciais: 12 + modificador de Constituição.
+PV por nível: 3 + modificador de Constituição.
+PM iniciais: 4 por nível de inventor.
+PM por nível: 4 por nível de inventor.
+Ladino:
+PV iniciais: 12 + modificador de Constituição.
+PV por nível: 3 + modificador de Constituição.
+PM iniciais: 4 por nível de ladino.
+PM por nível: 4 por nível de ladino.
+Lutador:
+PV iniciais: 20 + modificador de Constituição.
+PV por nível: 5 + modificador de Constituição.
+PM iniciais: 3 por nível de lutador.
+PM por nível: 3 por nível de lutador.
+Nobre:
+PV iniciais: 16 + modificador de Constituição.
+PV por nível: 4 + modificador de Constituição.
+PM iniciais: 4 por nível de nobre.
+PM por nível: 4 por nível de nobre.
+Paladino:
+PV iniciais: 20 + modificador de Constituição.
+PV por nível: 5 + modificador de Constituição.
+PM iniciais: 3 por nível de paladino.
+PM por nível: 3 por nível de paladino.

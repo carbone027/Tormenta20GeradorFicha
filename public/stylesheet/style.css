@@ -6312,3 +6312,1543 @@ footer > * {
   outline: 2px solid #4fc3f7;
   outline-offset: 2px;
 }
+
+/* ========================================
+   SISTEMA DE PODERES DE CLASSE - CSS
+   ======================================== */
+
+/* Seção principal de poderes de classe */
+.class-powers-section {
+  background: linear-gradient(135deg, rgba(37, 40, 80, 0.9), rgba(25, 28, 60, 0.95));
+  border: 2px solid var(--accent-gold);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+  display: none;
+}
+
+.class-powers-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  display: block;
+}
+
+/* Header da seção */
+.class-powers-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.class-powers-title {
+  color: var(--accent-gold);
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.class-powers-title span {
+  margin: 0 0.5rem;
+  font-size: 1.2em;
+  animation: pulse 2s infinite;
+}
+
+.class-powers-description {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.class-powers-class-name {
+  color: var(--accent-gold);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Lista de poderes */
+.class-powers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Card individual de poder de classe */
+.class-power-card {
+  background: linear-gradient(135deg, rgba(60, 65, 120, 0.8), rgba(45, 50, 100, 0.9));
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 10px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.class-power-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.class-power-card:hover::before {
+  left: 100%;
+}
+
+.class-power-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: var(--accent-gold);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+.class-power-card.selected {
+  border-color: var(--success-green);
+  background: linear-gradient(135deg, rgba(60, 120, 65, 0.8), rgba(45, 100, 50, 0.9));
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+}
+
+/* Header do card */
+.class-power-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+}
+
+.class-power-name {
+  color: var(--accent-gold);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.class-power-level-badge {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--accent-gold);
+  border: 1px solid var(--accent-gold);
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.class-power-level-badge.automatic {
+  background: rgba(76, 175, 80, 0.2);
+  color: var(--success-green);
+  border-color: var(--success-green);
+}
+
+/* Descrição */
+.class-power-description {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+/* Detalhes do poder */
+.class-power-details {
+  margin-bottom: 0.75rem;
+}
+
+.class-power-detail {
+  margin-bottom: 0.5rem;
+}
+
+.class-power-detail-label {
+  color: var(--accent-gold);
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.class-power-detail-value {
+  color: var(--text-light);
+  font-size: 0.85rem;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+/* Tags */
+.class-power-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.class-power-tag {
+  background: rgba(37, 40, 80, 0.6);
+  color: var(--text-light);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.class-power-tag.level-requirement {
+  background: rgba(255, 140, 0, 0.2);
+  color: var(--warning-orange);
+  border-color: var(--warning-orange);
+}
+
+.class-power-tag.automatic {
+  background: rgba(76, 175, 80, 0.2);
+  color: var(--success-green);
+  border-color: var(--success-green);
+}
+
+/* Estados especiais */
+.class-powers-loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+.class-powers-loading-spinner {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  animation: spin 1s linear infinite;
+}
+
+.class-powers-empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+.class-powers-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+
+.class-powers-empty-title {
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.class-powers-empty-description {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Separador */
+.class-powers-separator {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  margin: 2rem 0;
+  opacity: 0.3;
+}
+
+/* Preview de poderes de classe */
+.class-power-preview-item {
+  background: rgba(60, 65, 120, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 0.25rem;
+}
+
+/* Animações */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .class-powers-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .class-powers-list {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .class-power-card {
+    padding: 0.75rem;
+  }
+  
+  .class-power-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .class-power-level-badge {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .class-powers-title {
+    font-size: 1.2rem;
+  }
+  
+  .class-power-name {
+    font-size: 1rem;
+  }
+  
+  .class-power-description {
+    font-size: 0.85rem;
+  }
+}
+
+/* Integração com o tema escuro */
+@media (prefers-color-scheme: dark) {
+  .class-power-card {
+    background: linear-gradient(135deg, rgba(30, 35, 70, 0.9), rgba(20, 25, 55, 0.95));
+  }
+  
+  .class-power-card.selected {
+    background: linear-gradient(135deg, rgba(30, 70, 35, 0.9), rgba(20, 55, 25, 0.95));
+  }
+}
+
+/* ========================================
+   SISTEMA DE PODERES - CSS MELHORADO
+   ======================================== */
+
+/* Melhorias nos poderes raciais */
+.racial-powers-section {
+  background: linear-gradient(135deg, rgba(60, 120, 65, 0.8), rgba(45, 100, 50, 0.9));
+  border: 2px solid var(--success-green);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+}
+
+.racial-powers-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+}
+
+.racial-powers-title {
+  color: var(--success-green);
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.racial-power-card {
+  background: rgba(45, 100, 50, 0.6);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.racial-power-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
+}
+
+.racial-power-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.racial-power-badge {
+  background: rgba(76, 175, 80, 0.3);
+  color: var(--success-green);
+  border: 1px solid var(--success-green);
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.racial-power-name {
+  color: var(--success-green);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.racial-power-description {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Melhorias na busca de poderes */
+.powers-search-container {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.powers-search-box {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.powers-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 25px;
+  background: rgba(37, 40, 80, 0.8);
+  color: var(--text-light);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.powers-search-input:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+.powers-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-gold);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.powers-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(37, 40, 80, 0.95);
+  border: 2px solid var(--accent-gold);
+  border-radius: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.powers-search-results.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.search-result-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+/* Melhorias nos filtros rápidos */
+.powers-quick-filters {
+  background: rgba(37, 40, 80, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.quick-filters-title {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.quick-filters-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.quick-filter-btn {
+  background: rgba(60, 65, 120, 0.6);
+  color: var(--text-light);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.quick-filter-btn:hover {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+}
+
+.quick-filter-btn.active {
+  background: var(--accent-gold);
+  color: var(--primary-bg);
+  border-color: var(--accent-gold);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+/* Melhorias nos cards de poder */
+.power-card {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.power-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.power-card:hover::before {
+  left: 100%;
+}
+
+.power-card.selected {
+  border-color: var(--success-green) !important;
+  background: linear-gradient(135deg, rgba(60, 120, 65, 0.8), rgba(45, 100, 50, 0.9)) !important;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.4) !important;
+}
+
+.power-card-source {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--success-green);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  z-index: 10;
+}
+
+/* Melhorias no toggle de seções */
+.power-type-toggle {
+  background: none;
+  border: none;
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.power-type-toggle:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: scale(1.1);
+}
+
+.toggle-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.power-type-section.expanding .toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Melhorias no preview */
+.preview-poderes {
+  background: rgba(37, 40, 80, 0.8);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.poder-preview-item,
+.class-power-preview-item {
+  background: rgba(60, 65, 120, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.poder-preview-item:hover,
+.class-power-preview-item:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: translateX(5px);
+}
+
+/* Estados de loading melhorados */
+.powers-loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}
+
+.powers-loading-spinner {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: bounce 1s infinite;
+}
+
+.powers-empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}
+
+.powers-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+  animation: float 3s ease-in-out infinite;
+}
+
+.powers-empty-title {
+  color: var(--accent-gold);
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.powers-empty-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Animações */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Responsividade melhorada */
+@media (max-width: 768px) {
+  .powers-search-box {
+    max-width: 100%;
+  }
+  
+  .quick-filters-buttons {
+    gap: 0.25rem;
+  }
+  
+  .quick-filter-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .power-card::before {
+    display: none; /* Remover efeito de brilho em mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .powers-quick-filters {
+    padding: 0.75rem;
+  }
+  
+  .quick-filters-buttons {
+    flex-direction: column;
+  }
+  
+  .quick-filter-btn {
+    text-align: center;
+  }
+  
+  .powers-search-input {
+    padding: 0.6rem 1rem 0.6rem 2.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Melhorias para acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .power-card::before,
+  .powers-loading-spinner,
+  .powers-empty-icon {
+    animation: none;
+  }
+  
+  .quick-filter-btn:hover,
+  .power-card:hover {
+    transform: none;
+  }
+}
+
+/* Tema claro (se necessário) */
+@media (prefers-color-scheme: light) {
+  .powers-search-input {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-bg);
+  }
+  
+  .powers-search-results {
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--primary-bg);
+  }
+}
+
+/* ========================================
+   SISTEMA INTEGRADO DE PODERES E CARACTERÍSTICAS - CSS
+   Inclui: Poderes de classe, poderes raciais, características derivadas
+   ======================================== */
+
+/* ========================================
+   VARIÁVEIS CUSTOMIZADAS PARA PODERES
+   ======================================== */
+:root {
+  /* Cores específicas para poderes */
+  --power-class-color: #d4af37;
+  --power-racial-color: #4caf50;
+  --power-general-color: #2196f3;
+  --power-combat-color: #f44336;
+  --power-destiny-color: #9c27b0;
+  --power-magic-color: #673ab7;
+  
+  /* Gradientes para cards */
+  --gradient-class: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+  --gradient-racial: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
+  --gradient-general: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(33, 150, 243, 0.1));
+}
+
+/* ========================================
+   CARACTERÍSTICAS DERIVADAS - MELHORIAS
+   ======================================== */
+
+/* Container principal das características */
+.form-section h3 {
+  position: relative;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent-gold);
+  border-radius: 2px;
+}
+
+/* Melhorias nos inputs de características derivadas */
+#pontos_vida, #pontos_mana, #ca {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));
+  border: 2px solid rgba(76, 175, 80, 0.3);
+  color: var(--success-green);
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+#pontos_vida:focus, #pontos_mana:focus, #ca:focus {
+  border-color: var(--success-green);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+/* Indicador visual para valores calculados automaticamente */
+.auto-calculated {
+  position: relative;
+}
+
+.auto-calculated::after {
+  content: '🧮';
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* ========================================
+   SEÇÃO DE PODERES DE CLASSE
+   ======================================== */
+
+/* Seção principal de poderes de classe */
+.class-powers-section {
+  background: linear-gradient(135deg, rgba(37, 40, 80, 0.9), rgba(25, 28, 60, 0.95));
+  border: 2px solid var(--power-class-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+  display: none;
+}
+
+.class-powers-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  display: block;
+}
+
+/* Header da seção */
+.class-powers-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.class-powers-title {
+  color: var(--power-class-color);
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.class-powers-title span {
+  margin: 0 0.5rem;
+  font-size: 1.2em;
+  animation: pulse 2s infinite;
+}
+
+.class-powers-description {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.class-powers-class-name {
+  color: var(--power-class-color);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Lista de poderes */
+.class-powers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Card individual de poder de classe */
+.class-power-card {
+  background: linear-gradient(135deg, rgba(60, 65, 120, 0.8), rgba(45, 50, 100, 0.9));
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 10px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.class-power-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.class-power-card:hover::before {
+  left: 100%;
+}
+
+.class-power-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: var(--power-class-color);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+.class-power-card.selected {
+  border-color: var(--success-green);
+  background: linear-gradient(135deg, rgba(60, 120, 65, 0.8), rgba(45, 100, 50, 0.9));
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+}
+
+/* Header do card */
+.class-power-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+}
+
+.class-power-name {
+  color: var(--power-class-color);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.class-power-level-badge {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--power-class-color);
+  border: 1px solid var(--power-class-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.class-power-level-badge.automatic {
+  background: rgba(76, 175, 80, 0.2);
+  color: var(--success-green);
+  border-color: var(--success-green);
+}
+
+/* Descrição */
+.class-power-description {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+/* Detalhes do poder */
+.class-power-details {
+  margin-bottom: 0.75rem;
+}
+
+.class-power-detail {
+  margin-bottom: 0.5rem;
+}
+
+.class-power-detail-label {
+  color: var(--power-class-color);
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.class-power-detail-value {
+  color: var(--text-light);
+  font-size: 0.85rem;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+/* Tags */
+.class-power-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.class-power-tag {
+  background: rgba(37, 40, 80, 0.6);
+  color: var(--text-light);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.class-power-tag.level-requirement {
+  background: rgba(255, 140, 0, 0.2);
+  color: var(--warning-orange);
+  border-color: var(--warning-orange);
+}
+
+.class-power-tag.automatic {
+  background: rgba(76, 175, 80, 0.2);
+  color: var(--success-green);
+  border-color: var(--success-green);
+}
+
+/* ========================================
+   PODERES RACIAIS MELHORADOS
+   ======================================== */
+
+.racial-powers-section {
+  background: linear-gradient(135deg, rgba(60, 120, 65, 0.8), rgba(45, 100, 50, 0.9));
+  border: 2px solid var(--power-racial-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+}
+
+.racial-powers-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+}
+
+.racial-powers-title {
+  color: var(--power-racial-color);
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.racial-power-card,
+.poder-racial-card {
+  background: rgba(45, 100, 50, 0.6);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.racial-power-card:hover,
+.poder-racial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
+}
+
+.racial-power-header,
+.poder-racial-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.racial-power-badge,
+.poder-automatico {
+  background: rgba(76, 175, 80, 0.3);
+  color: var(--power-racial-color);
+  border: 1px solid var(--power-racial-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.racial-power-name,
+.poder-nome {
+  color: var(--power-racial-color);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.racial-power-description,
+.poder-descricao {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ========================================
+   SISTEMA DE BUSCA MELHORADO
+   ======================================== */
+
+.powers-search-container {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.powers-search-box {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.powers-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 25px;
+  background: rgba(37, 40, 80, 0.8);
+  color: var(--text-light);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.powers-search-input:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+.powers-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.powers-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-gold);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.powers-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(37, 40, 80, 0.95);
+  border: 2px solid var(--accent-gold);
+  border-radius: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.powers-search-results.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.search-result-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+/* ========================================
+   FILTROS RÁPIDOS MELHORADOS
+   ======================================== */
+
+.powers-quick-filters {
+  background: rgba(37, 40, 80, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.quick-filters-title {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.quick-filters-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.quick-filter-btn {
+  background: rgba(60, 65, 120, 0.6);
+  color: var(--text-light);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.quick-filter-btn:hover {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+}
+
+.quick-filter-btn.active {
+  background: var(--accent-gold);
+  color: var(--primary-bg);
+  border-color: var(--accent-gold);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+/* ========================================
+   CARDS DE PODER MELHORADOS
+   ======================================== */
+
+.power-card {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.power-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.power-card:hover::before {
+  left: 100%;
+}
+
+.power-card.selected {
+  border-color: var(--success-green) !important;
+  background: linear-gradient(135deg, rgba(60, 120, 65, 0.8), rgba(45, 100, 50, 0.9)) !important;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.4) !important;
+}
+
+.power-card-source {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--success-green);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  z-index: 10;
+}
+
+/* ========================================
+   TOGGLE DE SEÇÕES
+   ======================================== */
+
+.power-type-toggle {
+  background: none;
+  border: none;
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.power-type-toggle:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: scale(1.1);
+}
+
+.toggle-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.power-type-section.expanding .toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* ========================================
+   PREVIEW MELHORADO
+   ======================================== */
+
+.preview-poderes {
+  background: rgba(37, 40, 80, 0.8);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.poder-preview-item,
+.class-power-preview-item {
+  background: rgba(60, 65, 120, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.poder-preview-item:hover,
+.class-power-preview-item:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: translateX(5px);
+}
+
+/* ========================================
+   ESTADOS DE LOADING E ERRO
+   ======================================== */
+
+.powers-loading,
+.class-powers-loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}
+
+.powers-loading-spinner,
+.class-powers-loading-spinner {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: bounce 1s infinite;
+}
+
+.powers-empty-state,
+.class-powers-empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}
+
+.powers-empty-icon,
+.class-powers-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+  animation: float 3s ease-in-out infinite;
+}
+
+.powers-empty-title,
+.class-powers-empty-title {
+  color: var(--accent-gold);
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.powers-empty-description,
+.class-powers-empty-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   SEPARADORES
+   ======================================== */
+
+.class-powers-separator {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  margin: 2rem 0;
+  opacity: 0.3;
+}
+
+/* ========================================
+   ANIMAÇÕES
+   ======================================== */
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   RESPONSIVIDADE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .class-powers-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .class-powers-list {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .class-power-card {
+    padding: 0.75rem;
+  }
+  
+  .class-power-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .class-power-level-badge {
+    align-self: flex-end;
+  }
+  
+  .powers-search-box {
+    max-width: 100%;
+  }
+  
+  .quick-filters-buttons {
+    gap: 0.25rem;
+  }
+  
+  .quick-filter-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .power-card::before {
+    display: none; /* Remover efeito de brilho em mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .class-powers-title {
+    font-size: 1.2rem;
+  }
+  
+  .class-power-name {
+    font-size: 1rem;
+  }
+  
+  .class-power-description {
+    font-size: 0.85rem;
+  }
+  
+  .powers-quick-filters {
+    padding: 0.75rem;
+  }
+  
+  .quick-filters-buttons {
+    flex-direction: column;
+  }
+  
+  .quick-filter-btn {
+    text-align: center;
+  }
+  
+  .powers-search-input {
+    padding: 0.6rem 1rem 0.6rem 2.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ========================================
+   ACESSIBILIDADE
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .power-card::before,
+  .powers-loading-spinner,
+  .powers-empty-icon,
+  .class-powers-loading-spinner,
+  .class-powers-empty-icon {
+    animation: none;
+  }
+  
+  .quick-filter-btn:hover,
+  .power-card:hover,
+  .class-power-card:hover {
+    transform: none;
+  }
+}
+
+/* ========================================
+   TEMA CLARO (FALLBACK)
+   ======================================== */
+
+@media (prefers-color-scheme: light) {
+  .powers-search-input {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-bg);
+  }
+  
+  .powers-search-results {
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--primary-bg);
+  }
+  
+  .class-power-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.95));
+  }
+  
+  .class-power-card.selected {
+    background: linear-gradient(135deg, rgba(200, 255, 200, 0.9), rgba(180, 255, 180, 0.95));
+  }
+}
