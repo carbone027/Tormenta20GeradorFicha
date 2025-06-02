@@ -61,6 +61,72 @@ exports.createForm = async (req, res) => {
   }
 };
 
+const applyClassPowers = async (characterId, classeId, nivel) => {
+  try {
+    console.log(`🏛️ Aplicando poderes de classe para personagem ${characterId}, classe ${classeId}, nível ${nivel}`);
+
+    // Buscar poderes automáticos da classe para o nível atual
+    const poderesClasseQuery = `
+      SELECT p.id, p.nome, cp.nivel_minimo
+      FROM poderes p
+      INNER JOIN classe_poderes cp ON p.id = cp.poder_id
+      WHERE cp.classe_id = $1 AND cp.nivel_minimo <= $2
+      ORDER BY cp.nivel_minimo, p.nome
+    `;
+
+    const result = await pool.query(poderesClasseQuery, [classeId, nivel]);
+
+    if (result.rows.length === 0) {
+      console.log('⚠️ Nenhum poder de classe encontrado para esta classe/nível');
+      return [];
+    }
+
+    console.log(`📚 Encontrados ${result.rows.length} poderes de classe para aplicar`);
+
+    // Aplicar cada poder de classe
+    const poderesAplicados = [];
+    for (const poder of result.rows) {
+      try {
+        // Verificar se o poder já existe para evitar duplicatas
+        const existeQuery = `
+          SELECT id FROM personagem_poderes 
+          WHERE personagem_id = $1 AND poder_id = $2
+        `;
+        const existe = await pool.query(existeQuery, [characterId, poder.id]);
+
+        if (existe.rows.length === 0) {
+          // Inserir poder de classe
+          const insertQuery = `
+            INSERT INTO personagem_poderes (personagem_id, poder_id, fonte, observacoes)
+            VALUES ($1, $2, 'classe', $3)
+            RETURNING *
+          `;
+
+          const insertResult = await pool.query(insertQuery, [
+            characterId,
+            poder.id,
+            `Poder de classe - Nível ${poder.nivel_minimo}+`
+          ]);
+
+          poderesAplicados.push(insertResult.rows[0]);
+          console.log(`✅ Poder aplicado: ${poder.nome}`);
+        } else {
+          console.log(`ℹ️ Poder já existe: ${poder.nome}`);
+        }
+      } catch (error) {
+        console.error(`❌ Erro ao aplicar poder ${poder.nome}:`, error.message);
+      }
+    }
+
+    console.log(`✅ ${poderesAplicados.length} poderes de classe aplicados com sucesso`);
+    return poderesAplicados;
+
+  } catch (error) {
+    console.error('❌ Erro ao aplicar poderes de classe:', error);
+    throw error;
+  }
+};
+
 exports.create = async (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ error: 'Não autorizado' });
@@ -76,7 +142,7 @@ exports.create = async (req, res) => {
     const character = await Character.create(characterData);
     console.log('✅ Personagem criado:', character.nome);
     if (!req.body.deus_id || req.body.deus_id === '') {
-        throw new Error('Deus patrono é obrigatório - Todo herói de Arton precisa de fé divina!');
+      throw new Error('Deus patrono é obrigatório - Todo herói de Arton precisa de fé divina!');
     }
     // Aplicar poderes raciais automaticamente se uma raça foi selecionada
     if (character.raca_id) {
@@ -85,6 +151,16 @@ exports.create = async (req, res) => {
         console.log('✅ Poderes raciais aplicados automaticamente');
       } catch (powerError) {
         console.log('⚠️ Erro ao aplicar poderes raciais (continuando):', powerError.message);
+      }
+    }
+
+    // 2. NOVO: Aplicar poderes de classe automaticamente
+    if (character.classe_id && character.nivel) {
+      try {
+        await applyClassPowers(character.id, character.classe_id, character.nivel);
+        console.log('✅ Poderes de classe aplicados automaticamente');
+      } catch (powerError) {
+        console.log('⚠️ Erro ao aplicar poderes de classe (continuando):', powerError.message);
       }
     }
 
@@ -106,6 +182,34 @@ exports.create = async (req, res) => {
       }
     }
 
+    // 4. NOVO: Processar poderes de classe selecionados manualmente (se enviados)
+    if (req.body.poderes_classe_selecionados) {
+      try {
+        const poderesClasseSelecionados = Array.isArray(req.body.poderes_classe_selecionados)
+          ? req.body.poderes_classe_selecionados
+          : [req.body.poderes_classe_selecionados];
+
+        for (const poderId of poderesClasseSelecionados) {
+          if (poderId && !isNaN(poderId)) {
+            // Verificar se é realmente um poder da classe
+            const verificacaoQuery = `
+              SELECT p.nome FROM poderes p
+              INNER JOIN classe_poderes cp ON p.id = cp.poder_id
+              WHERE p.id = $1 AND cp.classe_id = $2
+            `;
+            const verificacao = await pool.query(verificacaoQuery, [poderId, character.classe_id]);
+
+            if (verificacao.rows.length > 0) {
+              await PowerController.addToCharacter(character.id, parseInt(poderId), 'classe', 'Poder de classe selecionado');
+            }
+          }
+        }
+        console.log('✅ Poderes de classe selecionados aplicados');
+      } catch (powerError) {
+        console.log('⚠️ Erro ao aplicar poderes de classe selecionados:', powerError.message);
+      }
+    }
+
     res.redirect(`/personagens/${character.id}`);
   } catch (error) {
     console.error('Erro ao criar personagem:', error);
@@ -117,7 +221,7 @@ exports.view = async (req, res) => {
   try {
     const characterId = parseInt(req.params.id, 10);
     const character = await Character.findById(characterId);
-    
+
     if (!character) {
       return res.status(404).render('pages/error', { message: 'Personagem não encontrado' });
     }
@@ -127,6 +231,7 @@ exports.view = async (req, res) => {
     let poderesPorTipo = {};
 
     try {
+      console.log(`🔍 Carregando poderes para personagem ${characterId}`);
       // Buscar poderes já associados
       const poderesQuery = `
         SELECT p.*, pp.fonte, pp.observacoes
@@ -135,16 +240,16 @@ exports.view = async (req, res) => {
         WHERE pp.personagem_id = $1
         ORDER BY pp.fonte, p.nome
       `;
-      
+
       const result = await require('../config/database').query(poderesQuery, [characterId]);
       poderes = result.rows;
 
       // Se não há poderes de classe, buscar e associar automaticamente
       const temPoderesClasse = poderes.some(p => p.fonte === 'classe');
-      
+
       if (!temPoderesClasse && character.classe_id && character.nivel) {
         console.log('🏛️ Associando poderes de classe automaticamente...');
-        
+
         // Buscar poderes de classe disponíveis
         const poderesClasseQuery = `
           SELECT p.*, cp.nivel_minimo
@@ -153,9 +258,9 @@ exports.view = async (req, res) => {
           WHERE cp.classe_id = $1 AND cp.nivel_minimo <= $2
           ORDER BY cp.nivel_minimo, p.nome
         `;
-        
+
         const poderesClasseResult = await require('../config/database').query(poderesClasseQuery, [character.classe_id, character.nivel]);
-        
+
         // Adicionar à lista com fonte 'classe'
         poderesClasseResult.rows.forEach(poder => {
           poderes.push({
@@ -255,6 +360,8 @@ exports.update = async (req, res) => {
 
     // Verificar se a raça mudou
     const personagemAtual = await Character.findById(id, req.session.user.id);
+    const classeMudou = personagemAtual && personagemAtual.classe_id != req.body.classe_id;
+    const nivelMudou = personagemAtual && personagemAtual.nivel != req.body.nivel;
     const racaMudou = personagemAtual && personagemAtual.raca_id != req.body.raca_id;
 
     // Atualizar dados básicos do personagem
@@ -282,6 +389,23 @@ exports.update = async (req, res) => {
         console.log('✅ Poderes raciais atualizados devido à mudança de raça');
       } catch (powerError) {
         console.log('⚠️ Erro ao atualizar poderes raciais:', powerError.message);
+      }
+    }
+
+    // NOVO: Se a classe ou nível mudaram, atualizar poderes de classe
+    if ((classeMudou || nivelMudou) && req.body.classe_id && req.body.nivel) {
+      try {
+        // Remover poderes de classe antigos
+        await pool.query(`
+          DELETE FROM personagem_poderes 
+          WHERE personagem_id = $1 AND fonte = 'classe'
+        `, [id]);
+
+        // Aplicar novos poderes de classe baseados na nova classe/nível
+        await applyClassPowers(id, req.body.classe_id, req.body.nivel);
+        console.log('✅ Poderes de classe atualizados devido à mudança de classe/nível');
+      } catch (powerError) {
+        console.log('⚠️ Erro ao atualizar poderes de classe:', powerError.message);
       }
     }
 
