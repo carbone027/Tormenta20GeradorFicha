@@ -529,6 +529,107 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+// Função para criar campos hidden com poderes de classe selecionados
+function createClassPowerHiddenFields() {
+  // Remover campos existentes para evitar duplicatas
+  const existingFields = document.querySelectorAll('input[name="poderes_classe_selecionados"]');
+  existingFields.forEach(field => field.remove());
+  
+  // Se não há manager, não fazer nada
+  if (!window.classPowersManager) return;
+  
+  const selectedPowers = window.classPowersManager.getSelectedClassPowers();
+  
+  if (selectedPowers.selectedPowers && selectedPowers.selectedPowers.length > 0) {
+    const form = document.getElementById('characterForm');
+    if (!form) return;
+    
+    console.log('📝 Criando campos hidden para poderes de classe:', selectedPowers.selectedPowers);
+    
+    // Criar campos hidden para cada poder de classe selecionado
+    selectedPowers.selectedPowers.forEach(powerId => {
+      const hiddenField = document.createElement('input');
+      hiddenField.type = 'hidden';
+      hiddenField.name = 'poderes_classe_selecionados';
+      hiddenField.value = powerId;
+      form.appendChild(hiddenField);
+    });
+    
+    console.log(`✅ ${selectedPowers.selectedPowers.length} poderes de classe adicionados ao formulário`);
+  }
+}
+
+// Integrar com o evento de submit do formulário
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('characterForm');
+  
+  if (form) {
+    // Interceptar submit do formulário para adicionar poderes de classe
+    form.addEventListener('submit', function(e) {
+      console.log('📤 Preparando envio do formulário com poderes de classe...');
+      
+      // Criar campos hidden para poderes de classe antes do envio
+      createClassPowerHiddenFields();
+      
+      // Continuar com o submit normal
+      console.log('✅ Formulário pronto para envio com todos os poderes');
+    });
+  }
+});
+
+// Modificar a classe ClassPowersManager para suportar a integração
+if (typeof ClassPowersManager !== 'undefined') {
+  // Adicionar método para atualizar formulário quando poderes mudam
+  const originalTogglePowerSelection = ClassPowersManager.prototype.togglePowerSelection;
+  
+  ClassPowersManager.prototype.togglePowerSelection = function(card) {
+    // Chamar método original
+    originalTogglePowerSelection.call(this, card);
+    
+    // Atualizar campos do formulário automaticamente
+    setTimeout(() => {
+      createClassPowerHiddenFields();
+    }, 100);
+  };
+}
+
+// Função para debug - verificar se poderes de classe estão sendo enviados
+function debugFormData() {
+  const form = document.getElementById('characterForm');
+  if (!form) return;
+  
+  const formData = new FormData(form);
+  const data = {};
+  
+  for (let [key, value] of formData.entries()) {
+    if (!data[key]) data[key] = [];
+    data[key].push(value);
+  }
+  
+  console.log('🔍 Dados do formulário:', data);
+  console.log('🔍 Poderes gerais:', data.poderes_selecionados || []);
+  console.log('🔍 Poderes de classe:', data.poderes_classe_selecionados || []);
+  
+  return data;
+}
+
+// Adicionar botão de debug em desenvolvimento
+if (process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost') {
+  setTimeout(() => {
+    const form = document.getElementById('characterForm');
+    if (form) {
+      const debugBtn = document.createElement('button');
+      debugBtn.type = 'button';
+      debugBtn.textContent = '🔍 Debug Form Data';
+      debugBtn.style.cssText = 'margin: 1rem; padding: 0.5rem; background: orange; color: white; border: none; border-radius: 4px;';
+      debugBtn.onclick = debugFormData;
+      form.appendChild(debugBtn);
+    }
+  }, 2000);
+}
+
+console.log('✅ Integração de poderes de classe com formulário inicializada');
+
 // Exportar para uso global
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = ClassPowersManager;
