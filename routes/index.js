@@ -106,7 +106,7 @@ router.get('/api/classes/:classId/poderes', async (req, res) => {
     
     console.log(`📡 Requisição de poderes para classe ${classId}, nível máximo ${nivel}`);
     
-    // Buscar poderes específicos da classe
+    // CORREÇÃO: Query sem a coluna cp.automatico
     const query = `
       SELECT 
         p.id,
@@ -148,6 +148,67 @@ router.get('/api/classes/:classId/poderes', async (req, res) => {
     });
   }
 });
+
+router.get('/api/classes/:id/completo', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nivel = 1 } = req.query;
+    
+    // Buscar dados básicos da classe
+    const classeQuery = 'SELECT * FROM classes WHERE id = $1';
+    const classeResult = await require('../config/database').query(classeQuery, [id]);
+    
+    if (classeResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Classe não encontrada'
+      });
+    }
+    
+    const classe = classeResult.rows[0];
+    
+    // CORREÇÃO: Query para habilidades sem cp.automatico
+    const habilidadesQuery = `
+      SELECT 
+        hc.*,
+        ch.nivel_obtencao,
+        ch.observacoes
+      FROM habilidades_classe hc
+      INNER JOIN classe_habilidades ch ON hc.id = ch.habilidade_id
+      WHERE ch.classe_id = $1 AND ch.nivel_obtencao <= $2
+      ORDER BY ch.nivel_obtencao, hc.nome
+    `;
+    const habilidadesResult = await require('../config/database').query(habilidadesQuery, [id, nivel]);
+    
+    // CORREÇÃO: Query para poderes sem cp.automatico
+    const poderesQuery = `
+      SELECT 
+        p.*,
+        cp.nivel_minimo,
+        cp.pre_requisitos as pre_requisitos_classe
+      FROM poderes p
+      INNER JOIN classe_poderes cp ON p.id = cp.poder_id
+      WHERE cp.classe_id = $1 AND cp.nivel_minimo <= $2
+      ORDER BY cp.nivel_minimo, p.nome
+    `;
+    const poderesResult = await require('../config/database').query(poderesQuery, [id, nivel]);
+    
+    res.json({
+      success: true,
+      classe,
+      habilidades: habilidadesResult.rows,
+      poderes: poderesResult.rows
+    });
+    
+  } catch (error) {
+    console.error('Erro ao buscar informações completas da classe:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 
 // Buscar informações básicas de uma classe (fallback)
 router.get('/api/classes/:classId/info', async (req, res) => {
@@ -340,26 +401,24 @@ router.get('/api/classes/:classId/progressao/:nivelAtual/:nivelDesejado', async 
     
     // Calcular ganhos
     const niveisGanhos = parseInt(nivelDesejado) - parseInt(nivelAtual);
-    const pvGanhos = classe.pv_por_nivel * niveisGanhos;
-    const pmGanhos = classe.pm_por_nivel * niveisGanhos;
+    const pvGanhos = (classe.pv_por_nivel || 5) * niveisGanhos;
+    const pmGanhos = (classe.pm_por_nivel || 3) * niveisGanhos;
     
-    // Buscar novas habilidades disponíveis
+    // CORREÇÃO: Buscar novas habilidades sem ch.automatica
     const novasHabilidadesQuery = `
       SELECT 
         hc.*,
-        ch.nivel_obtencao,
-        ch.automatica
+        ch.nivel_obtencao
       FROM habilidades_classe hc
       INNER JOIN classe_habilidades ch ON hc.id = ch.habilidade_id
       WHERE ch.classe_id = $1 
         AND ch.nivel_obtencao > $2 
         AND ch.nivel_obtencao <= $3
-        AND ch.automatica = true
       ORDER BY ch.nivel_obtencao, hc.nome
     `;
     const novasHabilidades = await require('../config/database').query(novasHabilidadesQuery, [classId, nivelAtual, nivelDesejado]);
     
-    // Buscar novos poderes disponíveis
+    // CORREÇÃO: Buscar novos poderes sem verificar cp.automatico
     const novosPoderesQuery = `
       SELECT 
         p.*,
@@ -418,7 +477,7 @@ router.get('/debug/classe/:classId/poderes', async (req, res) => {
     
     const classe = classeResult.rows[0];
     
-    // Verificar se há poderes de classe
+    // CORREÇÃO: Verificar poderes sem cp.automatico
     const poderesQuery = `
       SELECT 
         p.nome as poder_nome,
@@ -445,7 +504,8 @@ router.get('/debug/classe/:classId/poderes', async (req, res) => {
       classe: classe,
       totalPoderes: poderesResult.rows.length,
       poderes: poderesResult.rows,
-      estruturaBanco: tabelasResult.rows
+      estruturaBanco: tabelasResult.rows,
+      observacao: 'Todas as queries foram corrigidas para não usar cp.automatico'
     });
     
   } catch (error) {
