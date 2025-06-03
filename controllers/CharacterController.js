@@ -337,7 +337,7 @@ exports.view = async (req, res) => {
 
     try {
       console.log(`🎯 Carregando perícias para personagem ${characterId}`);
-      pericias = await Character.getCharacterSkills(characterId);
+      pericias = await require('../models/pericia').getAllSkillsForCharacter(characterId);
 
       // Organizar por categoria
       pericias.forEach(pericia => {
@@ -348,7 +348,13 @@ exports.view = async (req, res) => {
         periciasPorCategoria[categoria].push(pericia);
       });
 
-      console.log(`✅ ${pericias.length} perícias carregadas`);
+      console.log(`✅ ${pericias.length} perícias carregadas (incluindo não treinadas)`);
+
+      // Log para debug
+      const treinadas = pericias.filter(p => p.treinado).length;
+      const utilizaveis = pericias.filter(p => p.pode_usar).length;
+      console.log(`📊 Perícias: ${treinadas} treinadas, ${utilizaveis} utilizáveis de ${pericias.length} total`);
+
     } catch (error) {
       console.error('❌ Erro ao carregar perícias:', error);
     }

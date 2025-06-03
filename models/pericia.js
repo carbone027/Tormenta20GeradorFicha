@@ -105,16 +105,22 @@ class Pericia {
     }
   }
 
-  // Buscar perícias de um personagem
+  // CORRIGIDO: Buscar perícias de um personagem (TODAS, treinadas ou não)
   static async findByCharacter(personagemId) {
     try {
       const result = await pool.query(`
         SELECT 
-          pp.*,
+          pp.id as personagem_pericia_id,
+          pp.pericia_id,
+          pp.treinado,
+          pp.especialista,
+          pp.origem,
+          pp.observacoes,
           p.nome,
           p.atributo_chave,
           p.categoria,
           p.descricao,
+          p.precisa_treino,
           -- Calcular bônus
           CASE p.atributo_chave
             WHEN 'for' THEN (per.forca - 10) / 2
@@ -132,7 +138,12 @@ class Pericia {
             WHEN per.nivel BETWEEN 7 AND 14 THEN 4
             WHEN per.nivel >= 15 THEN 6
             ELSE 0
-          END as bonus_treinamento
+          END as bonus_treinamento,
+          -- Verificar se pode usar
+          CASE 
+            WHEN p.precisa_treino = TRUE AND pp.treinado = FALSE THEN FALSE
+            ELSE TRUE
+          END as pode_usar
         FROM personagem_pericias pp
         INNER JOIN pericias p ON pp.pericia_id = p.id
         INNER JOIN personagens per ON pp.personagem_id = per.id
@@ -162,6 +173,78 @@ class Pericia {
       return pericias;
     } catch (error) {
       console.error('Erro ao buscar perícias do personagem:', error);
+      throw error;
+    }
+  }
+
+  // NOVA FUNÇÃO: Buscar TODAS as perícias para um personagem (incluindo não treinadas)
+  static async getAllSkillsForCharacter(personagemId) {
+    try {
+      const result = await pool.query(`
+        SELECT 
+          p.id as pericia_id,
+          p.nome,
+          p.atributo_chave,
+          p.categoria,
+          p.descricao,
+          p.precisa_treino,
+          pp.id as personagem_pericia_id,
+          COALESCE(pp.treinado, FALSE) as treinado,
+          COALESCE(pp.especialista, FALSE) as especialista,
+          pp.origem,
+          pp.observacoes,
+          -- Calcular bônus
+          CASE p.atributo_chave
+            WHEN 'for' THEN (per.forca - 10) / 2
+            WHEN 'des' THEN (per.destreza - 10) / 2
+            WHEN 'con' THEN (per.constituicao - 10) / 2
+            WHEN 'int' THEN (per.inteligencia - 10) / 2
+            WHEN 'sab' THEN (per.sabedoria - 10) / 2
+            WHEN 'car' THEN (per.carisma - 10) / 2
+            ELSE 0
+          END as bonus_atributo,
+          per.nivel / 2 as bonus_nivel,
+          CASE 
+            WHEN COALESCE(pp.treinado, FALSE) = FALSE THEN 0
+            WHEN per.nivel BETWEEN 1 AND 6 THEN 2
+            WHEN per.nivel BETWEEN 7 AND 14 THEN 4
+            WHEN per.nivel >= 15 THEN 6
+            ELSE 0
+          END as bonus_treinamento,
+          -- Verificar se pode usar
+          CASE 
+            WHEN p.precisa_treino = TRUE AND COALESCE(pp.treinado, FALSE) = FALSE THEN FALSE
+            ELSE TRUE
+          END as pode_usar
+        FROM pericias p
+        CROSS JOIN personagens per
+        LEFT JOIN personagem_pericias pp ON p.id = pp.pericia_id AND pp.personagem_id = per.id
+        WHERE per.id = $1
+        ORDER BY p.categoria, p.nome
+      `, [personagemId]);
+      
+      // Calcular bônus total para cada perícia
+      const pericias = result.rows.map(pericia => {
+        let bonusTotal = parseInt(pericia.bonus_nivel) + parseInt(pericia.bonus_atributo);
+        
+        if (pericia.treinado) {
+          bonusTotal += parseInt(pericia.bonus_treinamento);
+          
+          // Bonus adicional para especialista (Ladino)
+          if (pericia.especialista) {
+            bonusTotal += parseInt(pericia.bonus_treinamento);
+          }
+        }
+        
+        return {
+          ...pericia,
+          bonus_total: bonusTotal
+        };
+      });
+      
+      return pericias;
+    } catch (error) {
+      console.error('Erro ao buscar todas as perícias do personagem:', error);
       throw error;
     }
   }
@@ -290,6 +373,20 @@ class Pericia {
         ORDER BY quantidade DESC
       `);
       
+      // Perícias que precisam de treino vs não precisam
+      const trainableResult = await pool.query(`
+        SELECT 
+          CASE precisa_treino
+            WHEN TRUE THEN 'Precisa de treino'
+            WHEN FALSE THEN 'Não precisa de treino'
+            ELSE 'Indefinido'
+          END as tipo,
+          COUNT(*) as quantidade
+        FROM pericias 
+        GROUP BY precisa_treino 
+        ORDER BY quantidade DESC
+      `);
+      
       // Perícias mais usadas
       const popularResult = await pool.query(`
         SELECT 
@@ -308,6 +405,7 @@ class Pericia {
         total: totalResult.rows[0].total,
         porCategoria: categoryResult.rows,
         porAtributo: attributeResult.rows,
+        porTreino: trainableResult.rows,
         maisPopulares: popularResult.rows
       };
     } catch (error) {
@@ -366,7 +464,8 @@ class Pericia {
               'id', id,
               'nome', nome,
               'atributo_chave', atributo_chave,
-              'descricao', descricao
+              'descricao', descricao,
+              'precisa_treino', precisa_treino
             ) ORDER BY nome
           ) as pericias
         FROM pericias

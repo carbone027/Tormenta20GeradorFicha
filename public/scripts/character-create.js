@@ -1066,135 +1066,31 @@ document.addEventListener('DOMContentLoaded', function () {
   let periciasClasseCarregadas = [];
   let bonusPericiasPorInteligencia = 0;
 
-  // Função para carregar perícias da classe
-  async function carregarPericiasClasse(classeId) {
-    try {
-      console.log('📚 Carregando perícias de classe para ID:', classeId);
+async function carregarPericiasClasse(classeId) {
+  try {
+    console.log('📚 Carregando perícias de classe para ID:', classeId);
 
-      const response = await fetch(`/api/classes/${classeId}/pericias?tipo=todas`);
-      if (!response.ok) {
-        throw new Error('Erro ao carregar perícias de classe');
-      }
+    const response = await fetch(`/api/classes/${classeId}/pericias?tipo=todas`);
+    if (!response.ok) {
+      throw new Error('Erro ao carregar perícias de classe');
+    }
 
-      const data = await response.json();
-      if (data.success) {
-        periciasClasseCarregadas = data.pericias || [];
-        exibirPericiasClasse(periciasClasseCarregadas);
-        console.log('✅ Perícias de classe carregadas:', periciasClasseCarregadas.length);
-      } else {
-        console.warn('⚠️ Nenhuma perícia de classe encontrada');
-        periciasClasseCarregadas = [];
-        esconderPericiasClasse();
-      }
-    } catch (error) {
-      console.error('❌ Erro ao carregar perícias de classe:', error);
+    const data = await response.json();
+    if (data.success) {
+      periciasClasseCarregadas = data.pericias || [];
+      exibirPericiasOpcionaisClasse(periciasClasseCarregadas); // USAR A NOVA FUNÇÃO
+      console.log('✅ Perícias de classe carregadas:', periciasClasseCarregadas.length);
+    } else {
+      console.warn('⚠️ Nenhuma perícia de classe encontrada');
       periciasClasseCarregadas = [];
       esconderPericiasClasse();
     }
+  } catch (error) {
+    console.error('❌ Erro ao carregar perícias de classe:', error);
+    periciasClasseCarregadas = [];
+    esconderPericiasClasse();
   }
-
-  // Função para exibir perícias de classe
-  function exibirPericiasClasse(pericias) {
-    const secaoPericias = document.getElementById('classSkillsSection');
-    const listaPericias = document.getElementById('classSkillsList');
-
-    if (!secaoPericias || !listaPericias) return;
-
-    if (pericias && pericias.length > 0) {
-      listaPericias.innerHTML = '';
-
-      // Separar perícias obrigatórias e opcionais
-      const obrigatorias = pericias.filter(p => p.obrigatoria);
-      const opcionais = pericias.filter(p => p.opcional && !p.obrigatoria);
-
-      // Exibir perícias obrigatórias
-      if (obrigatorias.length > 0) {
-        const obrigatoriasSection = document.createElement('div');
-        obrigatoriasSection.className = 'mandatory-skills-section';
-        obrigatoriasSection.innerHTML = `
-        <h5 class="mandatory-skills-title">
-          <span>⚔️</span>
-          Perícias Obrigatórias
-          <span class="skills-count">(${obrigatorias.length})</span>
-        </h5>
-        <p class="mandatory-skills-description">
-          Estas perícias são aplicadas automaticamente pela sua classe
-        </p>
-      `;
-
-        const obrigatoriasGrid = document.createElement('div');
-        obrigatoriasGrid.className = 'mandatory-skills-grid';
-
-        obrigatorias.forEach(pericia => {
-          const periciaCard = document.createElement('div');
-          periciaCard.className = 'mandatory-skill-card';
-          periciaCard.innerHTML = `
-          <div class="mandatory-skill-header">
-            <span class="skill-icon">${getSkillIcon(pericia.nome)}</span>
-            <span class="skill-name">${pericia.nome}</span>
-            <span class="skill-auto">🔧 Automática</span>
-          </div>
-          <p class="skill-attribute">
-            ${getAttributeIcon(pericia.atributo_chave)} ${getAttributeName(pericia.atributo_chave)}
-          </p>
-          ${pericia.descricao ? `<p class="skill-description">${pericia.descricao}</p>` : ''}
-        `;
-          obrigatoriasGrid.appendChild(periciaCard);
-        });
-
-        obrigatoriasSection.appendChild(obrigatoriasGrid);
-        listaPericias.appendChild(obrigatoriasSection);
-      }
-
-      // Exibir perícias opcionais
-      if (opcionais.length > 0) {
-        const opcionaisSection = document.createElement('div');
-        opcionaisSection.className = 'optional-skills-section';
-        opcionaisSection.innerHTML = `
-        <h5 class="optional-skills-title">
-          <span>📚</span>
-          Perícias Opcionais da Classe
-          <span class="skills-count">(${opcionais.length} disponíveis)</span>
-        </h5>
-        <p class="optional-skills-description">
-          Você pode escolher essas perícias como opcionais ou por bônus de inteligência
-        </p>
-      `;
-
-        const opcionaisGrid = document.createElement('div');
-        opcionaisGrid.className = 'optional-skills-grid';
-
-        opcionais.forEach(pericia => {
-          const periciaCard = document.createElement('div');
-          periciaCard.className = 'optional-skill-card';
-          periciaCard.innerHTML = `
-          <label class="optional-skill-label">
-            <input type="checkbox" name="pericias_opcionais" value="${pericia.id}" class="optional-skill-checkbox">
-            <div class="optional-skill-content">
-              <div class="optional-skill-header">
-                <span class="skill-icon">${getSkillIcon(pericia.nome)}</span>
-                <span class="skill-name">${pericia.nome}</span>
-              </div>
-              <p class="skill-attribute">
-                ${getAttributeIcon(pericia.atributo_chave)} ${getAttributeName(pericia.atributo_chave)}
-              </p>
-              ${pericia.descricao ? `<p class="skill-description">${pericia.descricao}</p>` : ''}
-            </div>
-          </label>
-        `;
-          opcionaisGrid.appendChild(periciaCard);
-        });
-
-        opcionaisSection.appendChild(opcionaisGrid);
-        listaPericias.appendChild(opcionaisSection);
-      }
-
-      secaoPericias.style.display = 'block';
-      atualizarPreviewPericias();
-    } else {
-      esconderPericiasClasse();
-    }
-  }
+}
 
   // Função para esconder perícias de classe
   function esconderPericiasClasse() {
@@ -1238,16 +1134,16 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Função para exibir perícias disponíveis por inteligência
-  function exibirPericiasInteligencia(pericias) {
-    const gridElement = document.getElementById('intelligenceSkillsGrid');
-    if (!gridElement) return;
+function exibirPericiasInteligencia(pericias) {
+  const gridElement = document.getElementById('intelligenceSkillsGrid');
+  if (!gridElement) return;
 
-    gridElement.innerHTML = '';
+  gridElement.innerHTML = '';
 
-    pericias.forEach(pericia => {
-      const periciaCard = document.createElement('div');
-      periciaCard.className = 'intelligence-skill-card';
-      periciaCard.innerHTML = `
+  pericias.forEach(pericia => {
+    const periciaCard = document.createElement('div');
+    periciaCard.className = 'intelligence-skill-card';
+    periciaCard.innerHTML = `
       <label class="intelligence-skill-label">
         <input type="checkbox" name="pericias_inteligencia" value="${pericia.id}" class="intelligence-skill-checkbox">
         <div class="intelligence-skill-content">
@@ -1262,25 +1158,24 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
       </label>
     `;
-      gridElement.appendChild(periciaCard);
+    gridElement.appendChild(periciaCard);
+  });
+
+  // Adicionar event listeners para limite de seleção
+  const checkboxes = gridElement.querySelectorAll('.intelligence-skill-checkbox');
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function () {
+      const selecionados = Array.from(checkboxes).filter(cb => cb.checked);
+
+      if (selecionados.length > bonusPericiasPorInteligencia) {
+        this.checked = false;
+        alert(`Você pode escolher apenas ${bonusPericiasPorInteligencia} perícia(s) por bônus de Inteligência!`);
+      }
+
+      atualizarPreviewPericias();
     });
-
-    // Adicionar event listeners para limite de seleção
-    const checkboxes = gridElement.querySelectorAll('.intelligence-skill-checkbox');
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', function () {
-        const selecionados = Array.from(checkboxes).filter(cb => cb.checked);
-
-        if (selecionados.length > bonusPericiasPorInteligencia) {
-          this.checked = false;
-          alert(`Você pode escolher apenas ${bonusPericiasPorInteligencia} perícia(s) por bônus de Inteligência!`);
-        }
-
-        atualizarPreviewPericias();
-      });
-    });
-  }
-
+  });
+}
   // Função para obter ícone da perícia
   function getSkillIcon(nome) {
     const nomeL = nome.toLowerCase();
@@ -1444,6 +1339,123 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   }
+
+  function exibirPericiasOpcionaisClasse(pericias) {
+  const classSkillsSection = document.getElementById('classSkillsSection');
+  const listaPericias = document.getElementById('classSkillsList');
+
+  if (!classSkillsSection || !listaPericias) return;
+
+  if (pericias && pericias.length > 0) {
+    // Separar perícias obrigatórias e opcionais
+    const obrigatorias = pericias.filter(p => p.obrigatoria);
+    const opcionais = pericias.filter(p => p.opcional && !p.obrigatoria);
+
+    listaPericias.innerHTML = '';
+
+    // Exibir perícias obrigatórias
+    if (obrigatorias.length > 0) {
+      const obrigatoriasSection = document.createElement('div');
+      obrigatoriasSection.className = 'mandatory-skills-section';
+      obrigatoriasSection.innerHTML = `
+        <h5 class="mandatory-skills-title">
+          <span>⚔️</span>
+          Perícias Obrigatórias
+          <span class="skills-count">(${obrigatorias.length})</span>
+        </h5>
+        <p class="mandatory-skills-description">
+          Estas perícias são aplicadas automaticamente pela sua classe
+        </p>
+      `;
+
+      const obrigatoriasGrid = document.createElement('div');
+      obrigatoriasGrid.className = 'mandatory-skills-grid';
+
+      obrigatorias.forEach(pericia => {
+        const periciaCard = document.createElement('div');
+        periciaCard.className = 'mandatory-skill-card';
+        periciaCard.innerHTML = `
+          <div class="mandatory-skill-header">
+            <span class="skill-icon">${getSkillIcon(pericia.nome)}</span>
+            <span class="skill-name">${pericia.nome}</span>
+            <span class="skill-auto">🔧 Automática</span>
+          </div>
+          <p class="skill-attribute">
+            ${getAttributeIcon(pericia.atributo_chave)} ${getAttributeName(pericia.atributo_chave)}
+          </p>
+          ${pericia.descricao ? `<p class="skill-description">${pericia.descricao}</p>` : ''}
+        `;
+        obrigatoriasGrid.appendChild(periciaCard);
+      });
+
+      obrigatoriasSection.appendChild(obrigatoriasGrid);
+      listaPericias.appendChild(obrigatoriasSection);
+    }
+
+    // Exibir perícias opcionais com INPUTS CORRETOS
+    if (opcionais.length > 0) {
+      const opcionaisSection = document.createElement('div');
+      opcionaisSection.className = 'optional-skills-section';
+      opcionaisSection.innerHTML = `
+        <h5 class="optional-skills-title">
+          <span>📚</span>
+          Perícias Opcionais da Classe
+          <span class="skills-count">(${opcionais.length} disponíveis)</span>
+        </h5>
+        <p class="optional-skills-description">
+          Você pode escolher essas perícias como parte da sua classe
+        </p>
+      `;
+
+      const opcionaisGrid = document.createElement('div');
+      opcionaisGrid.className = 'optional-skills-grid';
+
+      opcionais.forEach(pericia => {
+        const periciaCard = document.createElement('div');
+        periciaCard.className = 'optional-skill-card';
+        periciaCard.innerHTML = `
+          <label class="optional-skill-label">
+            <input type="checkbox" name="pericias_selecionadas" value="${pericia.id}" class="optional-skill-checkbox">
+            <div class="optional-skill-content">
+              <div class="optional-skill-header">
+                <span class="skill-icon">${getSkillIcon(pericia.nome)}</span>
+                <span class="skill-name">${pericia.nome}</span>
+              </div>
+              <p class="skill-attribute">
+                ${getAttributeIcon(pericia.atributo_chave)} ${getAttributeName(pericia.atributo_chave)}
+              </p>
+              ${pericia.descricao ? `<p class="skill-description">${pericia.descricao}</p>` : ''}
+            </div>
+          </label>
+        `;
+        opcionaisGrid.appendChild(periciaCard);
+      });
+
+      // Adicionar event listeners
+      const checkboxes = opcionaisGrid.querySelectorAll('.optional-skill-checkbox');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+          const card = this.closest('.optional-skill-label');
+          if (this.checked) {
+            card.classList.add('selected');
+          } else {
+            card.classList.remove('selected');
+          }
+          atualizarPreviewPericias();
+        });
+      });
+
+      opcionaisSection.appendChild(opcionaisGrid);
+      listaPericias.appendChild(opcionaisSection);
+    }
+
+    classSkillsSection.style.display = 'block';
+    atualizarPreviewPericias();
+  } else {
+    esconderPericiasClasse();
+  }
+}
+
 
   // Função para filtros rápidos por atributo
   function initSkillsQuickFilters() {

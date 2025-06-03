@@ -378,6 +378,18 @@ class Character {
     return Math.max(0, modInteligencia); // Não pode ser negativo
   }
 
+  // NOVA FUNÇÃO: Buscar TODAS as perícias para exibição (incluindo não treinadas)
+  static async getCharacterSkills(characterId) {
+    try {
+      // Usar a nova função do modelo Pericia
+      const Pericia = require('./pericia');
+      return await Pericia.getAllSkillsForCharacter(characterId);
+    } catch (error) {
+      console.error('Erro ao buscar perícias do personagem:', error);
+      throw error;
+    }
+  }
+
 
 }
 
