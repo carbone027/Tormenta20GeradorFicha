@@ -1,5 +1,6 @@
 const Character = require('../models/character');
 const PowerController = require('../controllers/PowerController');
+const Pericia = require('../models/pericia');
 const pool = require('../config/database');
 const express = require('express');
 const app = express();
@@ -43,6 +44,9 @@ exports.createForm = async (req, res) => {
     // Buscar poderes disponíveis para seleção (não raciais)
     const poderesDisponiveis = await PowerController.getAvailablePowers();
 
+    // Buscar perícias organizadas
+    const periciasSistema = await Pericia.getOrganizedSkills();
+
     res.render('pages/character-create', {
       title: 'Criar Personagem',
       activePage: 'createCharacter',
@@ -50,7 +54,8 @@ exports.createForm = async (req, res) => {
       racas: racas.rows,
       classes: classes.rows,
       deuses: deuses.rows,
-      poderesDisponiveis
+      poderesDisponiveis,
+      periciasSistema
     });
   } catch (error) {
     console.error('Erro ao carregar formulário:', error);
@@ -154,7 +159,7 @@ exports.create = async (req, res) => {
       }
     }
 
-    // 2. NOVO: Aplicar poderes de classe automaticamente
+    // Aplicar poderes de classe automaticamente
     if (character.classe_id && character.nivel) {
       try {
         await applyClassPowers(character.id, character.classe_id, character.nivel);
@@ -182,7 +187,49 @@ exports.create = async (req, res) => {
       }
     }
 
-    // 4. NOVO: Processar poderes de classe selecionados manualmente (se enviados)
+    // Aplicar perícias selecionadas pelo usuário
+    if (req.body.pericias_selecionadas) {
+      try {
+        const periciasSelecionadas = Array.isArray(req.body.pericias_selecionadas)
+          ? req.body.pericias_selecionadas
+          : [req.body.pericias_selecionadas];
+
+        for (const periciaId of periciasSelecionadas) {
+          if (periciaId && !isNaN(periciaId)) {
+            await Pericia.addToCharacter(character.id, parseInt(periciaId), true, 'escolha', 'Perícia escolhida na criação');
+          }
+        }
+        console.log('✅ Perícias selecionadas aplicadas');
+      } catch (skillError) {
+        console.log('⚠️ Erro ao aplicar perícias selecionadas:', skillError.message);
+      }
+    }
+
+    // Aplicar perícias por bônus de inteligência
+    if (character.inteligencia > 10) {
+      try {
+        const bonusSkills = await Character.calculateBonusSkillsFromIntelligence(character.inteligencia);
+        if (bonusSkills > 0 && req.body.pericias_inteligencia) {
+          const periciasInteligencia = Array.isArray(req.body.pericias_inteligencia)
+            ? req.body.pericias_inteligencia
+            : [req.body.pericias_inteligencia];
+
+          // Aplicar apenas a quantidade permitida pelo bônus de inteligência
+          const periciasProcessar = periciasInteligencia.slice(0, bonusSkills);
+          
+          for (const periciaId of periciasProcessar) {
+            if (periciaId && !isNaN(periciaId)) {
+              await Pericia.addToCharacter(character.id, parseInt(periciaId), true, 'inteligencia', 'Perícia adicional por bônus de Inteligência');
+            }
+          }
+          console.log(`✅ ${periciasProcessar.length} perícias de inteligência aplicadas`);
+        }
+      } catch (skillError) {
+        console.log('⚠️ Erro ao aplicar perícias de inteligência:', skillError.message);
+      }
+    }
+
+    // Processar poderes de classe selecionados manualmente (se enviados)
     if (req.body.poderes_classe_selecionados) {
       try {
         const poderesClasseSelecionados = Array.isArray(req.body.poderes_classe_selecionados)
@@ -284,10 +331,35 @@ exports.view = async (req, res) => {
       console.error('❌ Erro ao carregar poderes:', error);
     }
 
+    // Carregar perícias do personagem
+    let pericias = [];
+    let periciasPorCategoria = {};
+
+    try {
+      console.log(`🎯 Carregando perícias para personagem ${characterId}`);
+      pericias = await Character.getCharacterSkills(characterId);
+
+      // Organizar por categoria
+      pericias.forEach(pericia => {
+        const categoria = pericia.categoria || 'geral';
+        if (!periciasPorCategoria[categoria]) {
+          periciasPorCategoria[categoria] = [];
+        }
+        periciasPorCategoria[categoria].push(pericia);
+      });
+
+      console.log(`✅ ${pericias.length} perícias carregadas`);
+    } catch (error) {
+      console.error('❌ Erro ao carregar perícias:', error);
+    }
+
+
     res.render('pages/character-view', {
       character,
       poderes,
-      poderesPorTipo
+      poderesPorTipo,
+      pericias,
+      periciasPorCategoria,
     });
 
   } catch (error) {
@@ -328,6 +400,23 @@ exports.editForm = async (req, res) => {
       console.log('⚠️ Erro ao carregar poderes para edição:', powerError.message);
     }
 
+        // NOVO: Buscar perícias do personagem e disponíveis
+    let periciasPersonagem = [];
+    let periciasSistema = {};
+    let periciasDaClasse = [];
+
+    try {
+      periciasPersonagem = await Character.getCharacterSkills(id);
+      periciasSistema = await Pericia.getOrganizedSkills();
+      
+      // Se o personagem tem classe, buscar perícias da classe
+      if (character.classe_id) {
+        periciasDaClasse = await Character.getAvailableSkillsForClass(character.classe_id);
+      }
+    } catch (skillError) {
+      console.log('⚠️ Erro ao carregar perícias para edição:', skillError.message);
+    }
+
     res.render('pages/character-edit', {
       title: `Editar ${character.nome}`,
       activePage: 'editCharacter',
@@ -337,7 +426,10 @@ exports.editForm = async (req, res) => {
       classes: classes.rows,
       deuses: deuses.rows,
       poderesPersonagem,
-      poderesDisponiveis
+      poderesDisponiveis,
+      periciasPersonagem,
+      periciasSistema,
+      periciasDaClasse
     });
   } catch (error) {
     console.error('Erro ao carregar formulário de edição:', error);
@@ -392,7 +484,7 @@ exports.update = async (req, res) => {
       }
     }
 
-    // NOVO: Se a classe ou nível mudaram, atualizar poderes de classe
+    // Se a classe ou nível mudaram, atualizar poderes de classe
     if ((classeMudou || nivelMudou) && req.body.classe_id && req.body.nivel) {
       try {
         // Remover poderes de classe antigos
@@ -406,6 +498,23 @@ exports.update = async (req, res) => {
         console.log('✅ Poderes de classe atualizados devido à mudança de classe/nível');
       } catch (powerError) {
         console.log('⚠️ Erro ao atualizar poderes de classe:', powerError.message);
+      }
+    }
+
+    // Se a classe mudou, atualizar perícias de classe
+    if (classeMudou && req.body.classe_id) {
+      try {
+        // Remover perícias de classe antigas
+        await pool.query(`
+          DELETE FROM personagem_pericias 
+          WHERE personagem_id = $1 AND origem = 'classe'
+        `, [id]);
+
+        // Aplicar novas perícias de classe
+        await Character.applyClassSkills(id, req.body.classe_id);
+        console.log('✅ Perícias de classe atualizadas devido à mudança de classe');
+      } catch (skillError) {
+        console.log('⚠️ Erro ao atualizar perícias de classe:', skillError.message);
       }
     }
 
@@ -433,6 +542,64 @@ exports.update = async (req, res) => {
         console.log('✅ Poderes selecionados atualizados');
       } catch (powerError) {
         console.log('⚠️ Erro ao atualizar poderes selecionados:', powerError.message);
+      }
+    }
+
+    // NOVO: Atualizar perícias selecionadas
+    if (req.body.pericias_selecionadas !== undefined) {
+      try {
+        // Remover perícias de escolha existentes
+        await pool.query(`
+          DELETE FROM personagem_pericias 
+          WHERE personagem_id = $1 AND origem = 'escolha'
+        `, [id]);
+
+        // Adicionar novas perícias selecionadas
+        if (req.body.pericias_selecionadas) {
+          const periciasSelecionadas = Array.isArray(req.body.pericias_selecionadas)
+            ? req.body.pericias_selecionadas
+            : [req.body.pericias_selecionadas];
+
+          for (const periciaId of periciasSelecionadas) {
+            if (periciaId && !isNaN(periciaId)) {
+              await Pericia.addToCharacter(id, parseInt(periciaId), true, 'escolha', 'Perícia escolhida na edição');
+            }
+          }
+        }
+        console.log('✅ Perícias selecionadas atualizadas');
+      } catch (skillError) {
+        console.log('⚠️ Erro ao atualizar perícias selecionadas:', skillError.message);
+      }
+    }
+
+    // NOVO: Atualizar perícias de inteligência se aplicável
+    if (req.body.pericias_inteligencia !== undefined && req.body.inteligencia > 10) {
+      try {
+        // Remover perícias de inteligência existentes
+        await pool.query(`
+          DELETE FROM personagem_pericias 
+          WHERE personagem_id = $1 AND origem = 'inteligencia'
+        `, [id]);
+
+        const bonusSkills = await Character.calculateBonusSkillsFromIntelligence(req.body.inteligencia);
+        
+        if (bonusSkills > 0 && req.body.pericias_inteligencia) {
+          const periciasInteligencia = Array.isArray(req.body.pericias_inteligencia)
+            ? req.body.pericias_inteligencia
+            : [req.body.pericias_inteligencia];
+
+          // Aplicar apenas a quantidade permitida pelo bônus de inteligência
+          const periciasProcessar = periciasInteligencia.slice(0, bonusSkills);
+          
+          for (const periciaId of periciasProcessar) {
+            if (periciaId && !isNaN(periciaId)) {
+              await Pericia.addToCharacter(id, parseInt(periciaId), true, 'inteligencia', 'Perícia adicional por bônus de Inteligência');
+            }
+          }
+        }
+        console.log('✅ Perícias de inteligência atualizadas');
+      } catch (skillError) {
+        console.log('⚠️ Erro ao atualizar perícias de inteligência:', skillError.message);
       }
     }
 
@@ -471,7 +638,7 @@ exports.delete = async (req, res) => {
   }
 };
 
-// Novo endpoint para buscar poderes por raça via AJAX
+// Endpoint para buscar poderes por raça via AJAX
 exports.getRacialPowers = async (req, res) => {
   try {
     const { raca_id } = req.params;
@@ -485,5 +652,57 @@ exports.getRacialPowers = async (req, res) => {
   } catch (error) {
     console.error('Erro ao buscar poderes raciais:', error);
     res.status(500).json({ error: 'Erro ao buscar poderes raciais' });
+  }
+};
+
+// Endpoint para buscar perícias por classe via AJAX
+exports.getClassSkills = async (req, res) => {
+  try {
+    const { classe_id } = req.params;
+    const { tipo } = req.query; // 'obrigatorias', 'opcionais', 'todas'
+
+    if (!classe_id || isNaN(classe_id)) {
+      return res.status(400).json({ error: 'ID da classe inválido' });
+    }
+
+    let pericias;
+    switch (tipo) {
+      case 'obrigatorias':
+        pericias = await Pericia.findMandatoryByClass(classe_id);
+        break;
+      case 'opcionais':
+        pericias = await Pericia.findOptionalByClass(classe_id);
+        break;
+      default:
+        pericias = await Pericia.findByClass(classe_id);
+    }
+
+    res.json({ success: true, pericias });
+  } catch (error) {
+    console.error('Erro ao buscar perícias da classe:', error);
+    res.status(500).json({ error: 'Erro ao buscar perícias da classe' });
+  }
+};
+
+// Endpoint para calcular perícias disponíveis por inteligência
+exports.calculateBonusSkills = async (req, res) => {
+  try {
+    const { inteligencia } = req.params;
+
+    if (!inteligencia || isNaN(inteligencia)) {
+      return res.status(400).json({ error: 'Valor de inteligência inválido' });
+    }
+
+    const bonusSkills = await Character.calculateBonusSkillsFromIntelligence(parseInt(inteligencia));
+    
+    res.json({ 
+      success: true, 
+      bonusSkills,
+      inteligencia: parseInt(inteligencia),
+      modificador: Math.floor((parseInt(inteligencia) - 10) / 2)
+    });
+  } catch (error) {
+    console.error('Erro ao calcular perícias de inteligência:', error);
+    res.status(500).json({ error: 'Erro ao calcular perícias de inteligência' });
   }
 };

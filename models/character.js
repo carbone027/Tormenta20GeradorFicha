@@ -79,7 +79,17 @@ class Character {
           console.warn('⚠️ Erro ao associar poderes de classe:', error.message);
         }
       }
-      
+
+      // NOVO: Aplicar perícias automáticas de classe
+      if (character.classe_id) {
+        try {
+          await this.applyClassSkills(character.id, character.classe_id);
+          console.log('✅ Perícias de classe aplicadas automaticamente');
+        } catch (error) {
+          console.warn('⚠️ Erro ao aplicar perícias de classe:', error.message);
+        }
+      }
+
       return character;
     } catch (error) {
       console.error('Erro ao criar personagem:', error);
@@ -163,6 +173,212 @@ class Character {
       throw error;
     }
   }
+
+  // NOVO: Aplicar perícias automáticas de classe
+  static async applyClassSkills(characterId, classeId) {
+    try {
+      console.log(`🎯 Aplicando perícias automáticas da classe ${classeId} para personagem ${characterId}`);
+
+      // Buscar perícias obrigatórias da classe
+      const periciaClasseQuery = `
+        SELECT p.id, p.nome
+        FROM pericias p
+        INNER JOIN classe_pericias cp ON p.id = cp.pericia_id
+        WHERE cp.classe_id = $1 AND cp.obrigatoria = true
+      `;
+
+      const result = await pool.query(periciaClasseQuery, [classeId]);
+
+      if (result.rows.length === 0) {
+        console.log('⚠️ Nenhuma perícia obrigatória encontrada para esta classe');
+        return 0;
+      }
+
+      console.log(`📚 Encontradas ${result.rows.length} perícias obrigatórias para aplicar`);
+
+      // Aplicar cada perícia obrigatória
+      const periciasSucessfuly = [];
+      for (const pericia of result.rows) {
+        try {
+          // Verificar se a perícia já existe para evitar duplicatas
+          const existeQuery = `
+            SELECT id FROM personagem_pericias 
+            WHERE personagem_id = $1 AND pericia_id = $2
+          `;
+          const existe = await pool.query(existeQuery, [characterId, pericia.id]);
+
+          if (existe.rows.length === 0) {
+            // Inserir perícia obrigatória
+            const insertQuery = `
+              INSERT INTO personagem_pericias (personagem_id, pericia_id, treinado, origem, observacoes)
+              VALUES ($1, $2, true, 'classe', $3)
+              RETURNING *
+            `;
+
+            const insertResult = await pool.query(insertQuery, [
+              characterId,
+              pericia.id,
+              'Perícia obrigatória da classe'
+            ]);
+
+            periciasSucessfuly.push(insertResult.rows[0]);
+            console.log(`✅ Perícia aplicada: ${pericia.nome}`);
+          } else {
+            // Se já existe, garantir que está marcada como treinada
+            const updateQuery = `
+              UPDATE personagem_pericias 
+              SET treinado = true, origem = 'classe', observacoes = $3
+              WHERE personagem_id = $1 AND pericia_id = $2
+              RETURNING *
+            `;
+
+            const updateResult = await pool.query(updateQuery, [
+              characterId,
+              pericia.id,
+              'Perícia obrigatória da classe'
+            ]);
+
+            periciasSucessfuly.push(updateResult.rows[0]);
+            console.log(`🔄 Perícia atualizada: ${pericia.nome}`);
+          }
+        } catch (error) {
+          console.error(`❌ Erro ao aplicar perícia ${pericia.nome}:`, error.message);
+        }
+      }
+
+      console.log(`✅ ${periciasSucessfuly.length} perícias de classe aplicadas com sucesso`);
+      return periciasSucessfuly.length;
+
+    } catch (error) {
+      console.error('❌ Erro ao aplicar perícias de classe:', error);
+      throw error;
+    }
+  }
+
+  // NOVO: Buscar perícias de um personagem
+  static async getCharacterSkills(characterId) {
+    try {
+      const result = await pool.query(`
+        SELECT 
+          pp.*,
+          p.nome,
+          p.atributo_chave,
+          p.categoria,
+          p.descricao,
+          -- Calcular bônus baseado no personagem
+          CASE p.atributo_chave
+            WHEN 'for' THEN (per.forca - 10) / 2
+            WHEN 'des' THEN (per.destreza - 10) / 2
+            WHEN 'con' THEN (per.constituicao - 10) / 2
+            WHEN 'int' THEN (per.inteligencia - 10) / 2
+            WHEN 'sab' THEN (per.sabedoria - 10) / 2
+            WHEN 'car' THEN (per.carisma - 10) / 2
+            ELSE 0
+          END as bonus_atributo,
+          per.nivel / 2 as bonus_nivel,
+          CASE 
+            WHEN NOT pp.treinado THEN 0
+            WHEN per.nivel BETWEEN 1 AND 6 THEN 2
+            WHEN per.nivel BETWEEN 7 AND 14 THEN 4
+            WHEN per.nivel >= 15 THEN 6
+            ELSE 0
+          END as bonus_treinamento
+        FROM personagem_pericias pp
+        INNER JOIN pericias p ON pp.pericia_id = p.id
+        INNER JOIN personagens per ON pp.personagem_id = per.id
+        WHERE pp.personagem_id = $1
+        ORDER BY p.categoria, p.nome
+      `, [characterId]);
+
+      // Calcular bônus total para cada perícia
+      const pericias = result.rows.map(pericia => {
+        let bonusTotal = parseInt(pericia.bonus_nivel) + parseInt(pericia.bonus_atributo);
+
+        if (pericia.treinado) {
+          bonusTotal += parseInt(pericia.bonus_treinamento);
+
+          // Bonus adicional para especialista (Ladino)
+          if (pericia.especialista) {
+            bonusTotal += parseInt(pericia.bonus_treinamento);
+          }
+        }
+
+        return {
+          ...pericia,
+          bonus_total: bonusTotal
+        };
+      });
+
+      return pericias;
+    } catch (error) {
+      console.error('Erro ao buscar perícias do personagem:', error);
+      throw error;
+    }
+  }
+
+  // NOVO: Atualizar perícias de um personagem
+  static async updateCharacterSkills(characterId, periciasSelecionadas) {
+    try {
+      console.log(`🎯 Atualizando perícias do personagem ${characterId}`);
+
+      // Primeiro, remover perícias de escolha existentes
+      await pool.query(`
+        DELETE FROM personagem_pericias 
+        WHERE personagem_id = $1 AND origem = 'escolha'
+      `, [characterId]);
+
+      // Adicionar novas perícias selecionadas
+      if (periciasSelecionadas && periciasSelecionadas.length > 0) {
+        for (const periciaId of periciasSelecionadas) {
+          if (periciaId && !isNaN(periciaId)) {
+            const insertQuery = `
+              INSERT INTO personagem_pericias (personagem_id, pericia_id, treinado, origem, observacoes)
+              VALUES ($1, $2, true, 'escolha', 'Perícia escolhida pelo jogador')
+              ON CONFLICT (personagem_id, pericia_id) 
+              DO UPDATE SET treinado = true, origem = 'escolha'
+            `;
+
+            await pool.query(insertQuery, [characterId, parseInt(periciaId)]);
+          }
+        }
+      }
+
+      console.log(`✅ Perícias atualizadas para personagem ${characterId}`);
+      return true;
+    } catch (error) {
+      console.error('❌ Erro ao atualizar perícias:', error);
+      throw error;
+    }
+  }
+
+  // NOVO: Buscar perícias disponíveis para seleção baseado na classe
+  static async getAvailableSkillsForClass(classeId) {
+    try {
+      const result = await pool.query(`
+        SELECT 
+          p.*,
+          cp.obrigatoria,
+          cp.opcional
+        FROM pericias p
+        INNER JOIN classe_pericias cp ON p.id = cp.pericia_id
+        WHERE cp.classe_id = $1
+        ORDER BY cp.obrigatoria DESC, p.categoria, p.nome
+      `, [classeId]);
+
+      return result.rows;
+    } catch (error) {
+      console.error('Erro ao buscar perícias da classe:', error);
+      throw error;
+    }
+  }
+
+  // NOVO: Calcular perícias por atributo de inteligência
+  static async calculateBonusSkillsFromIntelligence(inteligencia) {
+    const modInteligencia = Math.floor((inteligencia - 10) / 2);
+    return Math.max(0, modInteligencia); // Não pode ser negativo
+  }
+
+
 }
 
 module.exports = Character;
