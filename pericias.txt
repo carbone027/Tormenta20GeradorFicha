@@ -1,0 +1,69 @@
+## Cálculo das Perícias em Tormenta20
+
+O cálculo do bônus total em um teste de perícia é feito da seguinte forma:
+
+$Bônus \ de \ Perícia = Metade \ do \ Nível \ do \ Personagem \ (arredondado \ para \ baixo) + Atributo-Chave \ da \ Perícia + Bônus \ de \ Treinamento \ (se \ for \ treinado)$ [cite: 625]
+
+**Bônus de Treinamento:** [cite: 625]
+* **Níveis 1-6:** +2
+* **Níveis 7-14:** +4
+* **Níveis 15 em diante:** +6
+
+---
+
+### Atributo-Chave por Perícia: [cite: 626]
+
+| Perícia        | Atributo-Chave |
+| :------------- | :------------- |
+| Acrobacia      | Destreza (Des) |
+| Adestramento   | Carisma (Car)  |
+| Atletismo      | Força (For)    |
+| Atuação        | Carisma (Car)  |
+| Cavalgar       | Destreza (Des) |
+| Conhecimento   | Inteligência (Int) |
+| Cura           | Sabedoria (Sab)|
+| Diplomacia     | Carisma (Car)  |
+| Enganação      | Carisma (Car)  |
+| Fortitude      | Constituição (Con) |
+| Furtividade    | Destreza (Des) |
+| Guerra         | Inteligência (Int) |
+| Iniciativa     | Destreza (Des) |
+| Intimidação    | Carisma (Car)  |
+| Intuição       | Sabedoria (Sab)|
+| Investigação   | Inteligência (Int) |
+| Jogatina       | Carisma (Car)  |
+| Ladinagem      | Destreza (Des) |
+| Luta           | Força (For)    |
+| Misticismo     | Inteligência (Int) |
+| Nobreza        | Inteligência (Int) |
+| Ofício         | Inteligência (Int) |
+| Percepção      | Sabedoria (Sab)|
+| Pilotagem      | Destreza (Des) |
+| Pontaria       | Destreza (Des) |
+| Reflexos       | Destreza (Des) |
+| Religião       | Sabedoria (Sab)|
+| Sobrevivência  | Sabedoria (Sab)|
+| Vontade        | Sabedoria (Sab)|
+
+*Nota: Além das perícias de classe, um personagem recebe um número de perícias treinadas adicionais igual ao seu modificador de Inteligência (se positivo). Essas perícias podem ser de qualquer tipo, não se limitando à lista da classe.* [cite: 491]
+
+---
+
+### Perícias Treinadas por Classe (além das automáticas):
+
+Cada classe concede um número fixo de perícias treinadas e permite que o jogador escolha perícias adicionais de uma lista específica.
+
+* **Arcanista:** Misticismo (Int) e Vontade (Sab), mais 2 a sua escolha entre Conhecimento (Int), Diplomacia (Car), Enganação (Car), Guerra (Int), Iniciativa (Des), Intimidação (Car), Intuição (Sab), Investigação (Int), Nobreza (Int), Ofício (Int) e Percepção (Sab). [cite: 519]
+* **Bárbaro:** Fortitude (Con) e Luta (For), mais 4 a sua escolha entre Adestramento (Car), Atletismo (For), Cavalgar (Des), Iniciativa (Des), Intimidação (Car), Ofício (Int), Percepção (Sab), Pontaria (Des), Sobrevivência (Sab) e Vontade (Sab). [cite: 525]
+* **Bardo:** Atuação (Car) e Reflexos (Des), mais 6 a sua escolha entre Acrobacia (Des), Cavalgar (Des), Conhecimento (Int), Diplomacia (Car), Enganação (Car), Furtividade (Des), Iniciativa (Des), Intuição (Sab), Investigação (Int), Jogatina (Car), Ladinagem (Des), Luta (For), Misticismo (Int), Nobreza (Int), Percepção (Sab), Pontaria (Des) e Vontade (Sab). [cite: 532]
+* **Bucaneiro:** Luta (For) ou Pontaria (Des), Reflexos (Des), mais 4 a sua escolha entre Acrobacia (Des), Atletismo (For), Atuação (Car), Enganação (Car), Fortitude (Con), Furtividade (Des), Iniciativa (Des), Intimidação (Car), Jogatina (Car), Luta (For), Ofício (Int), Percepção (Sab), Pilotagem (Des) e Pontaria (Des). [cite: 535]
+* **Caçador:** Luta (For) ou Pontaria (Des), Sobrevivência (Sab), mais 4 (o livro diz 6, mas a tabela diz 4) a sua escolha entre Adestramento (Car), Atletismo (For), Cavalgar (Des), Cura (Sab), Fortitude (Con), Furtividade (Des), Iniciativa (Des), Investigação (Int), Luta (For), Ofício (Int), Percepção (Sab), Pontaria (Des) e Reflexos (Des). [cite: 542, 511]
+* **Cavaleiro:** Fortitude (Con) e Luta (For), mais 2 a sua escolha entre Adestramento (Car), Atletismo (For), Cavalgar (Des), Diplomacia (Car), Guerra (Int), Iniciativa (Des), Intimidação (Car), Nobreza (Int), Percepção (Sab) e Vontade (Sab). [cite: 545]
+* **Clérigo:** Religião (Sab) e Vontade (Sab), mais 2 a sua escolha entre Conhecimento (Int), Cura (Sab), Diplomacia (Car), Fortitude (Con), Iniciativa (Des), Intuição (Sab), Luta (For), Misticismo (Int), Nobreza (Int), Ofício (Int) e Percepção (Sab). [cite: 551]
+* **Druida:** Sobrevivência (Sab) e Vontade (Sab), mais 4 a sua escolha entre Adestramento (Car), Atletismo (For), Cavalgar (Des), Conhecimento (Int), Cura (Sab), Fortitude (Con), Iniciativa (Des), Intuição (Sab), Luta (For), Misticismo (Int), Ofício (Int), Percepção (Sab) e Religião (Sab). [cite: 557]
+* **Guerreiro:** Luta (For) ou Pontaria (Des), Fortitude (Con), mais 2 a sua escolha entre Adestramento (Car), Atletismo (For), Cavalgar (Des), Guerra (Int), Iniciativa (Des), Intimidação (Car), Luta (For), Ofício (Int), Percepção (Sab), Pontaria (Des) e Reflexos (Des). [cite: 563]
+* **Inventor:** Ofício (Int) e Vontade (Sab), mais 4 a sua escolha entre Conhecimento (Int), Cura (Sab), Diplomacia (Car), Fortitude (Con), Iniciativa (Des), Investigação (Int), Luta (For), Misticismo (Int), Ofício (Int), Pilotagem (Des), Percepção (Sab) e Pontaria (Des). [cite: 570]
+* **Ladino:** Ladinagem (Des) e Reflexos (Des), mais 8 a sua escolha entre Acrobacia (Des), Atletismo (For), Atuação (Car), Cavalgar (Des), Conhecimento (Int), Diplomacia (Car), Enganação (Car), Furtividade (Des), Iniciativa (Des), Intimidação (Car), Intuição (Sab), Investigação (Int), Jogatina (Car), Luta (For), Ofício (Int), Percepção (Sab), Pilotagem (Des) e Pontaria (Des). [cite: 575]
+* **Lutador:** Fortitude (Con) e Luta (For), mais 4 a sua escolha entre Acrobacia (Des), Adestramento (Car), Atletismo (For), Enganação (Car), Furtividade (Des), Iniciativa (Des), Intimidação (Car), Ofício (Int), Percepção (Sab), Pontaria (Des) e Reflexos (Des). [cite: 582]
+* **Nobre:** Diplomacia (Car) ou Intimidação (Car), Vontade (Sab), mais 4 a sua escolha entre Adestramento (Car), Atuação (Car), Cavalgar (Des), Conhecimento (Int), Diplomacia (Car), Enganação (Car), Fortitude (Con), Guerra (Int), Iniciativa (Des), Intimidação (Car), Intuição (Sab), Investigação (Int), Jogatina (Car), Luta (For), Nobreza (Int), Ofício (Int), Percepção (Sab) e Pontaria (Des). [cite: 585]
+* **Paladino:** Luta (For) e Vontade (Sab), mais 2 a sua escolha entre Adestramento (Car), Atletismo (For), Cavalgar (Des), Cura (Sab), Diplomacia (Car), Fortitude (Con), Guerra (Int), Iniciativa (Des), Intuição (Sab), Nobreza (Int), Percepção (Sab) e Religião (Sab). [cite: 592]
