@@ -768,6 +768,279 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // Variáveis globais para perícias (edição)
+  let bonusPericiasPorInteligenciaEdit = 0;
+  let periciasOriginaisInteligencia = [];
+
+  // Função para calcular perícias disponíveis por inteligência (edição)
+  function calcularPericiasInteligenciaEdit() {
+    const inteligencia = parseInt(document.getElementById('inteligencia').value) || 10;
+    const modificador = Math.floor((inteligencia - 10) / 2);
+    bonusPericiasPorInteligenciaEdit = Math.max(0, modificador);
+
+    // Coletar perícias já selecionadas por inteligência
+    const checkboxesInt = document.querySelectorAll('input[name="pericias_inteligencia"]');
+    periciasOriginaisInteligencia = Array.from(checkboxesInt)
+      .filter(cb => cb.checked)
+      .map(cb => cb.value);
+
+    console.log(`🧠 Cálculo Inteligência: ${inteligencia} = ${modificador} mod = ${bonusPericiasPorInteligenciaEdit} perícias`);
+    console.log('📚 Perícias já selecionadas por inteligência:', periciasOriginaisInteligencia);
+
+    // Atualizar interface
+    atualizarInterfacePericiasInteligencia();
+    configurarLimitesSelecaoInteligencia();
+  }
+
+  // Função para atualizar interface de perícias de inteligência
+  function atualizarInterfacePericiasInteligencia() {
+    const descriptionElement = document.querySelector('.intelligence-skills-description');
+    if (descriptionElement) {
+      const plural = bonusPericiasPorInteligenciaEdit !== 1;
+      descriptionElement.innerHTML = `
+      Você pode escolher <strong>${bonusPericiasPorInteligenciaEdit}</strong> perícia${plural ? 's' : ''} adicional${plural ? 'is' : ''} pelo seu modificador de Inteligência
+      <br><span style="color: var(--text-muted); font-size: 0.9em;">
+        ${periciasOriginaisInteligencia.length} já selecionada${periciasOriginaisInteligencia.length !== 1 ? 's' : ''} | 
+        ${Math.max(0, bonusPericiasPorInteligenciaEdit - periciasOriginaisInteligencia.length)} disponível${bonusPericiasPorInteligenciaEdit - periciasOriginaisInteligencia.length !== 1 ? 'is' : ''}
+      </span>
+    `;
+    }
+  }
+
+  // Função para configurar limites de seleção por inteligência
+  function configurarLimitesSelecaoInteligencia() {
+    const checkboxes = document.querySelectorAll('.intelligence-skill-checkbox');
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function () {
+        const selecionados = Array.from(checkboxes).filter(cb => cb.checked);
+
+        if (selecionados.length > bonusPericiasPorInteligenciaEdit) {
+          this.checked = false;
+          showSkillNotification(
+            `Limite excedido! Você pode escolher apenas ${bonusPericiasPorInteligenciaEdit} perícia${bonusPericiasPorInteligenciaEdit !== 1 ? 's' : ''} por bônus de Inteligência.`,
+            'warning'
+          );
+          return;
+        }
+
+        // Atualizar visual dos cards
+        const card = this.closest('.intelligence-skill-label');
+        if (this.checked) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+
+        atualizarContadorInteligencia();
+        atualizarPreviewPericiasEdit();
+      });
+    });
+  }
+
+  // Função para atualizar contador de perícias de inteligência
+  function atualizarContadorInteligencia() {
+    const checkboxes = document.querySelectorAll('.intelligence-skill-checkbox');
+    const selecionados = Array.from(checkboxes).filter(cb => cb.checked);
+
+    const descriptionElement = document.querySelector('.intelligence-skills-description');
+    if (descriptionElement) {
+      const restantes = Math.max(0, bonusPericiasPorInteligenciaEdit - selecionados.length);
+      const plural = bonusPericiasPorInteligenciaEdit !== 1;
+      const pluralRestantes = restantes !== 1;
+
+      descriptionElement.innerHTML = `
+      Você pode escolher <strong>${bonusPericiasPorInteligenciaEdit}</strong> perícia${plural ? 's' : ''} adicional${plural ? 'is' : ''} pelo seu modificador de Inteligência
+      <br><span style="color: var(--text-muted); font-size: 0.9em;">
+        ${selecionados.length} selecionada${selecionados.length !== 1 ? 's' : ''} | 
+        ${restantes} disponível${pluralRestantes ? 'is' : ''}
+      </span>
+    `;
+    }
+  }
+
+  // Função para configurar seleção de perícias opcionais da classe
+  function configurarPericiasOpcionaisClasse() {
+    const checkboxes = document.querySelectorAll('.class-optional-skill-checkbox');
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function () {
+        // Atualizar visual dos cards
+        const card = this.closest('.class-optional-skill-label');
+        if (this.checked) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+
+        atualizarPreviewPericiasEdit();
+      });
+    });
+  }
+
+  // Função para atualizar preview de perícias (edição)
+  function atualizarPreviewPericiasEdit() {
+    const previewPericias = document.getElementById('previewPericias');
+    const periciasPreview = document.getElementById('periciasPreview');
+
+    if (!previewPericias || !periciasPreview) return;
+
+    // Coletar perícias de classe (obrigatórias - já existentes)
+    const periciasClasse = [];
+    const cardsClasse = document.querySelectorAll('.character-skill-origin-section');
+    cardsClasse.forEach(section => {
+      const titulo = section.querySelector('.character-skill-origin-title').textContent;
+      if (titulo.includes('Classe')) {
+        const nomes = section.querySelectorAll('.character-skill-name');
+        nomes.forEach(nome => {
+          periciasClasse.push(`⚔️ ${nome.textContent.replace(/[🎯💪🏃❤️🧠🧙😎⚡🤸🐎👤🔓👊🚗🏹🤺📚⚔️🔍🔮👑🔨🙏🐕🎭🤝😠🎲💚💡👁️🏕️🛡️🧠]/g, '').trim()} (Classe)`);
+        });
+      }
+    });
+
+    // Coletar perícias opcionais selecionadas
+    const periciasOpcionais = [];
+    const checkboxesOpcionais = document.querySelectorAll('input[name="pericias_selecionadas"]:checked');
+    checkboxesOpcionais.forEach(checkbox => {
+      const nome = checkbox.closest('.class-optional-skill-label').querySelector('.skill-name').textContent;
+      periciasOpcionais.push(`📚 ${nome} (Opcional)`);
+    });
+
+    // Coletar perícias por inteligência
+    const periciasInteligencia = [];
+    const checkboxesInt = document.querySelectorAll('input[name="pericias_inteligencia"]:checked');
+    checkboxesInt.forEach(checkbox => {
+      const nome = checkbox.closest('.intelligence-skill-label').querySelector('.skill-name').textContent;
+      periciasInteligencia.push(`🧠 ${nome} (Inteligência)`);
+    });
+
+    // Combinar todas as perícias
+    const todasPericias = [...periciasClasse, ...periciasOpcionais, ...periciasInteligencia];
+
+    if (todasPericias.length > 0) {
+      periciasPreview.innerHTML = todasPericias.map(pericia =>
+        `<div class="pericia-preview-item">${pericia}</div>`
+      ).join('');
+      previewPericias.style.display = 'block';
+    } else {
+      previewPericias.style.display = 'none';
+    }
+  }
+
+  // Função para mostrar notificações sobre perícias
+  function showSkillNotification(message, type = 'info') {
+    console.log(`🔔 Notificação (${type}): ${message}`);
+
+    // Remover notificação anterior se existir
+    const existingNotification = document.querySelector('.skill-notification');
+    if (existingNotification) {
+      existingNotification.remove();
+    }
+
+    const notification = document.createElement('div');
+    notification.className = `skill-notification ${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    z-index: 1001;
+    animation: slideInRight 0.3s ease-out;
+    background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#2196f3'};
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    max-width: 300px;
+  `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.3s ease-out';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 300);
+    }, 3000);
+  }
+
+  // Função para validar seleções antes do submit
+  function validarSelecoesPericias() {
+    console.log('🔍 Validando seleções de perícias...');
+
+    // Validar limite de perícias por inteligência
+    const checkboxesInt = document.querySelectorAll('input[name="pericias_inteligencia"]:checked');
+    if (checkboxesInt.length > bonusPericiasPorInteligenciaEdit) {
+      showSkillNotification(
+        `Erro: Você selecionou ${checkboxesInt.length} perícias por inteligência, mas só pode ter ${bonusPericiasPorInteligenciaEdit}.`,
+        'error'
+      );
+      return false;
+    }
+
+    console.log('✅ Validação de perícias passou');
+    return true;
+  }
+
+  // Função para inicializar visual dos cards selecionados
+  function inicializarVisualizacaoSelecionados() {
+    // Marcar cards já selecionados de inteligência
+    const checkboxesInt = document.querySelectorAll('.intelligence-skill-checkbox:checked');
+    checkboxesInt.forEach(checkbox => {
+      const card = checkbox.closest('.intelligence-skill-label');
+      if (card) {
+        card.classList.add('selected');
+      }
+    });
+
+    // Marcar cards já selecionados de classe opcional
+    const checkboxesOpt = document.querySelectorAll('.class-optional-skill-checkbox:checked');
+    checkboxesOpt.forEach(checkbox => {
+      const card = checkbox.closest('.class-optional-skill-label');
+      if (card) {
+        card.classList.add('selected');
+      }
+    });
+  }
+
+  // Event listeners para mudança de inteligência (edição)
+  document.getElementById('inteligencia').addEventListener('change', function () {
+    console.log('🧠 Inteligência alterada para:', this.value);
+    calcularPericiasInteligenciaEdit();
+  });
+
+  // Event listeners para perícias selecionadas (edição)
+  document.addEventListener('change', function (e) {
+    if (e.target.classList.contains('intelligence-skill-checkbox') ||
+      e.target.classList.contains('class-optional-skill-checkbox')) {
+      atualizarPreviewPericiasEdit();
+    }
+  });
+
+  // Event listener para validação no submit
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('characterForm');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        if (!validarSelecoesPericias()) {
+          e.preventDefault();
+          return false;
+        }
+      });
+    }
+
+    // Inicializar funcionalidades de perícias na edição
+    calcularPericiasInteligenciaEdit();
+    configurarPericiasOpcionaisClasse();
+    inicializarVisualizacaoSelecionados();
+    atualizarPreviewPericiasEdit();
+
+    console.log('✅ Sistema de perícias (edição) inicializado');
+  });
+
   // Inicializar todas as funcionalidades
   initSearch();
   initQuickFilters();

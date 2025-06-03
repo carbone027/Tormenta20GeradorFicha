@@ -8113,3 +8113,1369 @@ footer > * {
     align-items: center;
   }
 }
+
+/* ========================================
+   SISTEMA DE PERÍCIAS - CSS COMPLETO
+   ======================================== */
+
+/* ========================================
+   1. CONTAINER PRINCIPAL E HEADERS
+   ======================================== */
+
+.skills-main-container {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 2px solid rgba(212, 175, 55, 0.2);
+}
+
+.skills-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.skills-header h3 {
+  color: var(--accent-gold);
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.skills-header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* ========================================
+   2. EXPLICAÇÃO DO SISTEMA
+   ======================================== */
+
+.skills-explanation {
+  margin-bottom: 2rem;
+}
+
+.explanation-card {
+  background: rgba(37, 40, 80, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.explanation-card h4 {
+  color: var(--accent-gold);
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.explanation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.explanation-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 6px;
+  border-left: 3px solid var(--accent-gold);
+}
+
+.explanation-item h5 {
+  color: var(--accent-gold);
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.explanation-item p {
+  color: var(--text-color);
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ========================================
+   3. BARRA DE BUSCA
+   ======================================== */
+
+.skills-search-container {
+  margin-bottom: 1.5rem;
+}
+
+.skills-search-box {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.skills-search-input {
+  width: 100%;
+  padding: 12px 20px 12px 50px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 25px;
+  background: rgba(37, 40, 80, 0.6);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.skills-search-input:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.skills-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.skills-search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: var(--accent-gold);
+}
+
+.skills-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--primary-bg);
+  border: 2px solid var(--accent-gold);
+  border-radius: 8px;
+  z-index: 1000;
+  display: none;
+  margin-top: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.skills-search-results.active {
+  display: block;
+}
+
+.search-result-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+/* ========================================
+   4. FILTROS RÁPIDOS
+   ======================================== */
+
+.skills-quick-filters {
+  background: rgba(37, 40, 80, 0.4);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.quick-filters-title {
+  color: var(--accent-gold);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.quick-filters-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+.quick-filter-btn {
+  padding: 8px 16px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 20px;
+  background: rgba(37, 40, 80, 0.6);
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.quick-filter-btn:hover {
+  border-color: var(--accent-gold);
+  background: rgba(212, 175, 55, 0.1);
+  transform: translateY(-2px);
+}
+
+.quick-filter-btn.active {
+  background: var(--accent-gold);
+  color: var(--primary-bg);
+  border-color: var(--accent-gold);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* ========================================
+   5. SEÇÕES DE CATEGORIAS
+   ======================================== */
+
+.skills-sections-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.skill-category-section {
+  background: rgba(37, 40, 80, 0.4);
+  border-radius: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.skill-category-section:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.skill-category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(212, 175, 55, 0.1);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  cursor: pointer;
+}
+
+.skill-category-title {
+  color: var(--accent-gold);
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skill-category-count {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.skill-category-toggle {
+  background: none;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--accent-gold);
+}
+
+.skill-category-toggle:hover {
+  border-color: var(--accent-gold);
+  background: rgba(212, 175, 55, 0.1);
+  transform: scale(1.1);
+}
+
+.toggle-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+/* ========================================
+   6. GRID DE PERÍCIAS
+   ======================================== */
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+/* Estado recolhido */
+.skills-grid[style*="display: none"] {
+  display: none !important;
+}
+
+/* ========================================
+   7. CARDS DE PERÍCIAS - INFORMACIONAIS
+   ======================================== */
+
+.skill-info-card {
+  background: var(--secondary-bg);
+  border: 2px solid rgba(212, 175, 55, 0.2);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-gold);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.skill-info-card:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
+}
+
+.skill-info-card:hover::before {
+  opacity: 1;
+}
+
+.skill-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.skill-card-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.skill-card-name {
+  color: var(--accent-gold);
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  flex-grow: 1;
+}
+
+.skill-card-attribute {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.skill-card-content {
+  margin-top: 1rem;
+}
+
+.skill-card-description {
+  color: var(--text-color);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+/* ========================================
+   8. CARDS DE PERÍCIAS - SELECIONÁVEIS
+   ======================================== */
+
+.optional-skill-label,
+.intelligence-skill-label,
+.class-optional-skill-label {
+  display: block;
+  cursor: pointer;
+  position: relative;
+}
+
+.optional-skill-checkbox,
+.intelligence-skill-checkbox,
+.class-optional-skill-checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.optional-skill-content,
+.intelligence-skill-content,
+.class-optional-skill-content {
+  background: var(--secondary-bg);
+  border: 2px solid rgba(212, 175, 55, 0.2);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.optional-skill-content::before,
+.intelligence-skill-content::before,
+.class-optional-skill-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 20px 0;
+  border-color: transparent var(--accent-gold) transparent transparent;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.optional-skill-content::after,
+.intelligence-skill-content::after,
+.class-optional-skill-content::after {
+  content: '✓';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: var(--primary-bg);
+  font-weight: bold;
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Estados hover e selecionado */
+.optional-skill-label:hover .optional-skill-content,
+.intelligence-skill-label:hover .intelligence-skill-content,
+.class-optional-skill-label:hover .class-optional-skill-content {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+}
+
+.optional-skill-label.selected .optional-skill-content,
+.intelligence-skill-label.selected .intelligence-skill-content,
+.class-optional-skill-label.selected .class-optional-skill-content,
+.optional-skill-checkbox:checked + .optional-skill-content,
+.intelligence-skill-checkbox:checked + .intelligence-skill-content,
+.class-optional-skill-checkbox:checked + .class-optional-skill-content {
+  border-color: var(--accent-gold);
+  background: rgba(212, 175, 55, 0.1);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.optional-skill-label.selected .optional-skill-content::before,
+.intelligence-skill-label.selected .intelligence-skill-content::before,
+.class-optional-skill-label.selected .class-optional-skill-content::before,
+.optional-skill-checkbox:checked + .optional-skill-content::before,
+.intelligence-skill-checkbox:checked + .intelligence-skill-content::before,
+.class-optional-skill-checkbox:checked + .class-optional-skill-content::before {
+  opacity: 1;
+}
+
+.optional-skill-label.selected .optional-skill-content::after,
+.intelligence-skill-label.selected .intelligence-skill-content::after,
+.class-optional-skill-label.selected .class-optional-skill-content::after,
+.optional-skill-checkbox:checked + .optional-skill-content::after,
+.intelligence-skill-checkbox:checked + .intelligence-skill-content::after,
+.class-optional-skill-checkbox:checked + .class-optional-skill-content::after {
+  opacity: 1;
+}
+
+.optional-skill-header,
+.intelligence-skill-header,
+.class-optional-skill-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.skill-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.skill-name {
+  color: var(--accent-gold);
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.skill-attribute {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.skill-category {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin: 0.3rem 0 0 0;
+  font-style: italic;
+}
+
+.skill-description {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0.8rem 0 0 0;
+}
+
+/* ========================================
+   9. CARDS DE PERÍCIAS - OBRIGATÓRIAS
+   ======================================== */
+
+.mandatory-skills-section {
+  margin-bottom: 2rem;
+}
+
+.mandatory-skills-title {
+  color: var(--accent-gold);
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mandatory-skills-description {
+  color: var(--text-muted);
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.mandatory-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.mandatory-skill-card {
+  background: rgba(76, 175, 80, 0.1);
+  border: 2px solid rgba(76, 175, 80, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+}
+
+.mandatory-skill-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #4caf50;
+}
+
+.mandatory-skill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.skill-auto {
+  background: #4caf50;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* ========================================
+   10. CARDS DE PERÍCIAS DO PERSONAGEM (VIEW)
+   ======================================== */
+
+.character-skills-section {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 2px solid rgba(212, 175, 55, 0.2);
+}
+
+.character-skills-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.character-skills-title {
+  color: var(--accent-gold);
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.character-skills-count {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.skills-summary-badges {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.skill-summary-badge {
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.skill-summary-badge.trained {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.skill-summary-badge.expert {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.character-skill-card {
+  background: var(--secondary-bg);
+  border: 2px solid rgba(212, 175, 55, 0.2);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.character-skill-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-gold);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.character-skill-card:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+}
+
+.character-skill-card:hover::before {
+  opacity: 1;
+}
+
+.character-skill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.skill-main-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-grow: 1;
+}
+
+.character-skill-name {
+  color: var(--accent-gold);
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.skill-bonus-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(212, 175, 55, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.skill-bonus-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+
+.skill-bonus-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skill-status-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.skill-status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.skill-status-badge.trained {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.skill-status-badge.untrained {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.4);
+}
+
+.skill-status-badge.expert {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.skill-origin-badge {
+  background: rgba(33, 150, 243, 0.2);
+  color: #2196f3;
+  border: 1px solid rgba(33, 150, 243, 0.4);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.character-skill-details {
+  background: rgba(37, 40, 80, 0.4);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.skill-bonus-breakdown h6 {
+  color: var(--accent-gold);
+  margin: 0 0 0.8rem 0;
+  font-size: 1rem;
+}
+
+.bonus-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.bonus-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  border-left: 3px solid rgba(212, 175, 55, 0.5);
+}
+
+.bonus-item.expert {
+  border-left-color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.bonus-item.total {
+  border-left-color: var(--accent-gold);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.bonus-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.bonus-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+}
+
+.skill-description h6,
+.skill-notes h6 {
+  color: var(--accent-gold);
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.skill-description p,
+.skill-notes p {
+  color: var(--text-color);
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ========================================
+   11. TAGS E BADGES
+   ======================================== */
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.skill-tag {
+  background: rgba(37, 40, 80, 0.8);
+  color: var(--text-muted);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.skill-tag.category {
+  background: rgba(33, 150, 243, 0.2);
+  color: #2196f3;
+  border-color: rgba(33, 150, 243, 0.4);
+}
+
+.skill-tag.attribute {
+  background: rgba(156, 39, 176, 0.2);
+  color: #9c27b0;
+  border-color: rgba(156, 39, 176, 0.4);
+}
+
+.skill-tag.origin {
+  background: rgba(255, 152, 0, 0.2);
+  color: #ff9800;
+  border-color: rgba(255, 152, 0, 0.4);
+}
+
+.skill-tag.trained {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  border-color: rgba(76, 175, 80, 0.4);
+}
+
+.skill-tag.expert {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.skill-tag.bonus {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--accent-gold);
+  border-color: rgba(212, 175, 55, 0.4);
+  font-weight: 600;
+}
+
+.skill-tag.cost {
+  background: rgba(33, 150, 243, 0.2);
+  color: #2196f3;
+  border-color: rgba(33, 150, 243, 0.4);
+}
+
+/* ========================================
+   12. ESTADOS VAZIOS
+   ======================================== */
+
+.skills-empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(37, 40, 80, 0.4);
+  border-radius: 10px;
+  border: 2px dashed rgba(212, 175, 55, 0.3);
+}
+
+.skills-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.skills-empty-title {
+  color: var(--accent-gold);
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+}
+
+.skills-empty-description {
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   13. SEÇÕES ESPECÍFICAS
+   ======================================== */
+
+.class-skills-section,
+.intelligence-skills-section,
+.optional-skills-section {
+  background: rgba(37, 40, 80, 0.4);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.class-skills-title,
+.intelligence-skills-title,
+.optional-skills-title {
+  color: var(--accent-gold);
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.class-skills-description,
+.intelligence-skills-description,
+.optional-skills-description {
+  color: var(--text-muted);
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+}
+
+.intelligence-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.optional-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+/* ========================================
+   14. PREVIEW DE PERÍCIAS
+   ======================================== */
+
+.preview-pericias {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(37, 40, 80, 0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.preview-pericias h5 {
+  color: var(--accent-gold);
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.pericias-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 0.8rem;
+}
+
+.pericia-preview-item {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 6px;
+  padding: 0.8rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.pericia-preview-item:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   15. NOTIFICAÇÕES DE PERÍCIAS
+   ======================================== */
+
+.skill-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  z-index: 1001;
+  max-width: 350px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-left: 4px solid currentColor;
+}
+
+.skill-notification.success {
+  background: #4caf50;
+}
+
+.skill-notification.error {
+  background: #f44336;
+}
+
+.skill-notification.warning {
+  background: #ff9800;
+}
+
+.skill-notification.info {
+  background: #2196f3;
+}
+
+/* ========================================
+   16. ANIMAÇÕES
+   ======================================== */
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Animação para cards que aparecem */
+.skill-info-card,
+.character-skill-card,
+.mandatory-skill-card {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Animação para expansão de seções */
+.skill-category-section.expanding {
+  animation: pulse 0.3s ease;
+}
+
+/* ========================================
+   17. RESPONSIVIDADE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .skills-main-container {
+    padding: 1rem;
+  }
+  
+  .skills-header h3 {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .explanation-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-filters-buttons {
+    gap: 0.5rem;
+  }
+  
+  .quick-filter-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    padding: 1rem;
+  }
+  
+  .skill-category-header {
+    padding: 0.8rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .skill-category-title {
+    font-size: 1rem;
+  }
+  
+  .character-skill-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .skill-main-info {
+    justify-content: space-between;
+  }
+  
+  .skill-status-badges {
+    justify-content: center;
+  }
+  
+  .bonus-breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .pericias-preview {
+    grid-template-columns: 1fr;
+  }
+  
+  .intelligence-skills-grid,
+  .optional-skills-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .skills-search-input {
+    padding: 10px 15px 10px 40px;
+    font-size: 0.9rem;
+  }
+  
+  .skills-search-icon {
+    left: 12px;
+    font-size: 1rem;
+  }
+  
+  .skill-info-card,
+  .character-skill-card {
+    padding: 1rem;
+  }
+  
+  .skill-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .character-skill-name {
+    font-size: 1rem;
+  }
+  
+  .skill-bonus-display {
+    align-self: flex-end;
+  }
+  
+  .skill-tags {
+    gap: 0.3rem;
+  }
+  
+  .skill-tag {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+}
+
+/* ========================================
+   18. ESTADOS DE CARREGAMENTO
+   ======================================== */
+
+.skills-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.skills-loading-spinner {
+  font-size: 2rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.skills-loading p {
+  margin: 1rem 0 0 0;
+  color: var(--text-muted);
+}
+
+/* ========================================
+   19. SEÇÕES DE ORIGEM (EDIT/VIEW)
+   ======================================== */
+
+.character-skill-origin-section,
+.character-skill-category-section,
+.character-power-type-section {
+  margin-bottom: 2rem;
+}
+
+.character-skill-origin-title,
+.character-skill-category-title {
+  color: var(--accent-gold);
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+/* ========================================
+   20. UTILIDADES E HELPERS
+   ======================================== */
+
+.hidden {
+  display: none !important;
+}
+
+.skills-count {
+  color: var(--text-muted);
+  font-weight: normal;
+  font-size: 0.9em;
+}
+
+.skill-highlight {
+  background: rgba(212, 175, 55, 0.2);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+/* Estados de erro */
+.skill-error {
+  border-color: #f44336 !important;
+  background: rgba(244, 67, 54, 0.1) !important;
+}
+
+.skill-error-message {
+  color: #f44336;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* Estados de sucesso */
+.skill-success {
+  border-color: #4caf50 !important;
+  background: rgba(76, 175, 80, 0.1) !important;
+}
+
+/* ========================================
+   21. IMPRESSÃO
+   ======================================== */
+
+@media print {
+  .skills-search-container,
+  .skills-quick-filters,
+  .skill-category-toggle,
+  .quick-filter-btn {
+    display: none !important;
+  }
+  
+  .skills-grid {
+    display: block !important;
+  }
+  
+  .skill-info-card,
+  .character-skill-card {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .skills-main-container {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}

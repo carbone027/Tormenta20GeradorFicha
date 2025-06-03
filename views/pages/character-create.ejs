@@ -226,6 +226,8 @@ function getPowerIcon(poder, tipo) {
         </div>
       </div>
 
+      
+
       <!-- Raça, Classe e Deus -->
       <div class="form-section">
         <h3>🧬 Origem e Vocação</h3>
@@ -285,6 +287,262 @@ function getPowerIcon(poder, tipo) {
           </div>
         </div>
       </div>
+
+      <!-- Perícias -->
+<div class="form-section">
+  <h3>🎯 Perícias do Personagem</h3>
+
+  <div class="skills-main-container">
+    <!-- Header Principal -->
+    <div class="skills-header">
+      <h3>
+        <span>🎯</span>
+        Sistema de Perícias
+        <span>🎯</span>
+      </h3>
+      <p>Gerencie as habilidades e conhecimentos do seu personagem</p>
+    </div>
+
+    <!-- Explicação do Sistema -->
+    <div class="skills-explanation">
+      <div class="card explanation-card">
+        <h4>📋 Como Funcionam as Perícias</h4>
+        <div class="explanation-grid">
+          <div class="explanation-item">
+            <h5>🎲 Teste de Perícia</h5>
+            <p><strong>1d20 + Metade do Nível + Atributo + Bônus de Treinamento</strong></p>
+          </div>
+          <div class="explanation-item">
+            <h5>💪 Bônus de Treinamento</h5>
+            <p>Níveis 1-6: +2 | Níveis 7-14: +4 | Níveis 15+: +6</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perícias Automáticas de Classe -->
+    <div class="class-skills-section" id="classSkillsSection" style="display: none;">
+      <div class="class-skills-header">
+        <h4 class="class-skills-title">
+          <span>⚔️</span>
+          Perícias de Classe
+        </h4>
+        <p class="class-skills-description">
+          Estas perícias serão aplicadas automaticamente baseadas na classe escolhida
+        </p>
+      </div>
+
+      <div id="classSkillsList" class="class-skills-list">
+        <!-- Preenchido via JavaScript quando classe for selecionada -->
+      </div>
+    </div>
+
+    <!-- Perícias por Bônus de Inteligência -->
+    <div class="intelligence-skills-section" id="intelligenceSkillsSection" style="display: none;">
+      <div class="intelligence-skills-header">
+        <h4 class="intelligence-skills-title">
+          <span>🧠</span>
+          Perícias por Inteligência
+        </h4>
+        <p class="intelligence-skills-description">
+          Escolha <span id="bonusSkillsCount">0</span> perícia(s) adicional(is) pelo seu modificador de Inteligência
+        </p>
+      </div>
+
+      <div class="intelligence-skills-grid" id="intelligenceSkillsGrid">
+        <!-- Preenchido via JavaScript baseado na inteligência -->
+      </div>
+    </div>
+
+    <!-- Perícias Opcionais da Classe -->
+    <div class="optional-skills-section" id="optionalSkillsSection" style="display: none;">
+      <div class="optional-skills-header">
+        <h4 class="optional-skills-title">
+          <span>📚</span>
+          Perícias Opcionais da Classe
+        </h4>
+        <p class="optional-skills-description">
+          Escolha perícias adicionais da lista da sua classe
+        </p>
+      </div>
+
+      <div class="optional-skills-grid" id="optionalSkillsGrid">
+        <!-- Preenchido via JavaScript baseado na classe -->
+      </div>
+    </div>
+
+    <!-- Todas as Perícias Disponíveis -->
+    <% if (periciasSistema && Object.keys(periciasSistema).length > 0) { %>
+      <div class="all-skills-section">
+        <div class="all-skills-header">
+          <h4 class="all-skills-title">
+            <span>🎯</span>
+            Todas as Perícias Disponíveis
+          </h4>
+          <p class="all-skills-description">
+            Visualize todas as perícias do sistema organizadas por categoria
+          </p>
+        </div>
+
+        <!-- Barra de Busca -->
+        <div class="skills-search-container">
+          <div class="skills-search-box">
+            <span class="skills-search-icon">🔍</span>
+            <input type="text" id="skillsSearchInput" class="skills-search-input"
+              placeholder="Buscar perícias por nome, atributo ou categoria..." autocomplete="off">
+            <div id="skillsSearchResults" class="skills-search-results"></div>
+          </div>
+        </div>
+
+        <!-- Filtros Rápidos -->
+        <div class="skills-quick-filters">
+          <div class="quick-filters-title">🎯 Filtros por Atributo</div>
+          <div class="quick-filters-buttons">
+            <button type="button" class="quick-filter-btn active" data-filter="all">
+              ✨ Todas
+            </button>
+            <button type="button" class="quick-filter-btn" data-filter="for">
+              💪 Força
+            </button>
+            <button type="button" class="quick-filter-btn" data-filter="des">
+              🏃 Destreza
+            </button>
+            <button type="button" class="quick-filter-btn" data-filter="con">
+              ❤️ Constituição
+            </button>
+            <button type="button" class="quick-filter-btn" data-filter="int">
+              🧠 Inteligência
+            </button>
+            <button type="button" class="quick-filter-btn" data-filter="sab">
+              🧙 Sabedoria
+            </button>
+            <button type="button" class="quick-filter-btn" data-filter="car">
+              😎 Carisma
+            </button>
+          </div>
+        </div>
+
+        <!-- Container das Perícias por Categoria -->
+        <div class="skills-sections-container">
+          <% Object.entries(periciasSistema).forEach(([categoria, pericias]) => { %>
+            <% if (pericias && pericias.length > 0) { %>
+              <div class="skill-category-section" data-category="<%= categoria %>">
+                <div class="skill-category-header">
+                  <h5 class="skill-category-title">
+                    <% 
+                      let categoryIcon = '🎯';
+                      let categoryName = categoria;
+                      switch(categoria.toLowerCase()) {
+                        case 'física': categoryIcon = '🏃'; categoryName = 'Perícias Físicas'; break;
+                        case 'combate': categoryIcon = '⚔️'; categoryName = 'Perícias de Combate'; break;
+                        case 'conhecimento': categoryIcon = '📚'; categoryName = 'Perícias de Conhecimento'; break;
+                        case 'social': categoryIcon = '💬'; categoryName = 'Perícias Sociais'; break;
+                        case 'percepção': categoryIcon = '👁️'; categoryName = 'Perícias de Percepção'; break;
+                        case 'resistência': categoryIcon = '🛡️'; categoryName = 'Perícias de Resistência'; break;
+                        case 'medicina': categoryIcon = '💚'; categoryName = 'Perícias de Medicina'; break;
+                        default: categoryIcon = '🎯'; categoryName = categoria.charAt(0).toUpperCase() + categoria.slice(1); break;
+                      }
+                    %>
+                    <span><%= categoryIcon %></span>
+                    <%= categoryName %>
+                  </h5>
+                  <div class="skill-category-count">(<%= pericias.length %> perícias)</div>
+                  <button type="button" class="skill-category-toggle" data-target="<%= categoria %>">
+                    <span class="toggle-icon">📁</span>
+                  </button>
+                </div>
+
+                <div class="skills-grid" id="skillsGrid-<%= categoria %>">
+                  <% pericias.forEach(pericia => { %>
+                    <div class="skill-info-card" data-skill-id="<%= pericia.id %>" data-attribute="<%= pericia.atributo_chave %>">
+                      <div class="skill-card-header">
+                        <div class="skill-card-icon">
+                          <% 
+                            let skillIcon = '🎯';
+                            const nome = pericia.nome.toLowerCase();
+                            
+                            // Ícones específicos por perícia
+                            if (nome.includes('acrobacia')) skillIcon = '🤸';
+                            else if (nome.includes('atletismo')) skillIcon = '💪';
+                            else if (nome.includes('cavalgar')) skillIcon = '🐎';
+                            else if (nome.includes('furtividade')) skillIcon = '👤';
+                            else if (nome.includes('iniciativa')) skillIcon = '⚡';
+                            else if (nome.includes('ladinagem')) skillIcon = '🔓';
+                            else if (nome.includes('luta')) skillIcon = '👊';
+                            else if (nome.includes('pilotagem')) skillIcon = '🚗';
+                            else if (nome.includes('pontaria')) skillIcon = '🏹';
+                            else if (nome.includes('reflexos')) skillIcon = '🤺';
+                            else if (nome.includes('conhecimento')) skillIcon = '📚';
+                            else if (nome.includes('guerra')) skillIcon = '⚔️';
+                            else if (nome.includes('investigação')) skillIcon = '🔍';
+                            else if (nome.includes('misticismo')) skillIcon = '🔮';
+                            else if (nome.includes('nobreza')) skillIcon = '👑';
+                            else if (nome.includes('ofício')) skillIcon = '🔨';
+                            else if (nome.includes('religião')) skillIcon = '🙏';
+                            else if (nome.includes('adestramento')) skillIcon = '🐕';
+                            else if (nome.includes('atuação')) skillIcon = '🎭';
+                            else if (nome.includes('diplomacia')) skillIcon = '🤝';
+                            else if (nome.includes('enganação')) skillIcon = '🎭';
+                            else if (nome.includes('intimidação')) skillIcon = '😠';
+                            else if (nome.includes('jogatina')) skillIcon = '🎲';
+                            else if (nome.includes('cura')) skillIcon = '💚';
+                            else if (nome.includes('intuição')) skillIcon = '💡';
+                            else if (nome.includes('percepção')) skillIcon = '👁️';
+                            else if (nome.includes('sobrevivência')) skillIcon = '🏕️';
+                            else if (nome.includes('fortitude')) skillIcon = '🛡️';
+                            else if (nome.includes('vontade')) skillIcon = '🧠';
+                          %>
+                          <%= skillIcon %>
+                        </div>
+
+                        <h6 class="skill-card-name"><%= pericia.nome %></h6>
+                        <p class="skill-card-attribute">
+                          <% 
+                            let attrName = '';
+                            let attrIcon = '';
+                            switch(pericia.atributo_chave) {
+                              case 'for': attrName = 'Força'; attrIcon = '💪'; break;
+                              case 'des': attrName = 'Destreza'; attrIcon = '🏃'; break;
+                              case 'con': attrName = 'Constituição'; attrIcon = '❤️'; break;
+                              case 'int': attrName = 'Inteligência'; attrIcon = '🧠'; break;
+                              case 'sab': attrName = 'Sabedoria'; attrIcon = '🧙'; break;
+                              case 'car': attrName = 'Carisma'; attrIcon = '😎'; break;
+                              default: attrName = pericia.atributo_chave; attrIcon = '🎯'; break;
+                            }
+                          %>
+                          <%= attrIcon %> <%= attrName %>
+                        </p>
+                      </div>
+
+                      <div class="skill-card-content">
+                        <p class="skill-card-description"><%= pericia.descricao %></p>
+
+                        <!-- Tags da Perícia -->
+                        <div class="skill-tags">
+                          <span class="skill-tag category"><%= categoryName %></span>
+                          <span class="skill-tag attribute"><%= attrName %></span>
+                        </div>
+                      </div>
+                    </div>
+                  <% }); %>
+                </div>
+              </div>
+            <% } %>
+          <% }); %>
+        </div>
+      </div>
+    <% } else { %>
+      <!-- Estado vazio -->
+      <div class="skills-empty-state">
+        <div class="skills-empty-icon">📜</div>
+        <h4 class="skills-empty-title">Nenhuma Perícia Disponível</h4>
+        <p class="skills-empty-description">
+          Não há perícias disponíveis para seleção no momento.
+        </p>
+      </div>
+    <% } %>
+  </div>
+</div>
 
       <!-- Poderes -->
       <!-- Seção de Poderes Melhorada para Character Create -->

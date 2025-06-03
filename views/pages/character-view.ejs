@@ -291,6 +291,501 @@ function getPowerIcon(poder, tipo) {
       </div>
     </div>
 
+    <!-- Perícias do Personagem -->
+<% 
+  // DEBUG: Verificar dados de perícias
+  console.log('🔍 ===== DEBUG PERÍCIAS CHARACTER-VIEW =====');
+  console.log('  - pericias definido:', typeof pericias !== 'undefined');
+  console.log('  - pericias é array:', Array.isArray(pericias));
+  console.log('  - quantidade de pericias:', pericias ? pericias.length : 0);
+  console.log('  - periciasPorCategoria definido:', typeof periciasPorCategoria !== 'undefined');
+  console.log('  - categorias disponíveis:', periciasPorCategoria ? Object.keys(periciasPorCategoria) : 'nenhuma');
+  
+  if (pericias && pericias.length > 0) {
+    console.log('  📋 Lista de perícias:');
+    pericias.forEach((pericia, index) => {
+      console.log(`    ${index + 1}. ${pericia.nome} (${pericia.origem}) - Bônus: +${pericia.bonus_total || 0}`);
+    });
+  }
+  console.log('===========================================');
+%>
+
+<div class="character-skills-section">
+  <div class="character-skills-header">
+    <h3 class="character-skills-title">
+      <span>🎯</span>
+      Perícias do Personagem
+      <span>🎯</span>
+    </h3>
+    
+    <% if (typeof pericias !== 'undefined' && pericias && pericias.length > 0) { %>
+      <p class="character-skills-count">
+        <%= pericias.length %> <%= pericias.length === 1 ? 'perícia ativa' : 'perícias ativas' %>
+      </p>
+      
+      <!-- Resumo rápido de perícias treinadas -->
+      <% 
+        const periciasTreeinadas = pericias.filter(p => p.treinado);
+        const periciasEspecialistas = pericias.filter(p => p.especialista);
+      %>
+      <div class="skills-summary-badges">
+        <span class="skill-summary-badge trained">
+          🎯 <%= periciasTreeinadas.length %> Treinada<%= periciasTreeinadas.length !== 1 ? 's' : '' %>
+        </span>
+        <% if (periciasEspecialistas.length > 0) { %>
+          <span class="skill-summary-badge expert">
+            ⭐ <%= periciasEspecialistas.length %> Especialista<%= periciasEspecialistas.length !== 1 ? 's' : '' %>
+          </span>
+        <% } %>
+      </div>
+    <% } else { %>
+      <p class="character-skills-count">
+        Nenhuma perícia configurada
+      </p>
+    <% } %>
+  </div>
+
+  <!-- Debug Info (apenas em desenvolvimento) -->
+  <% if (process.env.NODE_ENV === 'development' || (typeof debug !== 'undefined' && debug)) { %>
+    <div class="debug-info" style="background: rgba(255, 255, 0, 0.1); border: 1px solid yellow; padding: 1rem; margin: 1rem 0; border-radius: 8px; font-family: monospace; font-size: 0.8rem;">
+      <strong>🔧 DEBUG PERÍCIAS:</strong><br>
+      - Pericias: <%= typeof pericias %> (<%= pericias ? pericias.length : 0 %> itens)<br>
+      - PericiasPorCategoria: <%= typeof periciasPorCategoria %> (<%= periciasPorCategoria ? Object.keys(periciasPorCategoria).length : 0 %> categorias)<br>
+      - Character ID: <%= character ? character.id : 'undefined' %><br>
+      - Nível: <%= character ? character.nivel : 'undefined' %><br>
+      <% if (periciasPorCategoria && Object.keys(periciasPorCategoria).length > 0) { %>
+        - Categorias encontradas: <%= Object.keys(periciasPorCategoria).join(', ') %><br>
+      <% } %>
+    </div>
+  <% } %>
+
+  <!-- CASO 1: TEM PERÍCIAS PARA EXIBIR -->
+  <% if (typeof pericias !== 'undefined' && pericias && pericias.length > 0) { %>
+    
+    <!-- Explicação do Sistema -->
+    <div class="skills-explanation">
+      <div class="card explanation-card">
+        <h4>📋 Como Funcionam as Perícias</h4>
+        <div class="explanation-grid">
+          <div class="explanation-item">
+            <h5>🎲 Teste de Perícia</h5>
+            <p><strong>1d20 + Metade do Nível + Atributo + Bônus de Treinamento</strong></p>
+          </div>
+          <div class="explanation-item">
+            <h5>💪 Bônus de Treinamento</h5>
+            <p>Níveis 1-6: +2 | Níveis 7-14: +4 | Níveis 15+: +6</p>
+          </div>
+          <div class="explanation-item">
+            <h5>⭐ Especialista (Ladino)</h5>
+            <p>Recebe o bônus de treinamento em dobro</p>
+          </div>
+          <div class="explanation-item">
+            <h5>📊 Seu Nível</h5>
+            <p>Nível <%= character.nivel || 1 %> = +<%= Math.floor((character.nivel || 1) / 2) %> de bônus</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros para Visualização -->
+    <div class="skills-quick-filters">
+      <div class="quick-filters-title">🎯 Filtros Rápidos</div>
+      <div class="quick-filters-buttons">
+        <button type="button" class="quick-filter-btn active" data-filter="all">
+          ✨ Todas (<%= pericias.length %>)
+        </button>
+        
+        <button type="button" class="quick-filter-btn" data-filter="trained">
+          🎯 Treinadas (<%= pericias.filter(p => p.treinado).length %>)
+        </button>
+        
+        <% if (pericias.some(p => p.especialista)) { %>
+          <button type="button" class="quick-filter-btn" data-filter="expert">
+            ⭐ Especialistas (<%= pericias.filter(p => p.especialista).length %>)
+          </button>
+        <% } %>
+        
+        <!-- Filtros dinâmicos baseados nas origens existentes -->
+        <% if (pericias.some(p => p.origem === 'classe')) { %>
+          <button type="button" class="quick-filter-btn" data-filter="classe">
+            ⚔️ Classe (<%= pericias.filter(p => p.origem === 'classe').length %>)
+          </button>
+        <% } %>
+        
+        <% if (pericias.some(p => p.origem === 'escolha')) { %>
+          <button type="button" class="quick-filter-btn" data-filter="escolha">
+            📚 Escolhidas (<%= pericias.filter(p => p.origem === 'escolha').length %>)
+          </button>
+        <% } %>
+        
+        <% if (pericias.some(p => p.origem === 'inteligencia')) { %>
+          <button type="button" class="quick-filter-btn" data-filter="inteligencia">
+            🧠 Inteligência (<%= pericias.filter(p => p.origem === 'inteligencia').length %>)
+          </button>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Organização por Categoria -->
+    <% if (periciasPorCategoria && Object.keys(periciasPorCategoria).length > 0) { %>
+      <div class="skills-by-category">
+        <% Object.entries(periciasPorCategoria).forEach(([categoria, periciasCategoria]) => { %>
+          <% if (periciasCategoria && periciasCategoria.length > 0) { %>
+            <div class="character-skill-category-section" 
+                 data-category="<%= categoria %>">
+              <div class="skill-category-header">
+                <h4 class="character-skill-category-title">
+                  <% 
+                    let categoryIcon = '🎯';
+                    let categoryName = categoria;
+                    switch(categoria.toLowerCase()) {
+                      case 'física': 
+                        categoryIcon = '🏃'; 
+                        categoryName = 'Perícias Físicas'; 
+                        break;
+                      case 'combate': 
+                        categoryIcon = '⚔️'; 
+                        categoryName = 'Perícias de Combate'; 
+                        break;
+                      case 'conhecimento': 
+                        categoryIcon = '📚'; 
+                        categoryName = 'Perícias de Conhecimento'; 
+                        break;
+                      case 'social': 
+                        categoryIcon = '💬'; 
+                        categoryName = 'Perícias Sociais'; 
+                        break;
+                      case 'percepção': 
+                        categoryIcon = '👁️'; 
+                        categoryName = 'Perícias de Percepção'; 
+                        break;
+                      case 'resistência': 
+                        categoryIcon = '🛡️'; 
+                        categoryName = 'Perícias de Resistência'; 
+                        break;
+                      case 'medicina': 
+                        categoryIcon = '💚'; 
+                        categoryName = 'Perícias de Medicina'; 
+                        break;
+                      case 'geral':
+                        categoryIcon = '🎯';
+                        categoryName = 'Perícias Gerais';
+                        break;
+                      default:
+                        categoryIcon = '🎯';
+                        categoryName = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+                        break;
+                    }
+                  %>
+                  <span><%= categoryIcon %></span>
+                  <%= categoryName %>
+                </h4>
+                <div class="skill-category-count">
+                  (<%= periciasCategoria.length %> <%= periciasCategoria.length === 1 ? 'perícia' : 'perícias' %>)
+                </div>
+                <button type="button" class="skill-category-toggle" data-target="<%= categoria %>">
+                  <span class="toggle-icon">📂</span>
+                </button>
+              </div>
+              
+              <div class="skills-list" id="skillsGrid-<%= categoria %>">
+                <% periciasCategoria.forEach(pericia => { %>
+                  <div class="character-skill-card" 
+                       data-origin="<%= pericia.origem || 'geral' %>" 
+                       data-category="<%= pericia.categoria || 'geral' %>"
+                       data-trained="<%= pericia.treinado %>"
+                       data-expert="<%= pericia.especialista || false %>">
+                    
+                    <div class="character-skill-header">
+                      <div class="skill-main-info">
+                        <h5 class="character-skill-name">
+                          <% 
+                            // Ícone da perícia
+                            let skillIcon = '🎯';
+                            const nome = (pericia.nome || '').toLowerCase();
+                            
+                            if (nome.includes('acrobacia')) skillIcon = '🤸';
+                            else if (nome.includes('atletismo')) skillIcon = '💪';
+                            else if (nome.includes('cavalgar')) skillIcon = '🐎';
+                            else if (nome.includes('furtividade')) skillIcon = '👤';
+                            else if (nome.includes('iniciativa')) skillIcon = '⚡';
+                            else if (nome.includes('ladinagem')) skillIcon = '🔓';
+                            else if (nome.includes('luta')) skillIcon = '👊';
+                            else if (nome.includes('pilotagem')) skillIcon = '🚗';
+                            else if (nome.includes('pontaria')) skillIcon = '🏹';
+                            else if (nome.includes('reflexos')) skillIcon = '🤺';
+                            else if (nome.includes('conhecimento')) skillIcon = '📚';
+                            else if (nome.includes('guerra')) skillIcon = '⚔️';
+                            else if (nome.includes('investigação')) skillIcon = '🔍';
+                            else if (nome.includes('misticismo')) skillIcon = '🔮';
+                            else if (nome.includes('nobreza')) skillIcon = '👑';
+                            else if (nome.includes('ofício')) skillIcon = '🔨';
+                            else if (nome.includes('religião')) skillIcon = '🙏';
+                            else if (nome.includes('adestramento')) skillIcon = '🐕';
+                            else if (nome.includes('atuação')) skillIcon = '🎭';
+                            else if (nome.includes('diplomacia')) skillIcon = '🤝';
+                            else if (nome.includes('enganação')) skillIcon = '🎭';
+                            else if (nome.includes('intimidação')) skillIcon = '😠';
+                            else if (nome.includes('jogatina')) skillIcon = '🎲';
+                            else if (nome.includes('cura')) skillIcon = '💚';
+                            else if (nome.includes('intuição')) skillIcon = '💡';
+                            else if (nome.includes('percepção')) skillIcon = '👁️';
+                            else if (nome.includes('sobrevivência')) skillIcon = '🏕️';
+                            else if (nome.includes('fortitude')) skillIcon = '🛡️';
+                            else if (nome.includes('vontade')) skillIcon = '🧠';
+                          %>
+                          <%= skillIcon %> <%= pericia.nome %>
+                        </h5>
+                        
+                        <div class="skill-bonus-display">
+                          <span class="skill-bonus-value">+<%= pericia.bonus_total || 0 %></span>
+                          <span class="skill-bonus-label">Bônus Total</span>
+                        </div>
+                      </div>
+                      
+                      <div class="skill-status-badges">
+                        <% if (pericia.treinado) { %>
+                          <span class="skill-status-badge trained">🎯 Treinada</span>
+                        <% } else { %>
+                          <span class="skill-status-badge untrained">❌ Não Treinada</span>
+                        <% } %>
+                        
+                        <% if (pericia.especialista) { %>
+                          <span class="skill-status-badge expert">⭐ Especialista</span>
+                        <% } %>
+                        
+                        <% 
+                          let originIcon = '📝';
+                          let originText = pericia.origem || 'geral';
+                          switch(pericia.origem) {
+                            case 'classe': originIcon = '⚔️'; originText = 'Classe'; break;
+                            case 'escolha': originIcon = '📚'; originText = 'Escolhida'; break;
+                            case 'inteligencia': originIcon = '🧠'; originText = 'Inteligência'; break;
+                            case 'raca': originIcon = '🧬'; originText = 'Racial'; break;
+                            default: originIcon = '📝'; originText = 'Outro'; break;
+                          }
+                        %>
+                        <span class="skill-origin-badge">
+                          <%= originIcon %> <%= originText %>
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div class="character-skill-details">
+                      <!-- Cálculo detalhado do bônus -->
+                      <div class="skill-bonus-breakdown">
+                        <h6>📊 Cálculo do Bônus</h6>
+                        <div class="bonus-breakdown-grid">
+                          <div class="bonus-item">
+                            <span class="bonus-label">📊 Nível (÷2)</span>
+                            <span class="bonus-value">+<%= pericia.bonus_nivel || 0 %></span>
+                          </div>
+                          
+                          <div class="bonus-item">
+                            <span class="bonus-label">
+                              <% 
+                                let attrIcon = '🎯';
+                                let attrName = pericia.atributo_chave || 'N/A';
+                                switch(pericia.atributo_chave) {
+                                  case 'for': attrIcon = '💪'; attrName = 'Força'; break;
+                                  case 'des': attrIcon = '🏃'; attrName = 'Destreza'; break;
+                                  case 'con': attrIcon = '❤️'; attrName = 'Constituição'; break;
+                                  case 'int': attrIcon = '🧠'; attrName = 'Inteligência'; break;
+                                  case 'sab': attrIcon = '🧙'; attrName = 'Sabedoria'; break;
+                                  case 'car': attrIcon = '😎'; attrName = 'Carisma'; break;
+                                }
+                              %>
+                              <%= attrIcon %> <%= attrName %>
+                            </span>
+                            <span class="bonus-value">
+                              <%= pericia.bonus_atributo >= 0 ? '+' : '' %><%= pericia.bonus_atributo || 0 %>
+                            </span>
+                          </div>
+                          
+                          <% if (pericia.treinado) { %>
+                            <div class="bonus-item">
+                              <span class="bonus-label">🎯 Treinamento</span>
+                              <span class="bonus-value">+<%= pericia.bonus_treinamento || 0 %></span>
+                            </div>
+                          <% } %>
+                          
+                          <% if (pericia.especialista) { %>
+                            <div class="bonus-item expert">
+                              <span class="bonus-label">⭐ Especialista</span>
+                              <span class="bonus-value">+<%= pericia.bonus_treinamento || 0 %></span>
+                            </div>
+                          <% } %>
+                          
+                          <div class="bonus-item total">
+                            <span class="bonus-label"><strong>🎲 Total</strong></span>
+                            <span class="bonus-value"><strong>+<%= pericia.bonus_total || 0 %></strong></span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Descrição da perícia -->
+                      <% if (pericia.descricao) { %>
+                        <div class="skill-description">
+                          <h6>📝 Descrição</h6>
+                          <p><%= pericia.descricao %></p>
+                        </div>
+                      <% } %>
+                      
+                      <!-- Observações -->
+                      <% if (pericia.observacoes) { %>
+                        <div class="skill-notes">
+                          <h6>📋 Observações</h6>
+                          <p><%= pericia.observacoes %></p>
+                        </div>
+                      <% } %>
+                    </div>
+                    
+                    <!-- Tags informativos -->
+                    <div class="skill-tags" style="margin-top: 1rem;">
+                      <span class="skill-tag category">
+                        <%= categoryName.replace('Perícias ', '') %>
+                      </span>
+                      
+                      <span class="skill-tag attribute">
+                        <%= attrIcon %> <%= attrName %>
+                      </span>
+                      
+                      <span class="skill-tag origin">
+                        <%= originIcon %> <%= originText %>
+                      </span>
+                      
+                      <% if (pericia.treinado) { %>
+                        <span class="skill-tag trained">
+                          🎯 Treinada
+                        </span>
+                      <% } %>
+                      
+                      <% if (pericia.especialista) { %>
+                        <span class="skill-tag expert">
+                          ⭐ Especialista
+                        </span>
+                      <% } %>
+                      
+                      <span class="skill-tag bonus">
+                        🎲 +<%= pericia.bonus_total || 0 %>
+                      </span>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+            </div>
+          <% } %>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <!-- Lista simples (fallback se não há organização por categoria) -->
+      <div class="skills-list">
+        <% pericias.forEach(pericia => { %>
+          <div class="character-skill-card" 
+               data-origin="<%= pericia.origem %>" 
+               data-category="<%= pericia.categoria || 'geral' %>"
+               data-trained="<%= pericia.treinado %>"
+               data-expert="<%= pericia.especialista || false %>">
+            
+            <div class="character-skill-header">
+              <h5 class="character-skill-name">
+                🎯 <%= pericia.nome %>
+              </h5>
+              
+              <div class="skill-bonus-display">
+                <span class="skill-bonus-value">+<%= pericia.bonus_total || 0 %></span>
+              </div>
+            </div>
+            
+            <div class="character-skill-details">
+              <% if (pericia.observacoes) { %>
+                <p><%= pericia.observacoes %></p>
+              <% } %>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+    
+    <!-- Resumo das Perícias -->
+    <div class="skills-summary" style="margin-top: 2rem; padding: 1.5rem; background: rgba(212, 175, 55, 0.1); border: 2px solid var(--accent-gold); border-radius: 12px;">
+      <h4 style="color: var(--accent-gold); margin-bottom: 1rem; text-align: center;">
+        📊 Resumo das Perícias
+      </h4>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <% 
+          // Calcular estatísticas
+          const totalPericias = pericias.length;
+          const periciasTreeinadasCount = pericias.filter(p => p.treinado).length;
+          const periciasEspecialistasCount = pericias.filter(p => p.especialista).length;
+          const bonusMedio = pericias.length > 0 ? Math.round(pericias.reduce((sum, p) => sum + (p.bonus_total || 0), 0) / pericias.length) : 0;
+          const melhorBonus = pericias.length > 0 ? Math.max(...pericias.map(p => p.bonus_total || 0)) : 0;
+        %>
+        
+        <div class="summary-item" style="text-align: center; background: rgba(37, 40, 80, 0.6); padding: 1rem; border-radius: 8px;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+          <div style="color: var(--accent-gold); font-weight: bold; font-size: 1.8rem;"><%= totalPericias %></div>
+          <div style="color: var(--text-muted); font-size: 0.9rem;">Total de Perícias</div>
+        </div>
+        
+        <div class="summary-item" style="text-align: center; background: rgba(37, 40, 80, 0.6); padding: 1rem; border-radius: 8px;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</div>
+          <div style="color: var(--accent-gold); font-weight: bold; font-size: 1.8rem;"><%= periciasTreeinadasCount %></div>
+          <div style="color: var(--text-muted); font-size: 0.9rem;">Treinadas</div>
+        </div>
+        
+        <% if (periciasEspecialistasCount > 0) { %>
+          <div class="summary-item" style="text-align: center; background: rgba(37, 40, 80, 0.6); padding: 1rem; border-radius: 8px;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+            <div style="color: var(--accent-gold); font-weight: bold; font-size: 1.8rem;"><%= periciasEspecialistasCount %></div>
+            <div style="color: var(--text-muted); font-size: 0.9rem;">Especialistas</div>
+          </div>
+        <% } %>
+        
+        <div class="summary-item" style="text-align: center; background: rgba(37, 40, 80, 0.6); padding: 1rem; border-radius: 8px;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎲</div>
+          <div style="color: var(--accent-gold); font-weight: bold; font-size: 1.8rem;">+<%= melhorBonus %></div>
+          <div style="color: var(--text-muted); font-size: 0.9rem;">Melhor Bônus</div>
+        </div>
+        
+        <div class="summary-item" style="text-align: center; background: rgba(37, 40, 80, 0.6); padding: 1rem; border-radius: 8px;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📈</div>
+          <div style="color: var(--accent-gold); font-weight: bold; font-size: 1.8rem;">+<%= bonusMedio %></div>
+          <div style="color: var(--text-muted); font-size: 0.9rem;">Bônus Médio</div>
+        </div>
+      </div>
+    </div>
+
+  <!-- CASO 2: SEM PERÍCIAS -->
+  <% } else { %>
+    <div class="skills-empty-state">
+      <div class="skills-empty-icon">📜</div>
+      <h4 class="skills-empty-title">Nenhuma Perícia Configurada</h4>
+      <p class="skills-empty-description">
+        Este personagem ainda não possui perícias configuradas.
+        <br>
+        <% if (character && character.classe_nome) { %>
+          <strong>Classe:</strong> <%= character.classe_nome %> - <strong>Nível:</strong> <%= character.nivel || 1 %>
+          <br>
+        <% } %>
+        <strong>💡 Dica:</strong> Use a edição para configurar as perícias do personagem.
+        <br>
+        <a href="/personagens/<%= character.id %>/editar" style="color: var(--accent-gold); text-decoration: none;">
+          ✏️ Editar personagem para configurar perícias
+        </a>
+      </p>
+
+      <!-- Ações rápidas -->
+      <div style="margin-top: 1rem;">
+        <a href="/personagens/<%= character.id %>/editar" class="btn btn-secondary">
+          ✏️ Configurar Perícias
+        </a>
+      </div>
+    </div>
+  <% } %>
+</div>
+
     <!-- Poderes -->
 <% 
   // DEBUG: Log para verificar dados recebidos
