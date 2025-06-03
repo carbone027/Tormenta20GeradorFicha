@@ -1,0 +1,477 @@
+﻿Nome da Magia;Tipo;Escola;Descritivo da Magia;Círculo;Custo PM;Execução;Aprimoramento (Tipo);Descritivo do Aprimoramento;Custo PM Aprimoramento
+Abençoar Alimentos;Divina;Transmutação;Purifica alimento e pode conceder PV ou PM temporários. ;1º;1;Padrão;Truque (Custo Reduzido / Efeito Alterado);Alimento é purificado (não causa nenhum efeito nocivo se estava estragado ou envenenado), mas não fornece bônus ao ser consumido. ;Custo total: 0 PM
+Abençoar Alimentos;;;;;;;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1. ;+1 PM
+Abençoar Alimentos;;;;;;;Criar Água Benta (Efeito Alterado / Duração / Comp. Material);Muda a duração para permanente, o alvo para 1 frasco com água e adiciona componente material (pó de prata no valor de T$ 5). Cria um frasco de água benta. ;+1 PM
+Acalmar Animal;Divina;Encantamento;Torna um animal prestativo e facilita Adestramento/Diplomacia contra ele. ;1º;1;Padrão;Alcance Médio (Alcance);Muda o alcance para médio. ;+1 PM
+Acalmar Animal;;;;;;;Alvo Monstro/Espírito (Int 1 ou 2) (Alvo);Muda o alvo para 1 monstro ou espírito com Inteligência 1 ou 2. ;+1 PM
+Acalmar Animal;;;;;;;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1. ;+2 PM
+Acalmar Animal;;;;;;;"Alvo Monstro/Espírito (Qualquer) (Alvo; Requer 3º círculo)";Muda o alvo para 1 monstro ou espírito. Requer 3º círculo. ;+5 PM
+Adaga Mental;Arcana;Encantamento;Causa dano psíquico e pode atordoar o alvo. ;1º;1;Padrão;Discrição e Invisibilidade (Componentes / Efeito Adicional);Lança sem gesticular/palavras (pode usar com armadura), adaga invisível. Se alvo falhar na resistência, não percebe a magia. ;+1 PM
+Adaga Mental;;;;;;;Rastreamento Mental (Duração / Efeito Adicional);"Muda duração para um dia. Adaga ""fincada"" na mente do alvo permite saber direção e localização dele no mesmo mundo. ";+2 PM
+Adaga Mental;;;;;;;Aumento de Dano (Dano);Aumenta o dano em +1d6. ;+2 PM
+Alarme;Arcana;Abjuração;Avisa telepática ou sonoramente quando alguém invade uma área protegida. ;1º;1;Padrão;Proteção Pessoal (Alcance);Muda o alcance para pessoal. A área é emanada a partir de você. ;+2 PM
+Alarme;;;;;;;Detecção Aprimorada (Efeito Adicional);Além do normal, você percebe qualquer efeito de adivinhação na área ou que a atravesse. Pode tentar identificar o usuário. ;+5 PM
+Alarme;;;;;;;Alarme Atordoante (Duração / Efeito Adicional / Resistência);Muda a duração para um dia ou até ser descarregada e resistência para Vontade anula. Intruso que falhar na resistência fica paralisado por 1d4 rodadas. Bônus para rastrear. ;+9 PM
+Arma Mágica;Universal;Transmutação;"Arma se torna mágica, recebe bônus em ataque/dano; pode usar atributo-chave na magia. ";1º;1;Padrão;Aumento de Bônus (Bônus);Aumenta o bônus em +1 (bônus máximo limitado pelo círculo máximo de magia que você pode lançar). ;+2 PM
+Arma Mágica;;;;;;;Dano Elemental (Dano Adicional);A arma causa +1d6 de dano de ácido, eletricidade, fogo ou frio (escolhido ao lançar). Só pode ser usado uma vez. ;+2 PM
+Arma Mágica;;;;;;;Aumento Dano Elemental (Dano Adicional);Muda o bônus de dano do aprimoramento acima para +2d6. ;+3 PM
+Armamento da Natureza;Divina;Transmutação;Fortalece arma primitiva/natural/desarmada, aumentando dano e tornando-a mágica. ;1º;1;Padrão;Bônus de Ataque (Bônus);Fornece +1 nos testes de ataque com a arma. ;+1 PM
+Armamento da Natureza;;;;;;;Execução Rápida (Execução);Muda a execução para ação de movimento. ;+2 PM
+Armamento da Natureza;;;;;;;Aumento de Bônus de Ataque (Bônus);Aumenta o bônus nos testes de ataque em +1. ;+3 PM
+Armamento da Natureza;;;;;;;Aumento de Dano (Dano);Aumenta o dano da arma em mais um passo. ;+5 PM
+Armadura Arcana;Arcana;Abjuração;Cria película protetora invisível, fornecendo +5 na Defesa. ;1º;1;Padrão;Escudo Mágico (Execução / Duração / Efeito Adicional);Muda execução para reação, duração para instantânea. Cria escudo mágico que fornece +5 na Defesa contra o próximo ataque. ;+1 PM
+Armadura Arcana;;;;;;;Aumento de Bônus (Bônus);Aumenta o bônus na Defesa em +1. ;+2 PM
+Armadura Arcana;;;;;;;Duração Estendida (Duração);Muda a duração para um dia. ;+2 PM
+Área Escorregadia;Arcana;Convocação;Recobre superfície com substância escorregadia, podendo derrubar criaturas. ;1º;1;Padrão;Aumento de Área (Área);Aumenta a área em +1 quadrado de 1,5m. ;+1 PM
+Área Escorregadia;;;;;;;Dificuldade Aumentada (CD Acrobacia);Muda a CD dos testes de Acrobacia para 15. ;+2 PM
+Área Escorregadia;;;;;;;Dificuldade Muito Aumentada (CD Acrobacia);Muda a CD dos testes de Acrobacia para 20. ;+5 PM
+Aviso;Universal;Adivinhação;Envia um alerta telepático (Alerta, Mensagem ou Localização) para uma criatura. ;1º;1;Movimento;Alcance Estendido (Alcance);Aumenta o alcance em um fator de 10. ;+1 PM
+Aviso;;;;;;;Resposta (Efeito Adicional - Mensagem);Se escolher mensagem, o alvo pode enviar uma resposta de até 25 palavras até o fim do seu próximo turno. ;+1 PM
+Aviso;;;;;;;Localização Contínua (Duração - Localização);Se escolher localização, muda a duração para cena. O alvo sabe onde você está mesmo que você mude de posição. ;+2 PM
+Aviso;;;;;;;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1. ;+3 PM
+Bênção;Divina;Encantamento;Aliados recebem +1 em testes de ataque e rolagens de dano. Anula Perdição. ;1º;1;Padrão;Preservar Cadáver (Alvo / Duração);Muda o alvo para 1 cadáver e a duração para 1 semana. O cadáver não se decompõe nem pode ser transformado em morto-vivo. ;+1 PM
+Bênção;;;;;;;Aumento de Bônus (Bônus);Aumenta os bônus em +1 (bônus máximo limitado pelo círculo máximo de magia que você pode lançar). ;+2 PM
+Caminhos da Natureza;Divina;Convocação;Invoca espíritos da natureza que concedem bônus de deslocamento e ignoram terreno difícil. ;1º;1;Padrão;Truque (Alcance / Alvo / Efeito Alterado);Muda alcance para pessoal, alvo para você. Recebe +5 em Sobrevivência para se orientar. ;Custo total: 0 PM
+Caminhos da Natureza;;;;;;;Rastro Oculto (Efeito Adicional);Além do normal, a CD para rastrear os alvos em terreno natural aumenta em +10. ;+1 PM
+Caminhos da Natureza;;;;;;;Aumento Bônus Deslocamento (Bônus);Aumenta o bônus de deslocamento em +3m. ;+2 PM
+Comando;Divina;Encantamento;Força o alvo (humanoide) a obedecer uma ordem simples por 1 rodada. ;1º;1;Padrão;Alvo Criatura (Alvo);Muda o alvo para 1 criatura. ;+1 PM
+Comando;;;;;;;Aumento de Alvos (Alvo);Aumenta a quantidade de alvos em +1. ;+2 PM
+Compreensão;Universal;Adivinhação;Entende qualquer escrita/fala, ouve pensamentos de criatura tocada. ;1º;1;Padrão;Alcance Curto (Alcance);Muda o alcance para curto. ;+1 PM
+Compreensão;;;;;;;Compreensão Ampla (Alcance / Alvo);Muda o alcance para curto e o alvo para criaturas escolhidas. Entende todas, mas ouve pensamentos de uma por vez. ;+2 PM
+Compreensão;;;;;;;"Sondar Mente (Alvo / Efeito Adicional; Requer 2º círculo)";Muda o alvo para 1 criatura. Pode vasculhar pensamentos para extrair informações (Vontade anula). Requer 2º círculo. ;+2 PM
+Compreensão;;;;;;;"Poliglota (Alcance / Alvo / Efeito Adicional; Requer 3º círculo)";Muda o alcance para pessoal, alvo para você. Pode falar, entender e escrever qualquer idioma. Requer 3º círculo. ;+5 PM
+Concentração de Combate;Arcana;Adivinhação;Ao atacar, rola dois dados e fica com o melhor por 1 rodada. ;1º;1;Livre;"Duração Estendida (Execução / Duração; Requer 2º círculo)";Muda execução para padrão, duração para cena. Requer 2º círculo. ;+2 PM
+Concentração de Combate;;;;;;;"Defesa Intuitiva (Efeito Adicional; Requer 3º círculo)";Além do normal, ao ser atacado, inimigo rola dois dados e usa o pior. Requer 3º círculo. ;+5 PM
+Concentração de Combate;;;;;;;"Aura de Combate (Execução / Alcance / Alvo / Duração; Requer 4º círculo)";Muda execução para padrão, alcance para curto, alvo para criaturas escolhidas, duração para cena. Requer 4º círculo. ;+9 PM
+Concentração de Combate;;;;;;;"Sexto Sentido (Execução / Duração / Efeito Adicional; Requer 5º círculo)";Muda execução para padrão, duração para dia. Imune a surpresa/desprevenido, +10 Defesa/Reflexos. Requer 5º círculo. ;+14 PM
+Conjurar Monstro;Arcana;Convocação;Convoca um monstro Pequeno que ataca seus inimigos. ;1º;1;Completa;Movimento Especializado (Efeito Adicional - Monstro);O monstro ganha deslocamento de escalada ou natação igual ao seu deslocamento terrestre. ;+1 PM
+Conjurar Monstro;;;;;;;Aumento Deslocamento Monstro (Efeito Adicional - Monstro);Aumenta o deslocamento do monstro em +3m. ;+1 PM
+Conjurar Monstro;;;;;;;Dano Elemental Monstro (Efeito Adicional - Monstro);Muda o tipo de dano do ataque do monstro para ácido, fogo, frio ou eletricidade. ;+1 PM
+Conjurar Monstro;;;;;;;Aumento PV Monstro (Efeito Adicional - Monstro);Aumenta os PV do monstro em +10 para cada categoria de tamanho a partir de Pequeno. ;+2 PM
+Conjurar Monstro;;;;;;;Monstro Médio (Efeito Adicional - Monstro);Aumenta o tamanho do monstro para Médio (For 4, Des 3, 45 PV, desloc. 12m, dano 2d6+6). ;+2 PM
+Conjurar Monstro;;;;;;;Resistência Monstro (Efeito Adicional - Monstro);O monstro ganha resistência 5 contra dois tipos de dano. ;+2 PM
+Conjurar Monstro;;;;;;;Arma de Sopro (Efeito Adicional - Monstro);O monstro ganha uma nova ordem: Arma de Sopro. Para dar essa ordem você gasta 1 PM, e faz o monstro causar o dobro de seu dano de ataque em um cone de 6m a partir de si ;+4 PM
+Conjurar Monstro;;;;;;;Monstro Grande (Efeito Adicional - Monstro);Aumenta o tamanho do monstro para Grande (For 7, Des 2, 75 PV, desloc. 12m, dano 4d6+10, Alcance 3m). Requer 2º círculo. ;+5 PM
+Conjurar Monstro;;;;;;;Movimento de Voo(Efeito Adicional - Monstro);"O monstro ganha deslocamento de voo igual ao dobro do des
+locamento.  ";+9 PM
+Conjurar Monstro;;;;;;;Imunidade Monstro (Efeito Adicional - Monstro); O monstro ganha imunidade contra dois tipos de dano. ;+9 PM
+Conjurar Monstro;;;;;;;Monstro Enorme (Efeito Adicional - Monstro);Aumenta o tamanho do monstro para Enorme (For 11, Des 1, 110 PV, desloc. 15m, dano 4d8+15, Alcance 4,5m). Requer 4º círculo. ;+9 PM
+Conjurar Monstro;;;;;;;Monstro Colossal (Efeito Adicional - Monstro);Aumenta o tamanho do monstro para Colossal (For 15, Des 0, 180 PV, desloc. 15m, dano 4d12+20, Alcance 9m). Requer 5º círculo. ;+14 PM
+Consagrar;Divina;Evocação;Abençoa a área, maximizando PV curados por luz e dano de luz em mortos-vivos. ;1º;1;Padrão;Penalidade Mortos-Vivos (Efeito Adicional);Além do normal, mortos-vivos na área sofrem –2 em testes e Defesa. ;+1 PM
+Consagrar;;;;;;;Aumento Penalidade Mortos-Vivos (Efeito Adicional);Aumenta as penalidades para mortos-vivos em –1. ;+2 PM
+Consagrar;;;;;;;"Duração Permanente (Execução / Duração / Comp. Material; Requer 4º círculo)";Muda execução para 1 hora, duração para permanente, adiciona componente material (incenso/óleos T$ 1.000). Requer 4º círculo. ;+9 PM
+Controlar Plantas;Divina;Transmutação;Vegetação enreda criaturas na área, que se torna terreno difícil. ;1º;1;Padrão;Truque (Área / Alvo / Resistência / Efeito Alterado);Muda área para alvo 1 planta, resistência para nenhuma. Pode mover a planta como se animada (sem dano ou atrapalhar concentração). ;Custo total: 0 PM
+Controlar Plantas;;;;;;;Podar Vegetação (Duração / Efeito Alterado);Muda duração para instantânea. Plantas diminuem, terreno difícil vira normal, sem camuflagem. Dissipa uso normal de Controlar Plantas. ;+1 PM
+Controlar Plantas;;;;;;;Imobilizar Adicional (Efeito Adicional);Além do normal, criaturas que falhem na resistência também ficam imóveis. ;+1 PM
+Controlar Plantas;;;;;;;"Comunicação com Plantas (Alcance / Alvo / Resistência / Efeito Adicional; Requer 2º círculo)";Muda alcance para pessoal, alvo para você, resistência para nenhuma. Pode se comunicar com plantas (prestativa). Testes de Diplomacia com plantas. Requer 2º círculo. ;+2 PM
+Criar Elementos;Divina;Convocação;Cria pequena porção de água (ou gelo), ar, fogo ou terra. ;1º;1;Padrão;Aumento de Quantidade (Efeito Adicional);Aumenta a quantidade do elemento em um passo (categoria de tamanho para água/terra, +1 quadrado 1,5m para ar/fogo). ;+1 PM
+Criar Elementos;;;;;;;Arremessar Elemento (Alvo / Resistência / Efeito Adicional);Muda alvo para 1 criatura/objeto, resistência para Reflexos reduz à metade. Arremessa cubo de água/terra (2d4 impacto, dano aumenta com tamanho). Cubo se desfaz. ;+1 PM
+Criar Elementos;;;;;;;Aumento Dano Fogo (Dano Adicional - Fogo);Se escolheu fogo, aumenta o dano inicial de cada chama em +1d6. ;+1 PM
+Criar Ilusão;Arcana;Ilusão;Cria uma ilusão visual ou sonora simples. ;1º;1;Padrão;Movimento/Alteração (Duração / Efeito Adicional);Muda duração para sustentada. Pode mover imagem ou alterar som levemente (ação livre). Imagem/som persiste 1 rodada após parar de sustentar. ;+1 PM
+Criar Ilusão;;;;;;;Aumento de Efeito (Área);Aumenta o efeito da ilusão em +1 cubo de 1,5m. ;+1 PM
+Criar Ilusão;;;;;;;Imagem e Som Combinados (Efeito Adicional);Também pode criar ilusões de imagem e sons combinados. ;+1 PM
+Criar Ilusão;;;;;;;Sons Complexos (Efeito Adicional);Também pode criar sons complexos (volume de 5 pessoas por cubo). Pode alterar volume ou direção do som (ação livre). ;+1 PM
+Curar Ferimentos;Divina;Evocação;Toque recupera 2d8+2 PV. ;1º;1;Padrão;Truque (Alvo / Efeito Alterado / Resistência);Muda alvo para 1 morto-vivo. Causa 1d8 dano de luz (Vontade reduz à metade). ;Custo total: 0 PM
+Curar Ferimentos;;;;;;;Aumento de Cura (Cura);Aumenta a cura em +1d8+1. ;+1 PM
+Curar Ferimentos;;;;;;;Remover Fadiga (Efeito Adicional);Também remove uma condição de fadiga do alvo. ;+2 PM
+Curar Ferimentos;;;;;;;Alcance Curto (Alcance);Muda o alcance para curto. ;+2 PM
+Curar Ferimentos;;;;;;;Cura em Área (Alcance / Alvo);Muda o alcance para curto e o alvo para criaturas escolhidas. ;+5 PM
+Detectar Ameaças;Divina;Adivinhação;Intuição sobre perigos (criaturas hostis, armadilhas) em esfera de 18m de raio. ;1º;1;Padrão;Identificar Ameaça (Efeito Adicional);Descobre raça/espécie e poder da criatura detectada (aura). ;+1 PM
+Detectar Ameaças;;;;;;;"Sexto Sentido (Efeito Adicional; Requer 2º círculo)";Além do normal, não fica surpreso/desprevenido contra perigos detectados, +5 em testes de resistência contra armadilhas. Requer 2º círculo. ;+2 PM
+Despedaçar;Divina;Evocação;Som alto causa 1d8+2 dano de impacto e atordoamento. Dobro do dano a construtos/objetos. ;1º;1;Padrão;Aumento de Dano (Dano);Aumenta o dano em +1d8+2. ;+2 PM
+Despedaçar;;;;;;;"Alvo Objeto Médio (Alvo; Requer 2º círculo)";Muda o alvo para objeto mundano Médio. Requer 2º círculo. ;+2 PM
+Disfarce Ilusório;Arcana;Ilusão;Muda a aparência do alvo (incluindo equipamento), +10 em Enganação para disfarce. ;1º;1;Padrão;Truque (Alcance / Alvo / Duração / Efeito Alterado);Muda alcance para toque, alvo 1 criatura, duração 1 semana. Pequena alteração na aparência (nariz vermelho, flor na cabeça). Inofensiva, mas persistente. ;Custo total: 0 PM
+Disfarce Ilusório;;;;;;;Alvo Objeto (Alcance / Alvo / Efeito Adicional);Muda alcance para curto, alvo 1 objeto. +10 em Enganação para falsificação. ;+1 PM
+Disfarce Ilusório;;;;;;;Alvo Criatura (Alcance / Alvo / Resistência);Muda alcance para curto, alvo 1 criatura. Criatura involuntária pode anular com Vontade. ;+2 PM
+Disfarce Ilusório;;;;;;;Ilusão Completa (Efeito Adicional);A ilusão inclui odores e sensações. Bônus em Enganação para disfarce muda para +20. ;+2 PM
+Enfeitiçar;Arcana;Encantamento;Alvo (humanoide) fica enfeitiçado e prestativo. ;1º;1;Padrão;Sugestão (Efeito Alterado);Sugere uma ação aceitável ao alvo, que ele obedece. Pode ter condição específica. Magia termina após ação. ;+2 PM
+Enfeitiçar;;;;;;;"Alvo Espírito/Monstro (Alvo; Requer 3º círculo)";Muda o alvo para 1 espírito ou monstro. Requer 3º círculo. ;+5 PM
+Enfeitiçar;;;;;;;Enfeitiçar em Massa (Alvo);Afeta todos os alvos válidos dentro do alcance. ;+5 PM
+Escudo da Fé;Divina;Abjuração;Alvo recebe +2 na Defesa por 1 turno. ;1º;1;Reação;Duração Estendida (Execução / Alcance / Duração);Muda execução para padrão, alcance para toque, duração para cena. ;+1 PM
+Escudo da Fé;;;;;;;Camuflagem Leve (Efeito Adicional);Também fornece ao alvo camuflagem leve contra ataques à distância. ;+1 PM
+Escudo da Fé;;;;;;;Aumento de Bônus (Bônus);Aumenta o bônus na Defesa em +1. ;+2 PM
+Escuridão;Universal;Necromancia;Objeto emana sombras (6m raio), camuflagem leve. Anula Luz. ;1º;1;Padrão;Aumento de Área (Área);Aumenta a área da escuridão em +1,5m de raio. ;+1 PM
+Escuridão;;;;;;;Escuridão Total (Efeito Alterado);Muda o efeito para fornecer camuflagem total por escuridão total. Bloqueia visão na área e através dela. ;+2 PM
+Escuridão;;;;;;;"Cegueira (Alvo / Resistência; Requer 2º círculo)";"Muda alvo para 1 criatura, resistência para Fortitude parcial. Alvo fica cego pela cena; se passar, cego por 1 rodada. Requer 2º círculo. ";+2 PM
+Escuridão;;;;;;;Duração Estendida (Duração);Muda a duração para um dia. ;+3 PM
+Explosão de Chamas;Arcana;Evocação;Cone de 6m causa 2d6 dano de fogo. ;1º;1;Padrão;Truque (Alcance / Área / Alvo / Resistência / Efeito Alterado);Muda alcance para curto, área para alvo 1 objeto. Pequena explosão acende vela/tocha/fogueira ou item inflamável (RD 0) fica em chamas (Reflexos anula). ;Custo total: 0 PM
+Explosão de Chamas;;;;;;;Aumento de Dano (Dano);Aumenta o dano em +1d6. ;+1 PM
+Explosão de Chamas;;;;;;;Em Chamas (Resistência / Efeito Adicional);Muda resistência para Reflexos parcial. Se falhar, criatura fica em chamas. ;+1 PM
+Hipnotismo;Arcana;Encantamento;Alvo (animal/humanoide) fica fascinado por 1d4 rodadas. ;1º;1;Padrão;Truque (Duração / Efeito Alterado);Muda duração para 1 rodada. Alvo fica pasmo (apenas uma vez por cena). ;Custo total: 0 PM
+Hipnotismo;;;;;;;Enganar Resistência (Efeito Adicional);Alvos que passem na resistência não sabem que foram vítimas de uma magia. ;+1 PM
+Hipnotismo;;;;;;;Alvos Múltiplos (Alvo);Muda o alvo para animais ou humanoides escolhidos. ;+2 PM
+Hipnotismo;;;;;;;Duração Sustentada (Duração);Muda a duração para sustentada. ;+2 PM
+Imagem Espelhada;Arcana;Ilusão;"Cria 3 cópias ilusórias, concedendo +6 na Defesa; bônus diminui com ataques errados. ";1º;1;Padrão;Aumento de Cópias (Efeito Adicional / Bônus);Aumenta o número de cópias em +1 (e o bônus na Defesa em +2). ;+2 PM
+Imagem Espelhada;;;;;;;"Clarão Destrutivo (Efeito Adicional; Requer 2º círculo)";Além do normal, toda vez que uma cópia é destruída, emite um clarão de luz. Criatura que destruiu a cópia fica ofuscada por 1 rodada. Requer 2º círculo. ;+2 PM
+Infligir Ferimentos;Divina;Necromancia;Toque causa 2d8+2 dano de trevas (cura mortos-vivos). Anula Curar Ferimentos. ;1º;1;Padrão;Fraqueza Adicional (Efeito Adicional);Além do normal, se falhar na resistência, o alvo fica fraco pela cena. ;+1 PM
+Infligir Ferimentos;;;;;;;Aumento de Dano (Dano);Aumenta o dano em 1d8+1. ;+2 PM
+Infligir Ferimentos;;;;;;;Toque Certeiro (Resistência / Ataque Adicional);"Muda resistência para nenhum. Como parte da execução, faz um ataque corpo a corpo; se acertar, causa dano do ataque e da magia. ";+2 PM
+Infligir Ferimentos;;;;;;;Infligir em Massa (Alcance / Alvo);Muda o alcance para curto e o alvo para criaturas escolhidas. ;+5 PM
+Leque Cromático;Arcana;Ilusão;Cone de 4,5m de luzes deixa animais/humanoides atordoados por 1 rodada e ofuscados. ;1º;1;Padrão;Vulnerabilidade Adicional (Efeito Adicional);Além do normal, as criaturas afetadas ficam vulneráveis pela cena. ;+2 PM
+Leque Cromático;;;;;;;"Alvo Expandido (Alvo; Requer 2º círculo)";Também afeta espíritos e monstros na área. Requer 2º círculo. ;+2 PM
+Luz;Universal;Evocação;Objeto ilumina como tocha (6m raio). Anula Escuridão. ;1º;1;Padrão;Aumento de Área (Área);Aumenta a área iluminada em +3m de raio. ;+1 PM
+Luz;;;;;;;Duração Estendida (Duração);Muda a duração para um dia. ;+2 PM
+Luz;;;;;;;"Duração Permanente (Duração / Comp. Material; Requer 2º círculo)";Muda duração para permanente, adiciona componente material (pó de rubi T$ 50). Não pode ser usado com outros aprimoramentos. Requer 2º círculo. ;+2 PM
+Névoa;Universal;Convocação;Cria nuvem de névoa (6m raio, 6m altura) que obscurece visão. ;1º;1;Padrão;Névoa Aquática (Efeito Adicional);A magia também funciona sob a água, criando uma nuvem de tinta. ;+1 PM
+Névoa;;;;;;;"Visão Seletiva (Alvo; Requer 2º círculo)";"Você pode escolher criaturas no alcance ao lançar a magia; elas enxergam através do efeito. Requer 2º círculo. ";+2 PM
+Névoa;;;;;;;Névoa Fétida (Efeito Adicional);Nuvem tem cheiro horrível. Criaturas dentro ou com faro em alcance curto devem passar em Fortitude ou ficam enjoadas por 1 rodada. ;+2 PM
+Névoa;;;;;;;Névoa Cáustica (Efeito Adicional / Dano);Nuvem esverdeada e cáustica. Criaturas dentro sofrem 2d4 dano de ácido no início de seus turnos. ;+2 PM
+Orientação;Divina;Adivinhação;Alvo rola dois dados e fica com o melhor no próximo teste de perícia. ;1º;1;Padrão;"Orientação Duradoura (Duração / Efeito Alterado; Requer 2º círculo)";"Muda duração para cena. Escolha um atributo; alvo rola 2 dados em testes de perícia desse atributo (exceto ataque/resistência). Requer 2º círculo. ";+2 PM
+Orientação;;;;;;;"Orientação Ampla (Efeito Alterado; Requer 3º círculo)";Como acima, mas escolhe entre atributos físicos ou mentais. Requer 3º círculo. ;+5 PM
+Orientação;;;;;;;"Orientação em Massa (Alvo; Requer 3º círculo)";Muda o alvo para criaturas escolhidas. Requer 3º círculo. ;+5 PM
+Perdição;Divina;Necromancia;Alvos escolhidos sofrem –1 em ataque e dano. Anula Bênção. ;1º;1;Padrão;Aumento de Penalidade (Penalidade);Aumenta as penalidades em –1 (penalidade máxima limitada pelo círculo máximo de magia que você pode lançar). ;+2 PM
+Primor Atlético;Arcana;Transmutação;Alvo recebe +9m deslocamento e +10 em Atletismo. ;1º;1;Padrão;Salto Aprimorado (Efeito Adicional);Além do normal, o alvo recebe +20 em testes de Atletismo para saltar (total +30). ;+1 PM
+Primor Atlético;;;;;;;Escalada Perfeita (Efeito Adicional);Além do normal, o alvo pode escalar paredes e tetos sem testes de Atletismo (mãos livres ou uma se parado). Não fica desprevenido. ;+1 PM
+Primor Atlético;;;;;;;Ataque Acrobático (Execução / Alcance / Alvo / Duração / Efeito Adicional);Muda execução para movimento, alcance pessoal, alvo você, duração instantânea. Salta até alvo em alcance curto. Próximo ataque corpo a corpo tem bônus de investida e +1 dado de dano. ;+1 PM
+Primor Atlético;;;;;;;"Maestria Física (Efeito Adicional; Requer 2º círculo)";Além do normal, ao fazer testes de perícias de For, Des ou Con, alvo rola 2 dados e usa o melhor (não afeta ataque/resistência). Requer 2º círculo. ;+3 PM
+Profanar;Divina;Necromancia;Área é preenchida com energia negativa, maximizando dano de trevas e cura de mortos-vivos. ;1º;1;Padrão;Aura Profana (Efeito Adicional);Além do normal, mortos-vivos na área recebem +2 em testes e Defesa. ;+1 PM
+Profanar;;;;;;;Aumento Aura Profana (Efeito Adicional);Aumenta os bônus para mortos-vivos em +1. ;+2 PM
+Profanar;;;;;;;"Duração Permanente (Execução / Duração / Comp. Material; Requer 4º círculo)";Muda execução para 1 hora, duração para permanente, adiciona componente material (incenso/óleos T$ 1.000). Requer 4º círculo. ;+9 PM
+Proteção Divina;Divina;Abjuração;Alvo tocado recebe +2 em testes de resistência. ;1º;1;Padrão;Aumento de Bônus (Bônus);Aumenta o bônus concedido em +1. ;+2 PM
+Proteção Divina;;;;;;;Reação Protetora (Execução / Alcance / Duração / Efeito Adicional);Muda execução para reação, alcance curto, duração 1 rodada. Alvo recebe +5 no próximo teste de resistência. ;+2 PM
+Proteção Divina;;;;;;;"Proteção em Área (Alvo; Requer 2º círculo)";Muda alvo para área de esfera com 3m de raio. Todos aliados dentro recebem o bônus. Requer 2º círculo. ;+2 PM
+Proteção Divina;;;;;;;"Imunidade Mental (Efeito Adicional; Requer 3º círculo)";Torna o alvo imune a efeitos mentais e de medo. Requer 3º círculo. ;+5 PM
+Queda Suave;Arcana;Transmutação;Alvo cai lentamente (18m/rodada), sem dano por queda. ;1º;1;Reação;Truque (Alvo / Efeito Alterado);Muda alvo para objeto Minúsculo. Pode levitar o alvo até 4,5m em qualquer direção (ação de movimento). ;Custo total: 0 PM
+Queda Suave;;;;;;;Alvos Múltiplos (Alvo);Muda o alvo para até 10 criaturas ou objetos adequados. ;+2 PM
+Queda Suave;;;;;;;Aumento de Tamanho (Alvo);Aumenta a categoria de tamanho do alvo em uma. ;+2 PM
+Raio do Enfraquecimento;Arcana;Necromancia;"Raio púrpura deixa alvo fatigado; se passar na resistência, fica vulnerável. ";1º;1;Padrão;Truque (Alcance / Resistência / Efeito Alterado);"Muda alcance para toque, resistência Fortitude anula. Mão brilha púrpura; ao tocar, alvo fica fatigado. ";Custo total: 0 PM
+Raio do Enfraquecimento;;;;;;;"Exaustão (Efeito Alterado; Requer 2º círculo)";Em vez do normal, se falhar na resistência o alvo fica exausto. Se passar, fica fatigado. Requer 2º círculo. ;+2 PM
+Resistência a Energia;Universal;Abjuração;Alvo recebe RD 10 contra um tipo de dano elemental ou energia (luz/trevas). ;1º;1;Padrão;Aumento de RD (RD);Aumenta a redução de dano em +5. ;+2 PM
+Resistência a Energia;;;;;;;"Duração Estendida (Duração; Requer 2º círculo)";Muda a duração para um dia. Requer 2º círculo. ;+2 PM
+Resistência a Energia;;;;;;;"Alvos Múltiplos (Alcance / Alvo; Requer 3º círculo)";Muda o alcance para curto e o alvo para criaturas escolhidas. Requer 3º círculo. ;+5 PM
+Resistência a Energia;;;;;;;"Proteção Ampla (Efeito Alterado; Requer 3º círculo)";Muda o efeito para redução de dano contra todos os tipos listados na magia. Requer 3º círculo. ;+5 PM
+Santuário;Divina;Abjuração;Inimigos devem passar em Vontade para atacar o alvo. Magia se dissipa se alvo agir hostilmente. ;1º;1;Padrão;Discrição Animal (Efeito Adicional);Além do normal, escolha um tipo de criatura (animal, construto ou morto-vivo). Você não pode ser percebido por criaturas não inteligentes desse tipo. ;+1 PM
+Santuário;;;;;;;Proteção de Área (Efeito Adicional);"Também protege o alvo contra efeitos de área. Criatura que tente atacar área que inclua o alvo deve fazer Vontade; se falhar, perde a ação. ";+9 PM
+Seta Infalível de Talude;Arcana;Evocação;Dispara 2 setas de energia (1d4+1 dano de essência cada) que acertam automaticamente. ;1º;1;Padrão;"Lanças de Energia (Dano; Requer 2º círculo)";Muda setas para lanças de energia que caem do céu (1d8+1 dano de essência cada). Requer 2º círculo. ;+2 PM
+Seta Infalível de Talude;;;;;;;Três Projéteis (Quantidade);Muda o número de setas/lanças para três. ;+2 PM
+Seta Infalível de Talude;;;;;;;"Cinco Projéteis (Quantidade; Requer 2º círculo)";Muda o número de setas/lanças para cinco. Requer 2º círculo. ;+4 PM
+Sono;Arcana;Encantamento;Alvo (humanoide) fica inconsciente/caído ou exausto/fatigado (em combate). ;1º;1;Padrão;Exaustão Prolongada (Duração);Alvos que falhem na resistência ficam exaustos por 1d4+1 rodadas, em vez de apenas 1. ;+2 PM
+Sono;;;;;;;Alvo Criatura (Alvo);Muda o alvo para criatura. ;+2 PM
+Sono;;;;;;;Sono em Massa (Alvo);Afeta todos os alvos válidos a sua escolha dentro do alcance. ;+5 PM
+Suporte Ambiental;Divina;Abjuração;Alvo fica imune a calor/frio extremos, respira na água/ar, não sufoca em fumaça. ;1º;1;Padrão;Alvos Múltiplos (Alcance / Alvo);Muda o alcance para curto e o alvo para criaturas escolhidas. ;+5 PM
+Teia;Arcana;Convocação;"Cria teias pegajosas em cubo de 6m; criaturas ficam enredadas (Reflexos anula). ";1º;1;Padrão;Imobilizar Adicional (Efeito Adicional);Além do normal, criaturas que falhem na resistência também ficam imóveis. ;+1 PM
+Teia;;;;;;;"Teia Persistente (Efeito Adicional; Requer 2º círculo)";Além do normal, no início de seus turnos a magia afeta novamente qualquer criatura na área (novo teste de Reflexos). Requer 2º círculo. ;+2 PM
+Teia;;;;;;;Aumento de Área (Área);Aumenta a área em +1 cubo de 1,5m. ;+2 PM
+Toque Chocante;Arcana;Evocação;Toque causa 2d8+2 dano de eletricidade. Alvo com armadura de metal tem -5 na resistência. ;1º;1;Padrão;Aumento de Dano (Dano);Aumenta o dano em 1d8+1. ;+1 PM
+Toque Chocante;;;;;;;Toque Certeiro (Resistência / Ataque Adicional);"Muda resistência para nenhum. Como parte da execução, faz um ataque corpo a corpo; se acertar, causa dano do ataque e da magia. ";+2 PM
+Toque Chocante;;;;;;;Eletrocussão em Área (Alcance / Alvo / Área);Muda alcance para pessoal, alvo para área: esfera com 6m de raio. Dispara raios pelas pontas dos dedos que afetam todas as criaturas na área. ;+2 PM
+Tranca Arcana;Arcana;Abjuração;Tranca objeto (porta, baú), CD para abrir +10. Componente material: chave de bronze T$ 25. ;1º;1;Padrão;Truque (Alcance / Efeito Alterado);Muda alcance para curto. Abre ou fecha objeto Médio ou menor (não trancado). ;Custo total: 0 PM
+Tranca Arcana;;;;;;;Abrir Fechaduras (Alcance / Duração / Efeito Alterado);Muda alcance para curto, duração instantânea. Abre portas/baús/janelas trancadas/barradas/protegidas por Tranca Arcana. Afrouxa grilhões, solta correntes. ;+1 PM
+Tranca Arcana;;;;;;;Aumento de Dificuldade (CD);Aumenta a CD para abrir o alvo em +5. ;+5 PM
+Tranquilidade;Divina;Encantamento;Alvo (animal/humanoide) tem atitude mudada para indiferente, não pode atacar. ;1º;1;Padrão;Alvo Criatura (Alvo);Muda o alvo para 1 criatura. ;+1 PM
+Tranquilidade;;;;;;;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1. ;+1 PM
+Tranquilidade;;;;;;;"Tranquilidade em Massa (Alcance / Alvo; Requer 3º círculo)";Muda o alcance para médio e o alvo para criaturas escolhidas. Requer 3º círculo. ;+5 PM
+Transmutar Objetos;Arcana;Transmutação;Transforma matéria bruta em objeto Pequeno ou menor (preço máx. T$ 25) por uma cena. ;1º;1;Padrão;Truque (Alvo / Duração / Efeito Alterado);Muda alvo para objeto Minúsculo, duração instantânea. Altera propriedades (cor, limpeza), aquece/esfria/tempera, cura 1 PV do objeto. 1 vez/dia por objeto. ;Custo total: 0 PM
+Transmutar Objetos;;;;;;;Curar Construto (Alcance / Alvo / Duração / Efeito Alterado);Muda alcance para toque, alvo 1 construto, duração instantânea. Cura 2d8 PV do alvo. Pode gastar +2 PM para +1d8 cura. ;+1 PM
+Transmutar Objetos;;;;;;;Aumento de Tamanho (Tamanho do Objeto);Aumenta o limite de tamanho do objeto em uma categoria. ;+2 PM
+Transmutar Objetos;;;;;;;Aumento de Preço (Preço do Objeto);Aumenta o preço máximo do objeto criado em x10 (ex: +3 PM por T$ 250). ;+3 PM por x10
+Visão Mística;Universal;Adivinhação;Olhos brilham azul, enxerga auras mágicas (alcance médio), descobre conjuradores. ;1º;1;Padrão;Visão no Escuro (Efeito Adicional);Recebe visão no escuro. ;+1 PM
+Visão Mística;;;;;;;Duração Estendida (Duração);Muda a duração para um dia. ;+2 PM
+Visão Mística;;;;;;;Ver o Invisível (Efeito Adicional);Também pode enxergar objetos e criaturas invisíveis (formas translúcidas). ;+2 PM
+Vitalidade Fantasma;Arcana;Necromancia;Suga energia da terra, recebendo 2d10 PV temporários por uma cena. ;1º;1;Padrão;Aumento de PV Temporários (PV Temporários / Dano);Aumenta os PV temporários em +1d10. Se magia causa dano, aumenta dano em +1d10. ;+2 PM
+Vitalidade Fantasma;;;;;;;"Drenar Vida em Área (Alvo / Área / Resistência / Efeito Adicional; Requer 2º círculo)";Muda alvo para área: esfera 6m raio (você no centro), resistência Fortitude reduz à metade. Suga energia de criaturas vivas (1d10 dano de trevas), recebe PV temp. igual dano total. Requer 2º círculo. ;+5 PM
+Aliado Animal;Divina;Encantamento;Cria vínculo mental com animal prestativo, que se torna parceiro veterano.;2º;3;Padrão;Mensageiro Animal (Alvo / Duração / Efeito Alterado);Muda alvo para 1 animal Minúsculo, duração para 1 semana. Animal leva item/carta a local designado, esperando por criaturas escolhidas.;+1 PM
+Aliado Animal;;;;;;;"Parceiro Mestre (Nível do Parceiro; Requer 3º círculo)";Muda o parceiro para mestre. Requer 3º círculo.;+7 PM
+Aliado Animal;;;;;;;"Parceiros Múltiplos (Alvo; Requer 4º círculo)";Muda alvo para 2 animais prestativos. Cada um é parceiro de tipo diferente. Limite de parceiros ainda se aplica. Requer 4º círculo.;+12 PM
+Alterar Tamanho;Arcana;Transmutação;"Aumenta ou diminui tamanho de 1 objeto mundano em até 3 categorias; pode mudar consistência.";2º;3;Padrão;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1.;+1 PM
+Alterar Tamanho;;;;;;;Aumentar Criatura (Alcance / Alvo / Efeito Adicional);Muda alcance para toque, alvo 1 criatura. Alvo aumenta 1 categoria de tamanho (equipamento se ajusta), recebe For +2. (Fortitude anula);+2 PM
+Alterar Tamanho;;;;;;;"Reduzir Criatura (Alcance / Alvo / Efeito Adicional; Requer 3º círculo)";Muda alcance para toque, alvo 1 criatura. Alvo diminui 1 categoria de tamanho (equipamento se ajusta), recebe Des +2. (Fortitude anula). Requer 3º círculo.;+3 PM
+Alterar Tamanho;;;;;;;"Encolhimento Permanente (Alcance / Alvo / Duração / Resistência; Requer 4º círculo)";Muda alcance para toque, alvo 1 criatura, duração permanente, Fortitude anula. Alvo e equipamento viram Minúsculos (For -5, desloc. 3m). Requer 4º círculo.;+7 PM
+Amarras Etéreas;Arcana;Convocação;Três laços de energia prendem (agarrado) o alvo.;2º;3;Padrão;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1.;+2 PM
+Amarras Etéreas;;;;;;;Aumento de Laços (Efeito Adicional);Aumenta o número de laços em um alvo à sua escolha em +1 (bônus máximo limitado pelo círculo máximo de magia que você pode lançar).;+2 PM
+Amarras Etéreas;;;;;;;"Laços Energéticos (Efeito Adicional / Dano; Requer 3º círculo)";"Cada laço é destruído com 1 ataque; cada laço destruído causa 1d8+1 dano de essência na criatura amarrada. Requer 3º círculo.";+3 PM
+Aparência Perfeita;Arcana;Ilusão;Concede aparência idealizada, bônus em Carisma e perícias sociais.;2º;3;Padrão;Alvo Humanoide (Alcance / Alvo);Muda o alcance para toque e o alvo para 1 humanoide.;+1 PM
+Augúrio;Divina;Adivinhação;Diz se uma ação futura trará resultados bons, ruins, ambos ou nada.;2º;3;Completa;"Consulta Detalhada (Execução / Efeito Alterado; Requer 3º círculo)";Muda execução para 1 minuto. Pergunta sobre evento até 1 dia no futuro. Resposta pode ser frase, profecia ou enigma. (Falha: sem resposta). Requer 3º círculo.;+3 PM
+Augúrio;;;;;;;"Interrogatório Divino (Execução / Duração / Efeito Alterado; Requer 4º círculo)";"Muda execução para 10 minutos, duração 1 minuto. Pergunta sim/não/não sei (1/rodada). (Falha: ""não sei""). Requer 4º círculo.";+7 PM
+Augúrio;;;;;;;Chance de Sucesso Aumentada (Probabilidade);"Mestre rola 1d12; magia só falha com resultado 1.";+7 PM
+Augúrio;;;;;;;Chance de Sucesso Muito Aumentada (Probabilidade);"Mestre rola 1d20; magia só falha com resultado 1.";+12 PM
+Bola de Fogo;Arcana;Evocação;Esfera incandescente explode, causando 6d6 dano de fogo em área.;2º;3;Padrão;Aumento de Dano (Dano);Aumenta o dano em +2d6.;+2 PM
+Bola de Fogo;;;;;;;Esfera Flamejante (Área / Duração / Efeito Alterado);Muda área para esfera flamejante Média, duração para cena. Causa 3d6 dano a criaturas no mesmo espaço. Pode mover esfera (ação de movimento).;+2 PM
+Bola de Fogo;;;;;;;Pedra Explosiva (Duração / Efeito Alterado);Muda duração para 1 dia ou até descarregada. Cria pequena pedra flamejante, detonável como reação (dano da magia em área). Pode ser arremessada.;+3 PM
+Camuflagem Ilusória;Arcana;Ilusão;Imagem do alvo fica nublada, concedendo camuflagem leve.;2º;3;Padrão;Camuflagem Aprimorada (Duração / Efeito Adicional);Muda duração para sustentada. Chance de falha da camuflagem leve aumenta para 50%.;+3 PM
+Camuflagem Ilusória;;;;;;;"Camuflagem em Massa (Alcance / Alvo; Requer 4º círculo)";Muda o alcance para curto e o alvo para criaturas escolhidas. Requer 4º círculo.;+7 PM
+Campo de Força;Arcana;Abjuração;Cria película protetora que concede 30 PV temporários.;2º;3;Padrão;Escudo Protetor (Execução / Duração / Efeito Adicional);Muda execução para reação, duração instantânea. Concede RD 30 contra o próximo dano.;+1 PM
+Campo de Força;;;;;;;"Fortalecimento (PV Temporários / RD; Requer 3º círculo)";Muda os PV temporários ou a RD para 50. Requer 3º círculo.;+3 PM
+Campo de Força;;;;;;;"Fortalecimento Maior (PV Temporários / RD; Requer 4º círculo)";Muda os PV temporários ou a RD para 70. Requer 4º círculo.;+7 PM
+Círculo da Justiça;Divina;Abjuração;"Área causa -10 em Acrobacia, Enganação, Furtividade, Ladinagem; impede mentiras deliberadas.";2º;3;Completa;Ver o Invisível (Execução / Alcance / Alvo / Duração / Efeito Alterado / Resistência);Muda execução para padrão, alcance pessoal, alvo você, duração cena, resistência nenhuma. Criaturas/objetos invisíveis em alcance curto se tornam visíveis.;+1 PM
+Círculo da Justiça;;;;;;;"Penalidade Aumentada (Penalidade; Requer 4º círculo)";Muda penalidade nas perícias para -10 (se passar na resistência) e -20 (se falhar). Requer 4º círculo.;+3 PM
+Círculo da Justiça;;;;;;;Duração Permanente (Duração / Comp. Material);Muda duração para permanente, adiciona componente material (balança de prata T$ 5.000).;+7 PM
+Condição;Divina;Adivinhação;Monitora posição e status (PV, condições, magias) de até 5 criaturas tocadas.;2º;3;Padrão;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1.;+1 PM
+Condição;;;;;;;Duração Estendida (Duração);Muda a duração para um dia.;+1 PM
+Conjurar Mortos-Vivos;Universal;Necromancia;Ergue 6 esqueletos capangas que lutam sob seu comando.;2º;3;Completa;Aumento de Mortos-Vivos (Quantidade);Aumenta o número de mortos-vivos conjurados em +1.;+2 PM
+Conjurar Mortos-Vivos;;;;;;;"Carniçais (Tipo de Criatura; Requer 3º círculo)";Em vez de esqueletos, conjura carniçais (mais fortes, com paralisia). Requer 3º círculo.;+3 PM
+Conjurar Mortos-Vivos;;;;;;;"Sombras (Tipo de Criatura; Requer 4º círculo)";Em vez de esqueletos, conjura sombras (incorpóreas, drenam PM). Requer 4º círculo.;+7 PM
+Controlar Fogo;Divina;Evocação;"Permite criar, moldar, mover ou extinguir chamas; esquentar objetos; ou armas flamejantes.";2º;3;Padrão;Labaredas (Duração / Resistência / Efeito Alterado);Muda duração para sustentada, resistência Reflexos reduz à metade. A cada rodada, pode gastar ação de movimento para projetar labareda (4d6 dano de fogo).;+1 PM
+Controlar Fogo;;;;;;;Aumento de Dano (Dano);Aumenta o dano em +1d6 (exceto efeito Chamejar).;+2 PM
+Controlar Fogo;;;;;;;Destruir Elemental de Fogo (Alvo / Resistência);"Muda alvo para 1 criatura de fogo/lava/magma, resistência Fortitude parcial. Se falhar, alvo é reduzido a 0 PV; se passar, sofre 5d6 dano.";+3 PM
+Controlar Madeira;Divina;Transmutação;Molda, fortalece, repele ou retorce 1 objeto de madeira Grande ou menor.;2º;3;Padrão;Transformação Arbórea (Alcance / Alvo / Duração / Efeito Alterado);Muda alcance para pessoal, alvo você, duração 1 dia. Você e seu equipamento se transformam em árvore Grande. (Vontade (CD30) revela).;+1 PM
+Controlar Madeira;;;;;;;Espinhos no Solo (Alvo / Área / Duração / Efeito Alterado);Muda alvo para área (quadrado 9m), duração cena. Vegetação na área vira terreno difícil e causa 1d6 dano de corte por 1,5m de movimento.;+3 PM
+Controlar Madeira;;;;;;;"Aumento de Tamanho do Alvo (Alvo; Requer 3º círculo)";Muda o tamanho do alvo para Enorme ou menor. Requer 3º círculo.;+7 PM
+Crânio Voador de Vladislav;Arcana;Necromancia;Crânio de energia negativa causa 4d8+4 dano de trevas e abala alvo e inimigos próximos.;2º;3;Padrão;Aumento de Dano (Dano);Aumenta o dano em +1d8+1.;+2 PM
+Crânio Voador de Vladislav;;;;;;;Alvos Múltiplos (Alvo);Aumenta o número de alvos em +1.;+2 PM
+Desespero Esmagador;Arcana;Encantamento;Humanoides em cone de 6m ficam fracos e frustrados.;2º;3;Padrão;Desespero Maior (Efeito Alterado);Em vez do normal, condições são debilitado e esmorecido.;+2 PM
+Desespero Esmagador;;;;;;;Alvo Universal (Alvo);Em vez do normal, afeta qualquer tipo de criatura.;+3 PM
+Desespero Esmagador;;;;;;;"Pranto Desolador (Efeito Adicional; Requer 3º círculo)";Além do normal, criaturas que falhem na resistência ficam pasmas por 1 rodada (1 vez/cena). Requer 3º círculo.;+3 PM
+Dissipar Magia;Universal;Abjuração;Encerra magias ativas em alvo/área ou transforma item mágico em mundano temporariamente.;2º;3;Padrão;"Disjunção (Área / Efeito Alterado; Requer 5º círculo)";Muda área para esfera 9m raio. Magias na área são dissipadas. Itens mágicos viram mundanos por 1 cena (Vontade anula). Requer 5º círculo.;+12 PM
+Enxame de Pestes;Divina;Convocação;Convoca enxame (besouros, ratos, etc.) que causa 2d12 dano de corte/rodada.;2º;3;Completa;Aumento de Dano (Dano);Aumenta o dano em +1d12.;+2 PM
+Enxame de Pestes;;;;;;;Enxame Maior (Resistência / Efeito Alterado / Dano);Muda resistência para Reflexos reduz à metade, enxame de criaturas maiores (gatos, kobolds). Causa 3d12 dano (corte, impacto ou perfuração).;+3 PM
+Enxame de Pestes;;;;;;;"Enxames Múltiplos (Quantidade; Requer 3º círculo)";Aumenta o número de enxames em +1 (não podem ocupar mesmo espaço). Requer 3º círculo.;+5 PM
+Esculpir Sons;Arcana;Ilusão;Altera sons emitidos por 1 criatura/objeto (omitir, transformar).;2º;3;Padrão;Alvos Múltiplos (Alvo);Aumenta o número de alvos em +1. Todos afetados da mesma forma.;+2 PM
+Físico Divino;Divina;Transmutação;Alvo tocado recebe +2 em For, Des ou Con.;2º;3;Padrão;Alvos Múltiplos (Alcance / Alvo);Muda o alcance para curto e o alvo para criaturas escolhidas.;+3 PM
+Físico Divino;;;;;;;"Fortalecimento Completo (Efeito Alterado; Requer 3º círculo)";Em vez do normal, o alvo recebe +2 nos três atributos físicos. Requer 3º círculo.;+3 PM
+Físico Divino;;;;;;;"Fortalecimento Maior (Efeito Alterado; Requer 4º círculo)";Em vez do normal, o alvo recebe +4 no atributo escolhido. Requer 4º círculo.;+7 PM
+Flecha Ácida;Arcana;Evocação;"Projétil causa 4d6 dano de ácido; se falhar na resistência, +2d6 por 2 rodadas. Dobro do dano a objetos.";2º;3;Padrão;Corroer Armadura (Efeito Adicional);Se alvo com muco ácido usa armadura/escudo, item é corroído (-1 Defesa permanente). Consertável com Ofício.;+1 PM
+Flecha Ácida;;;;;;;Aumento Corrosão (Efeito Adicional);Aumenta a redução na Defesa em +1.;+2 PM
+Flecha Ácida;;;;;;;Aumento de Dano (Dano);Aumenta o dano inicial e o dano por rodada em +1d6.;+2 PM
+Globo da Verdade de Gwen;Divina;Adivinhação;Globo flutuante mostra cena vista até 1 semana atrás por você ou alvo tocado.;2º;3;Padrão;Memória Longa (Tempo);O globo mostra uma cena vista até um mês atrás.;+1 PM
+Globo da Verdade de Gwen;;;;;;;Memória Ancestral (Tempo);Como acima, mas até um ano atrás.;+2 PM
+Globo da Verdade de Gwen;;;;;;;Visão Post Mortem (Alvo);Ao lançar, pode tocar um cadáver. Globo mostra a última cena vista pela criatura.;+2 PM
+Globo da Verdade de Gwen;;;;;;;Globos Múltiplos (Quantidade);Muda o efeito para 10 globos. Todos mostram a mesma cena.;+4 PM
+Invisibilidade;Arcana;Ilusão;Alvo fica invisível por 1 rodada. Termina se atacar ou lançar magia ofensiva.;2º;3;Livre;Alvo Criatura/Objeto (Execução / Alcance / Alvo);Muda execução para padrão, alcance para toque, alvo para 1 criatura ou 1 objeto Grande ou menor.;+1 PM
+Invisibilidade;;;;;;;"Invisibilidade Duradoura (Duração; Requer 3º círculo)";Muda a duração para cena. Requer 3º círculo.;+3 PM
+Ligação Telepática;Arcana;Adivinhação;Cria elo mental entre 2 criaturas voluntárias (Int 3+) para comunicação à distância.;2º;3;Padrão;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1.;+2 PM
+Ligação Telepática;;;;;;;"Sentidos Compartilhados (Alvo / Efeito Adicional; Requer 3º círculo)";Muda alvo para 1 criatura. Vê e ouve pelos sentidos da criatura (ação de movimento). (Vontade suprime por 1h). Requer 3º círculo.;+3 PM
+Localização;Arcana;Adivinhação;Encontra criatura/objeto em esfera de 90m de raio. Indica direção e distância.;2º;3;Padrão;Truque (Área / Alvo / Efeito Alterado);Muda área para alvo você. Sabe onde fica o norte e recebe +5 em Sobrevivência para se orientar.;Custo total: 0 PM
+Localização;;;;;;;Alcance Estendido (Área);Aumenta a área em um fator de 10.;+5 PM
+Marca da Obediência;Universal;Encantamento;Marca mística no alvo o obriga a seguir uma ordem por uma cena.;2º;3;Padrão;"Duração Estendida (Duração; Requer 3º círculo)";Muda a duração para um dia. Se não estiver em combate, criatura só pode fazer teste de Vontade a cada hora. Requer 3º círculo.;+3 PM
+Marca da Obediência;;;;;;;"Marca Dolorosa (Dano; Requer 3º círculo)";Sempre que o alvo falhar no teste de Vontade, a marca causa 3d6 pontos de dano psíquico. Requer 3º círculo.;+3 PM
+Metamorfose;Arcana;Transmutação;Muda sua aparência e forma (incluindo equipamento) para qualquer criatura. +20 em Enganação para disfarce.;2º;3;Padrão;Sentidos Aguçados (Efeito Adicional - Forma);A forma escolhida recebe faro, visão na penumbra ou visão no escuro.;+1 PM
+Metamorfose;;;;;;;"Percepção às Cegas (Efeito Adicional - Forma; Requer 3º círculo)";A forma escolhida recebe percepção às cegas. Requer 3º círculo.;+3 PM
+Metamorfose;;;;;;;Alvo Criatura (Alcance / Alvo / Resistência);Muda alcance para toque, alvo 1 criatura, resistência Vontade anula.;+3 PM
+Miasma Mefítico;Divina;Necromancia;Nuvem (6m raio) causa 5d6 dano de ácido e enjoo por 1 rodada.;2º;3;Padrão;Truque (Alcance / Área / Alvo / Duração / Resistência / Efeito Alterado / Comp. Material);Muda alcance para toque, área para alvo 1 criatura (0 PV ou menos), duração instantânea, resistência Fortitude anula, comp. material (pó de ônix T$ 10). Vítima morre, +2 CD magias por 1 dia. (Imune a este truque por 1 dia se passar).;Custo total: 0 PM
+Miasma Mefítico;;;;;;;Aumento de Dano (Dano);Aumenta o dano em +1d6.;+2 PM
+Miasma Mefítico;;;;;;;Dano de Trevas (Tipo de Dano);Muda o tipo do dano para trevas.;+3 PM
+Mente Divina;Divina;Adivinhação;Alvo tocado recebe +2 em Int, Sab ou Car.;2º;3;Padrão;Alvos Múltiplos (Alcance / Alvo);Muda o alcance para curto e o alvo para criaturas escolhidas.;+3 PM
+Mente Divina;;;;;;;"Fortalecimento Mental Completo (Efeito Alterado; Requer 3º círculo)";Em vez do normal, o alvo recebe +2 nos três atributos mentais. Requer 3º círculo.;+3 PM
+Montaria Arcana;Arcana;Convocação;Convoca parceiro cavalo de guerra veterano com aparência personalizável.;2º;3;Padrão;Aura Aterradora (Efeito Adicional);Animais em alcance curto da montaria devem passar em Vontade ou ficam abalados (se falhar por 10+, apavorados).;+1 PM
+Montaria Arcana;;;;;;;Vínculo Permanente (Duração / Penalidade PM);Muda duração para permanente, adiciona penalidade de -3 PM.;+3 PM
+Montaria Arcana;;;;;;;Aumento de Tamanho (Tamanho da Montaria);Aumenta o tamanho da montaria em uma categoria (Enorme carrega 2, Colossal 6).;+3 PM
+Oração;Divina;Encantamento;"Aliados em alcance curto recebem +2 em perícias/dano; inimigos -2. Sustentada. Comp. Material T$ 25/PM.";2º;3;Padrão;Aumento de Bônus (Bônus);Aumenta os bônus em +1 (máximo limitado pelo círculo de magia).;+2 PM
+Oração;;;;;;;Aumento de Penalidade (Penalidade);Aumenta as penalidades em –1 (máximo limitado pelo círculo de magia).;+2 PM
+Oração;;;;;;;"Alcance Estendido (Alcance; Requer 3º círculo)";Muda o alcance para médio. Requer 3º círculo.;+7 PM
+Purificação;Divina;Evocação;Remove uma condição (abalado, cego, etc.) do alvo tocado.;2º;3;Padrão;Cura Veneno (Efeito Adicional);Também recupera todos os PV perdidos por veneno.;+2 PM
+Purificação;;;;;;;Purificação Ampla (Efeito Adicional);Em vez de uma, remove todas as condições listadas.;+2 PM
+Purificação;;;;;;;Quebrar Maldição (Efeito Adicional);Também permite que o alvo solte qualquer item amaldiçoado (não remove a maldição do item).;+3 PM
+Raio Solar;Divina;Evocação;Linha causa 4d8 dano de luz (4d12 em mortos-vivos) e ofusca por 1 rodada.;2º;3;Padrão;Truque (Duração / Resistência / Efeito Alterado);Muda duração para cena, resistência nenhuma. Cria facho de luz que ilumina área. Pode mudar direção (ação livre).;Custo total: 0 PM
+Raio Solar;;;;;;;Aumento de Dano/Cura (Dano / Cura);Aumenta o dano ou cura em +1d8 (ou +1d12 em mortos-vivos).;+2 PM
+Raio Solar;;;;;;;Cura Seletiva (Alvo / Efeito Alterado);"Em vez do normal, criaturas vivas escolhidas na área curam 4d8 PV; o restante sofre dano.";+3 PM
+Raio Solar;;;;;;;Cegueira Solar (Efeito Adicional);Criaturas que falhem na resistência ficam cegas por 1d4 rodadas.;+3 PM
+Refúgio;Arcana;Abjuração;Cria domo (6m raio) que protege de clima, mas não dano. Concede camuflagem total.;2º;3;Completa;Névoa Protetora (Efeito Adicional);Limites do domo são envoltos por fumaça escura, bloqueando visão/audição de fora e magias de adivinhação. Dentro se vê/ouve normalmente.;+1 PM
+Refúgio;;;;;;;Cabana Confortável (Efeito Alterado);Cria cabana para 10 criaturas Médias. Descanso confortável. Paredes (RD 5, 200 PV), porta/janelas (RD 5, 15 PV, Tranca Arcana).;+3 PM
+Relâmpago;Arcana;Evocação;Raio causa 6d6 dano de eletricidade em linha.;2º;3;Padrão;Aumento de Dano (Dano);Aumenta o dano em +2d6.;+2 PM
+Relâmpago;;;;;;;"Relâmpagos Múltiplos (Área / Alvo; Requer 3º círculo)";Muda área para alvo (criaturas escolhidas). Dispara vários relâmpagos (6d6 dano cada). Requer 3º círculo.;+3 PM
+Rogar Maldição;Divina;Necromancia;Amaldiçoa alvo com Debilidade, Doença, Fraqueza ou Isolamento. Sustentada.;2º;3;Padrão;"Efeitos Múltiplos (Efeito Adicional; Requer 3º círculo)";Aumenta o número de efeitos que você pode escolher em +1. Requer 3º círculo.;+3 PM
+Rogar Maldição;;;;;;;"Maldição Permanente (Duração / Resistência; Requer 4º círculo)";Muda duração para permanente, resistência Fortitude parcial (se passar, efeito por 1 rodada). Requer 4º círculo.;+7 PM
+Runa de Proteção;Universal;Abjuração;Escreve runa que explode (6d6 dano elemental) ao ser ativada por criatura. Permanente até descarregada. Comp. Mat. T$ 200.;2º;3;1 hora;Aumento de Dano (Dano);Aumenta o dano em +2d6.;+1 PM
+Runa de Proteção;;;;;;;Runa Pessoal (Alvo / Alcance / Efeito Alterado);"Muda alvo para ""você"", alcance ""pessoal"". Escreve runa no corpo com magia de 1º círculo. Ativa com condição, lança magia como reação. 1 runa/corpo.";+1 PM
+Salto Dimensional;Arcana;Convocação;Teletransporta você para outro lugar em alcance curto.;2º;3;Padrão;Alcance Médio (Alcance);Muda o alcance para médio.;+1 PM
+Salto Dimensional;;;;;;;Salto em Grupo (Alvo);Muda alvo para você e uma criatura voluntária. Pode escolher este aprimoramento mais vezes (+1 alvo/vez), tocando todos os alvos.;+1 PM
+Salto Dimensional;;;;;;;Esquiva Dimensional (Execução / Efeito Adicional);Muda execução para reação. +5 Defesa/Reflexos contra 1 ataque/efeito. Após resolução, salta para espaço adjacente.;+2 PM
+Salto Dimensional;;;;;;;Alcance Longo (Alcance);Muda o alcance para longo.;+3 PM
+Servos Invisíveis;Arcana;Convocação;Cria até 3 servos invisíveis/silenciosos para tarefas simples ou +2 em 1 teste de perícia.;2º;3;Padrão;Aumento de Servos (Quantidade);Aumenta o número de servos conjurados em 1.;+2 PM
+Servos Invisíveis;;;;;;;"Servos Habilidosos (Efeito Adicional; Requer 3º círculo)";Servos passam automaticamente em teste de perícia (CD máx. = seu nível + 2/servo). Tempo da perícia. Requer 3º círculo.;+3 PM
+Silêncio;Divina;Ilusão;Esfera (6m raio) impede som e lançamento de magias. Sustentada.;2º;3;Padrão;Silenciar Objeto (Alvo / Efeito Alterado);Muda alvo para 1 objeto. Objeto emana silêncio (3m raio). (Vontade anula se objeto de criatura involuntária).;+1 PM
+Silêncio;;;;;;;Bolha Sonora (Duração / Efeito Alterado);Muda duração para cena. Nenhum som sai da área, mas dentro se pode falar/ouvir/lançar magias.;+2 PM
+Soco de Arsenal;Divina;Convocação;Soco causa 4d6 + For dano de impacto e empurra alvo 3m.;2º;3;Padrão;Alcance Estendido (Alcance / Alvo / Duração / Resistência / Efeito Alterado);Muda alcance para pessoal, alvo você, duração cena, resistência nenhuma. Seu alcance natural aumenta em 3m.;+1 PM
+Soco de Arsenal;;;;;;;Aumento de Dano (Dano);Aumenta o dano em +1d6.;+2 PM
+Soco de Arsenal;;;;;;;Empurrão Maior (Efeito Adicional);Aumenta o empurrão em +3m.;+4 PM
+Soco de Arsenal;;;;;;;Dano de Essência (Tipo de Dano);Muda o tipo do dano para essência.;+5 PM
+Sopro das Uivantes;Arcana;Evocação;"Cone de 9m causa 4d6 dano de frio; criaturas M ou menores caem e são empurradas 6m.";2º;3;Padrão;Aumento de Dano (Dano);Aumenta o dano de frio em +2d6.;+2 PM
+Sopro das Uivantes;;;;;;;"Tamanho Aumentado (Alvo; Requer 3º círculo)";Aumenta o tamanho máximo das criaturas afetadas em uma categoria. Requer 3º círculo.;+3 PM
+Sussurros Insanos;Arcana;Encantamento;Alvo (humanoide) fica confuso por uma cena.;2º;3;Padrão;Alvos Múltiplos (Alvo);Aumenta o número de alvos em +1.;+2 PM
+Sussurros Insanos;;;;;;;Alvo Criatura (Alvo);Muda o alvo para 1 criatura.;+3 PM
+Sussurros Insanos;;;;;;;"Insanidade em Massa (Alvo; Requer 5º círculo)";Muda o alvo para criaturas escolhidas. Requer 5º círculo.;+12 PM
+Tempestade Divina;Divina;Evocação;Cria vendaval em cilindro (15m raio/altura). Pode gerar chuva, neve ou granizo. Sustentada.;2º;3;Completa;Raios (Efeito Adicional);1x/rodada (ação padrão), faz raio cair em alvo na área (3d8 dano elétrico, Reflexos reduz à metade).;+1 PM
+Tempestade Divina;;;;;;;Aumento Dano Raios (Dano);Aumenta o dano de raios em +1d8.;+2 PM
+Tempestade Divina;;;;;;;Chuva Intensa (Efeito Adicional - Chuva);"Se escolheu chuva: revela criaturas invisíveis; criaturas M ou menores ficam lentas; voadores caem (Atletismo evita).";+3 PM
+Tempestade Divina;;;;;;;Granizo Pesado (Efeito Adicional / Dano - Granizo);Se escolheu granizo: muda o dano para 2d6 por rodada.;+3 PM
+Tempestade Divina;;;;;;;Neve Congelante (Efeito Adicional / Dano - Neve);Se escolheu neve: criaturas na área sofrem 2d6 dano de frio no início de seus turnos.;+3 PM
+Tempestade Divina;;;;;;;Área Aumentada (Área);Muda a área para cilindro com 90m de raio e 90m de altura.;+3 PM
+Toque Vampírico;Arcana;Necromancia;"Toque causa 6d6 dano de trevas; recupera PV igual à metade do dano.";2º;3;Padrão;Toque Certeiro (Resistência / Ataque Adicional);"Muda resistência para nenhum. Como parte da execução, faz um ataque corpo a corpo; se acertar, causa dano do ataque e da magia, recupera PV.";+2 PM
+Toque Vampírico;;;;;;;Aumento de Dano (Dano);Aumenta o dano em +2d6.;+2 PM
+Toque Vampírico;;;;;;;"Drenagem Contínua (Alcance / Alvo / Duração / Efeito Alterado; Requer 3º círculo)";Muda alcance pessoal, alvo você, duração cena. 1x/rodada (ação padrão) toca 1 criatura (3d6 dano), recupera metade PV. Requer 3º círculo.;+2 PM
+Velocidade;Arcana;Transmutação;Alvo ganha ação padrão ou movimento adicional/turno (não para magias/engenhocas). Sustentada.;2º;3;Padrão;Movimento Extra (Duração / Efeito Alterado);Muda duração para cena. Ação adicional é apenas de movimento. Só 1 ação adicional/turno de Velocidade.;+0 PM
+Velocidade;;;;;;;"Velocidade em Massa (Alvo; Requer 4º círculo)";Muda o alvo para criaturas escolhidas no alcance. Requer 4º círculo.;+7 PM
+Velocidade;;;;;;;"Mente Acelerada (Alcance / Alvo / Efeito Adicional; Requer 4º círculo)";Muda alcance pessoal, alvo você. Ação adicional pode ser usada para lançar magias e ativar engenhocas. Requer 4º círculo.;+7 PM
+Vestimenta da Fé;Divina;Abjuração;Fortalece armadura/escudo (+2 Defesa) ou vestuário (+2 Defesa). Dura 1 dia.;2º;3;Padrão;"Proteção Adicional (Efeito Adicional; Requer 3º círculo)";O objeto oferece o mesmo bônus em testes de resistência. Requer 3º círculo.;+3 PM
+Vestimenta da Fé;;;;;;;Aumento de Bônus (Bônus);Aumenta o bônus em +1.;+4 PM
+Vestimenta da Fé;;;;;;;"Redução de Dano (RD; Requer 4º círculo)";O objeto também oferece redução de dano 5. Requer 4º círculo.;+7 PM
+Voz Divina;Divina;Adivinhação;Permite conversar com criaturas de qualquer raça/tipo (animais, construtos, etc.).;2º;3;Padrão;Falar com os Mortos (Efeito Adicional);Concede vida breve a cadáver para responder perguntas (conhecimento limitado, respostas curtas/enigmáticas). 1 vez/corpo. Não funciona se cabeça destruída.;+1 PM
+Voz Divina;;;;;;;Falar com Plantas/Rochas (Efeito Adicional);Pode falar com plantas (normais/monstruosas) e rochas (percepção limitada, respostas simplórias).;+1 PM
+Âncora Dimensional;Arcana;Abjuração;Impede movimento planar do alvo (teletransporte, viagens astrais, incorpóreo).;3º;6;Padrão;Área de Ancoragem (Alcance / Área / Alvo);Muda o alcance para médio, a área para esfera com 3m de raio e o alvo para criaturas escolhidas.;+2 PM
+Âncora Dimensional;;;;;;;Fio de Energia (Efeito Alterado);Em vez do normal, cria fio de energia que prende o alvo a um ponto no espaço (até 3m). Fio tem 20 PV, RD 20 (pode ser dissipado por efeitos de libertação).;+2 PM
+Âncora Dimensional;;;;;;;Corrente de Energia (Efeito Alterado - Fio);Como o Fio de Energia, mas cria uma corrente com 20 PV e RD 40.;+4 PM
+Âncora Dimensional;;;;;;;Bloqueio de Área (Alvo / Área / Duração / Comp. Material);Muda alvo para área de cubo de 9m, duração permanente, adiciona comp. material (chave de esmeralda T$ 2.000). Nenhum movimento planar pode entrar/sair da área.;+4 PM
+Âncora Dimensional;;;;;;;Ancoragem em Massa (Alcance / Área / Alvo / Efeito Alterado - Fio);Muda alcance para médio, área esfera 3m raio, alvo criaturas escolhidas. Cria Fio de Energia que prende todos os alvos ao centro da área.;+9 PM
+Anular a Luz;Divina;Necromancia;Onda de escuridão dissipa magias (até 3º círculo), protege aliados (+4 Defesa), enjoa inimigos. Anula Dispersar as Trevas.;3º;6;Padrão;Aumento de Bônus Defesa (Bônus);Aumenta o bônus na Defesa em +1.;+2 PM
+Anular a Luz;;;;;;;"Dissipar Magia Aprimorado (Efeito Alterado; Requer 4º círculo)";Muda as magias dissipadas para até 4º círculo. Requer 4º círculo.;+4 PM
+Anular a Luz;;;;;;;"Dissipar Magia Superior (Efeito Alterado; Requer 5º círculo)";Muda as magias dissipadas para até 5º círculo. Requer 5º círculo.;+9 PM
+Banimento;Divina;Abjuração;Expulsa criatura não nativa para seu plano ou destrói morto-vivo (0 PV).;3º;6;1d3+1 Rodadas;Sem Resistência (Resistência / Efeito Alterado);Muda resistência para nenhum. Em vez do normal, devolve automaticamente criatura conjurada para seu plano de origem.;+0 PM
+Coluna de Chamas;Divina;Evocação;Pilar de fogo sagrado (3m raio, 30m altura) causa 6d6 fogo + 6d6 luz.;3º;6;Padrão;Aumento Dano de Fogo (Dano);Aumenta o dano de fogo em +1d6.;+1 PM
+Coluna de Chamas;;;;;;;Aumento Dano de Luz (Dano);Aumenta o dano de luz em +1d6.;+1 PM
+Comunhão com a Natureza;Divina;Adivinhação;Obtém informações e intuições sobre a região (1 dia de viagem), recebe 6d4 dados de auxílio para testes de perícia.;3º;6;Completa;Investigação Natural (Execução / Duração / Efeito Alterado);Muda execução para 1 minuto, duração instantânea. Descobre 1d4+1 informações (terreno, animais, vegetais, etc.) em região natural.;+1 PM
+Comunhão com a Natureza;;;;;;;Aumento de Dados de Auxílio (Quantidade);Aumenta o número de dados de auxílio em +2.;+3 PM
+Comunhão com a Natureza;;;;;;;Dados de Auxílio Aprimorados (Tipo de Dado);Muda o tipo dos dados de auxílio para d6.;+4 PM
+Comunhão com a Natureza;;;;;;;Dados de Auxílio Superiores (Tipo de Dado);Muda o tipo dos dados de auxílio para d8.;+8 PM
+Contato Extraplanar;Arcana;Adivinhação;"Contata seres extraplanares, recebe 6d6 dados de auxílio para testes de perícia; rolar ""6"" suga 1 PM.";3º;6;Completa;Aumento de Dados de Auxílio (Quantidade);Aumenta o número de dados de auxílio em +1.;+2 PM
+Contato Extraplanar;;;;;;;"Dados de Auxílio Superiores (Tipo de Dado / Custo Adicional; Requer 4º círculo)";"Muda dados para d12. Rolar ""12"" suga 2 PM. Requer 4º círculo.";+8 PM
+Controlar Água;Divina;Transmutação;Controla água em área (30m raio): Congelar, Derreter, Enchente, Evaporar, Partir.;3º;6;Padrão;Aumento de Dano (Dano - Evaporar);Aumenta o dano em +2d8 (efeito Evaporar).;+2 PM
+Controlar Terra;Divina;Transmutação;Manipula terra/pedra/lama/argila/areia (9 cubos de 1,5m): Amolecer, Modelar, Solidificar.;3º;6;Padrão;Aumento de Cubos (Área);Aumenta o número de cubos de 1,5m em +2.;+1 PM
+Controlar Terra;;;;;;;Fusão com a Terra (Alcance / Alvo / Duração / Efeito Alterado);Muda alcance para pessoal, alvo você, duração 1 dia. Funde-se a superfície de pedra/terra/etc. Pode sair (ação livre). Se objeto destruído, sofre 10d6 dano.;+1 PM
+Convocação Instantânea;Arcana;Convocação;Invoca 1 objeto (até 2 espaços) previamente marcado com runa (T$ 5) para sua mão, de qualquer lugar.;3º;6;Padrão;Envio de Retorno (Efeito Adicional);Até 1h após lançar, pode gastar ação de movimento para enviar o objeto de volta ao local original.;+1 PM
+Convocação Instantânea;;;;;;;Baú Extradimensional (Alvo / Duração / Efeito Alterado / Penalidade PM / Comp. Material);Muda alvo para 1 baú Médio, duração permanente, adiciona penalidade de -1 PM. Esconde baú (até 20 espaços) no Éter. Invoca/envia de volta (ação padrão). Comp. Material: baú (T$ 1.000) e miniatura (T$ 100).;+1 PM
+Convocação Instantânea;;;;;;;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1.;+2 PM
+Convocação Instantânea;;;;;;;Alvo Maior (Alvo);Muda o alvo para 1 objeto de até 10 espaços. Objeto grande surge adjacente.;+2 PM
+Despertar Consciência;Divina;Encantamento;Animal/planta tocado se torna parceiro veterano inteligente (Int -1, fala).;3º;6;Completa;Animar Estátua (Alvo / Efeito Alterado);Muda alvo para 1 escultura mundana inanimada. Alvo ganha características de construto.;+4 PM
+Despertar Consciência;;;;;;;Vínculo Permanente (Duração / Penalidade PM);Muda duração para permanente, adiciona penalidade de -3 PM.;+4 PM
+Dificultar Detecção;Arcana;Abjuração;Alvo (criatura/objeto) fica oculto contra detecção mágica (Vontade do conjurador anula).;3º;6;Padrão;Proteção de Área (Alvo / Área);Muda o alvo para área de cubo de 9m. Qualquer criatura/objeto na área recebe o efeito.;+4 PM
+Dificultar Detecção;;;;;;;Duração Estendida (Duração);Muda a duração para 1 semana.;+4 PM
+Dispersar as Trevas;Divina;Evocação;Luz dissipa magias (até 3º círculo), protege aliados (+4 Resist., RD 10 trevas), cega inimigos. Anula Anular a Luz.;3º;6;Padrão;Aumento de Bônus Resistência (Bônus);Aumenta o bônus nas resistências em +1.;+2 PM
+Dispersar as Trevas;;;;;;;Proteção Individual (Alcance / Alvo / Duração / Efeito Alterado);Muda alcance para toque, alvo 1 criatura, duração cena. Alvo fica imune a efeitos de trevas.;+4 PM
+Dispersar as Trevas;;;;;;;"Dissipar Magia Aprimorado (Efeito Alterado; Requer 4º círculo)";Muda o círculo máximo de magias dissipadas para 4º. Requer 4º círculo.;+4 PM
+Enxame Rubro de Ichabod;Arcana;Convocação;Invoca enxame Grande de demônios da Tormenta (4d12 dano de ácido/rodada). Sustentada.;3º;6;Padrão;Agarrar (Efeito Adicional);Além do normal, criatura que falhar no Reflexos fica agarrada. Pode se libertar (ação padrão, Acrobacia/Atletismo). Se mover enxame, criatura fica livre.;+1 PM
+Enxame Rubro de Ichabod;;;;;;;Aumento de Dano (Dano);Aumenta o dano em +1d12.;+2 PM
+Enxame Rubro de Ichabod;;;;;;;Dano de Trevas (Tipo de Dano);Muda o dano para trevas.;+2 PM
+Enxame Rubro de Ichabod;;;;;;;Enxame Enorme (Tamanho da Área);O enxame vira Enorme (quadrado de 6m de lado).;+3 PM
+Enxame Rubro de Ichabod;;;;;;;Enxame Voador (Movimento);O enxame ganha deslocamento de voo 18m e passa a ocupar um cubo.;+3 PM
+Erupção Glacial;Arcana;Evocação;Estacas de gelo causam 4d6 corte + 4d6 frio e derrubam alvos em área.;3º;6;Padrão;Aumento de Dano (Dano);Aumenta o dano de frio em +2d6 e o dano de corte em +2d6.;+3 PM
+Erupção Glacial;;;;;;;"Tempestade de Granizo (Área / Duração / Efeito Alterado; Requer 4º círculo)";Muda área para cilindro (6m raio/altura), duração sustentada. Causa 3d6 impacto + 3d6 frio/rodada (sem resistência). Camuflagem leve, piso escorregadio. Requer 4º círculo.;+4 PM
+Ferver Sangue;Arcana;Necromancia;Sangue do alvo ferve (4d8 dano de fogo/rodada, enjoado). Sustentada.;3º;6;Padrão;Aumento de Dano (Dano);Aumenta o dano em +1d8.;+2 PM
+Ferver Sangue;;;;;;;"Múltiplas Vítimas (Alvo; Requer 5º círculo)";Muda alvo para criaturas escolhidas. Requer 5º círculo.;+9 PM
+Globo de Invulnerabilidade;Arcana;Abjuração;Esfera (3m raio) protege contra magias de 2º círculo ou menor. Sustentada.;3º;6;Padrão;"Proteção Aprimorada (Efeito Alterado; Requer 4º círculo)";Muda o efeito para afetar magias de até 3º círculo. Requer 4º círculo.;+4 PM
+Globo de Invulnerabilidade;;;;;;;"Proteção Superior (Efeito Alterado; Requer 5º círculo)";Muda o efeito para afetar magias de até 4º círculo. Requer 5º círculo.;+9 PM
+Heroísmo;Divina;Encantamento;Alvo tocado fica imune a medo, ganha 40 PV temporários e +4 em ataque/dano contra inimigo mais forte.;3º;6;Padrão;Aumento de Bônus (Bônus);Muda o bônus para +6.;+2 PM
+Ilusão Lacerante;Arcana;Ilusão;Cria ilusão de perigo mortal (cubo 9m) que causa 3d6 dano psíquico não letal. Sustentada.;3º;6;Padrão;Aumento de Dano (Dano);Aumenta o dano em +2d6.;+3 PM
+Ilusão Lacerante;;;;;;;"Ilusão Expansiva (Área; Requer 4º círculo)";Muda a área para um cubo de 90m. Requer 4º círculo.;+4 PM
+Imobilizar;Universal;Encantamento;"Alvo (humanoide/animal) fica paralisado; se passar na resistência, lento.";3º;6;Padrão;Alvo Espírito (Alvo);Muda o alvo para 1 espírito.;+1 PM
+Imobilizar;;;;;;;Alvos Múltiplos (Alvo);Aumenta o número de alvos em +1.;+2 PM
+Imobilizar;;;;;;;"Alvo Universal (Alvo; Requer 4º círculo)";Muda o alvo para 1 criatura. Requer 4º círculo.;+3 PM
+Lança Ígnea de Aleph;Arcana;Evocação;Projétil de magma causa 4d6 fogo + 4d6 perfuração e deixa em chamas (2d6/rodada). Respingos atingem adjacentes.;3º;6;Padrão;Aumento de Dano (Dano);Aumenta o dano inicial em +2d6 e o dano do efeito em chamas em +1d6.;+3 PM
+Lança Ígnea de Aleph;;;;;;;"Dardos de Lava (Duração / Efeito Alterado; Requer 4º círculo)";Muda duração para cena ou até descarregada. Cria 4 dardos de lava flutuantes. 1x/rodada (ação livre), dispara dardo com efeito normal da magia. Requer 4º círculo.;+4 PM
+Lendas e Histórias;Universal;Adivinhação;Descobre informações sobre criatura/objeto/local tocado (habilidades, estatísticas, magias ativas). Sustentada.;3º;6;Padrão;Vidência Remota (Execução / Alcance / Comp. Material);Muda execução para 1 dia, alcance ilimitado, adiciona comp. material (cuba de ouro com água e ingredientes T$ 1.000). Requer informação sobre o alvo.;+4 PM
+Manto de Sombras;Universal;Ilusão;Cobre-se com manto de energia sombria, tornando-se incorpóreo e podendo teletransportar-se entre sombras. Sustentada.;3º;6;Padrão;"Alvo Criatura (Alcance / Alvo; Requer 4º círculo)";Muda o alcance para toque e o alvo para 1 criatura. Requer 4º círculo.;+4 PM
+Miragem;Arcana;Ilusão;Altera terreno em área (cubo 90m), incluindo sons e cheiros, por 1 dia.;3º;6;Padrão;Alterar Aparência de Criaturas (Efeito Adicional);Além do normal, pode alterar a aparência de criaturas escolhidas na área, como Disfarce Ilusório.;+4 PM
+Miragem;;;;;;;"Duração Permanente (Duração / Comp. Material; Requer 4º círculo)";Muda duração para permanente, adiciona comp. material (pó de diamante T$ 1.000). Requer 4º círculo.;+9 PM
+Missão Divina;Divina;Encantamento;"Obriga alvo a cumprir tarefa por 1 semana; se recusar, sofre penalidades cumulativas (-2/dia em testes).";3º;6;Padrão;Marca da Transgressão (Alcance / Duração / Efeito Alterado / Penalidade PM);Muda alcance para toque, duração permanente, -1 PM. Inscreve marca na pele do alvo, ativada por ação específica (crime, etc.). Marca causa -2 cumulativo em testes. Purificação remove.;+2 PM
+Missão Divina;;;;;;;Duração Estendida (Duração);Aumenta a duração para 1 ano ou até ser descarregada.;+4 PM
+Muralha Elemental;Arcana;Evocação;Cria muralha de Fogo (dano ao cruzar e proximidade) ou Gelo (bloqueia, RD, PV).;3º;6;Padrão;Aumento de Dano (Dano - Fogo);Aumenta o dano por atravessar a muralha de fogo em +2d6.;+2 PM
+Muralha Elemental;;;;;;;Aumento de Dimensões (Área);Aumenta o comprimento em +15m e altura em +3m (máx. 60m comprimento, 9m altura).;+2 PM
+Muralha Elemental;;;;;;;"Muralha de Essência (Duração / Efeito Alterado; Requer 4º círculo)";Muda duração para sustentada, nova escolha Essência. Muralha invisível e indestrutível, bloqueia movimento (exceto teleporte) e dano, mas não magias de alvo/área. Requer 4º círculo.;+4 PM
+Pele de Pedra;Universal;Transmutação;Pele endurece, concedendo RD 5.;3º;6;Padrão;Alvo Criatura (Alcance / Alvo);Muda o alcance para toque e o alvo para 1 criatura.;+1 PM
+Pele de Pedra;;;;;;;Duração Estendida (Duração);Muda a duração para um dia.;+4 PM
+Pele de Pedra;;;;;;;"Pele de Aço (RD; Requer 4º círculo)";Sua pele ganha aspecto e dureza de aço. RD 10. Requer 4º círculo.;+4 PM
+Pele de Pedra;;;;;;;"Petrificação (Alcance / Alvo / Duração / Resistência / Efeito Alterado; Requer 4º círculo)";Muda alcance para toque, alvo 1 criatura, duração 1d4 rodadas, Fortitude anula. Alvo e equipamento viram estátua inerte (RD 8). Requer 4º círculo.;+4 PM
+Poeira da Podridão;Divina;Necromancia;Nuvem (6m raio) causa 2d8+8 dano de trevas/rodada e impede cura de PV se falhar em Fortitude.;3º;6;Padrão;Aumento de Dano (Dano);Aumenta o dano em 1d8+4.;+2 PM
+Potência Divina;Divina;Transmutação;Aumenta tamanho, For +4, RD 10. Não pode lançar magias. Sustentada.;3º;6;Padrão;Aumento Bônus Força (Bônus);Aumenta o bônus de Força em +1.;+2 PM
+Potência Divina;;;;;;;Aumento RD (RD);Aumenta a RD em +5.;+5 PM
+Potência Divina;;;;;;;Compartilhar Poder (Alcance / Alvo);Muda o alcance para toque e o alvo para 1 criatura. Magia falha se você e o alvo não forem devotos da mesma divindade.;+2 PM
+Proteção contra Magia;Divina;Abjuração;Alvo tocado recebe +5 em testes de resistência contra magias.;3º;6;Padrão;"Proteção Aprimorada (Bônus; Requer 4º círculo)";Muda o bônus para +10. Requer 4º círculo.;+4 PM
+Proteção contra Magia;;;;;;;"Imunidade a Escola (Efeito Alterado; Requer 4º círculo)";Em vez do normal, o alvo fica imune a uma escola de magia à sua escolha. Requer 4º Círculo.;+4 PM
+Proteção contra Magia;;;;;;;"Imunidade a Escolas Múltiplas (Efeito Alterado; Requer 5º círculo)";Em vez do normal, o alvo fica imune a duas escolas de magia à sua escolha. Requer 5º Círculo.;+9 PM
+Selo de Mana;Universal;Encantamento;"Selo mágico na pele do alvo; se usar ação com PM, deve passar em Vontade ou ação falha (PM gastos).";3º;6;Padrão;"Selar Múltiplos Alvos (Alcance / Alvo; Requer 4º círculo)";Muda o alcance para curto e o alvo para criaturas escolhidas dentro do alcance. Requer 4º círculo.;+4 PM
+Servo Divino;Divina;Convocação;Invoca espírito para realizar tarefa (até 1h). Comp. Material: T$ 100.;3º;6;Padrão;Tarefa Prolongada (Duração / Comp. Material);Muda duração para 1 dia. Tarefa até 1 dia. Custo do pagamento aumenta para T$ 500.;+4 PM
+Servo Divino;;;;;;;Tarefa Extensa (Duração / Comp. Material);Muda duração para 1 semana. Tarefa até 1 semana. Custo do pagamento aumenta para T$ 1.000.;+9 PM
+Servo Morto-Vivo;Universal;Necromancia;Transforma cadáver (humanoide/animal/monstro) em esqueleto/zumbi parceiro iniciante. Comp. Material: ônix negro T$ 100.;3º;6;Completa;Carniçal (Comp. Material / Tipo de Criatura / Nível do Parceiro);Muda comp. material para pó de ônix negro (T$ 500). Cria carniçal (parceiro veterano).;+3 PM
+Servo Morto-Vivo;;;;;;;Sombra (Comp. Material / Tipo de Criatura / Nível do Parceiro);Muda comp. material para pó de ônix negro (T$ 500). Cria sombra (parceiro veterano).;+3 PM
+Servo Morto-Vivo;;;;;;;"Múmia (Comp. Material / Tipo de Criatura / Nível do Parceiro; Requer 4º círculo)";Muda comp. material para ferramentas de embalsamar (T$ 1.000). Cria múmia (parceiro mestre). Requer 4º círculo.;+7 PM
+Sopro da Salvação;Divina;Evocação;Cone de 9m de poeira reluzente cura aliados (2d8+4 PV) e remove 1 condição.;3º;6;Padrão;Aumento de Cura (Cura);Aumenta a cura em +1d8+2.;+2 PM
+Sopro da Salvação;;;;;;;Reverter Ferimentos Graves (Efeito Adicional);Além do normal, se um aliado estiver com PV negativos, seus PV são levados a 0 e então a cura é aplicada.;+4 PM
+Sopro da Salvação;;;;;;;Purificação Ampla (Efeito Adicional);Remove todas as condições listadas, em vez de apenas uma.;+4 PM
+Telecinesia;Arcana;Transmutação;Move objetos/criaturas (Força Contínua) ou arremessa objetos (Empurrão Violento).;3º;6;Padrão;Aumento de Tamanho/Peso (Alvo / Efeito Adicional);Aumenta o tamanho máximo da criatura em uma categoria ou dobra a quantidade de espaços do objeto.;+3 PM
+Teletransporte;Arcana;Convocação;Transporta até 5 criaturas voluntárias para local até 1.000km (teste de Misticismo).;3º;6;Padrão;Aumento de Alvos (Alvo);Aumenta o número de alvos em +5.;+2 PM
+Teletransporte;;;;;;;Santuário (Efeito Alterado);Teletransporta para santuário pessoal (local familiar preparado, T$ 1.000). Sem limite de distância ou teste, mesmo plano. 1 santuário/vez.;+2 PM
+Teletransporte;;;;;;;"Círculo de Teletransporte (Execução / Duração / Penalidade PM / Efeito Alterado; Requer 5º círculo)";Muda execução para completa, duração cena, -1 PM. Cria círculo 1,5m que transporta quem pisar para destino escolhido (conhecido, qualquer mundo, sem teste). Requer 5º círculo.;+9 PM
+Tentáculos de Trevas;Arcana;Necromancia;Tentáculos de treva em área (6m raio) agarram (teste Misticismo) e causam 4d6 dano de trevas.;3º;6;Padrão;Aumento de Área (Área);Aumenta o raio da área em +3m.;+2 PM
+Tentáculos de Trevas;;;;;;;Aumento de Dano (Dano);Aumenta o dano dos tentáculos em +2d6.;+2 PM
+Transformação de Guerra;Arcana;Transmutação;Ganha +6 Defesa/ataque/dano corpo a corpo, 30 PV temp. Não pode lançar magias. Proficiente em todas as armas. Sustentada.;3º;6;Padrão;Aumento de Bônus e PV (Bônus / PV Temporários);Aumenta os bônus na Defesa, ataque e dano em +1, e os PV temporários em +10.;+2 PM
+Transformação de Guerra;;;;;;;Forma Metálica (Comp. Material / Efeito Adicional);"Adiciona comp. material (barra de adamante T$ 100). Ganha RD 10 e imunidade a atordoamento, cansaço, encantamento, metabolismo, trevas, veneno; não precisa respirar.";+2 PM
+Viagem Arbórea;Divina;Convocação;"Entra em árvore adjacente; pode sair dela ou de qualquer outra árvore a até 1km (ação de movimento).";3º;6;Completa;Teletransporte em Grupo (Alcance / Alvo / Duração / Efeito Alterado);Muda alcance para toque, alvo até 5 criaturas, duração instantânea. Alvos entram em planta Média+ e saem em outra similar até 100km (direção/distância aprox.).;+2 PM
+Vidência;Universal;Adivinhação;Vê e ouve criatura escolhida e arredores (6m) através de superfície reflexiva. Sustentada.;3º;6;Completa;-;-;-
+Voo;Arcana;Transmutação;Concede deslocamento de voo 12m.;3º;6;Padrão;Alvo Criatura (Alcance / Alvo);Muda o alcance para toque e o alvo para 1 criatura.;+1 PM
+Voo;;;;;;;"Duração Estendida (Duração; Requer 4º círculo)";Muda a duração para um dia. Requer 4º círculo.;+4 PM
+Voo;;;;;;;"Voo em Massa (Alcance / Alvo; Requer 4º círculo)";Muda o alcance para curto e o alvo para até 10 criaturas. Requer 4º círculo.;+4 PM
+Alterar Memória;Arcana;Encantamento;Altera ou apaga memórias da última hora do alvo.;4º;10;Padrão;Área de Efeito (Alcance / Alvo / Área);Muda o alcance para pessoal e o alvo para área cone de 4,5m.;+2 PM
+Alterar Memória;;;;;;;Memória Estendida (Tempo);Você pode alterar ou apagar as memórias das últimas 24 horas.;+5 PM
+Animar Objetos;Arcana;Transmutação;Concede vida a objetos, que se tornam parceiros sob seu controle.;4º;10;Padrão;Duração Permanente (Duração / Comp. Material);Muda a duração para permanente e adiciona componente material (prataria no valor de T$ 1.000). Máximo de objetos animados = metade do seu nível.;+5 PM
+Assassino Fantasmagórico;Arcana;Necromancia;Conjura imagem do maior medo do alvo, que o persegue e pode causar dano de trevas ou PV -1.;4º;10;Padrão;-;-;-
+Campo Antimagia;Arcana;Abjuração;Barreira invisível (3m raio) suprime habilidades mágicas e itens mágicos na área.;4º;10;Padrão;-;-;-
+Círculo da Restauração;Divina;Evocação;Círculo de luz (3m raio) cura 3d8+3 PV e 1 PM a criaturas vivas que terminam turno dentro, por 5 rodadas.;4º;10;Padrão;Aumento de Cura (Cura);Aumenta a regeneração de PV em 1d8+1.;+2 PM
+Cólera de Azgher;Divina;Evocação;Explosão solar (6m raio) cega por 1d4 rodadas, causa 10d6 dano de fogo (10d8 em mortos-vivos) e deixa em chamas.;4º;10;Padrão;Aumento de Dano (Dano);Aumenta o dano em +2d6 (+2d8 contra mortos-vivos).;+2 PM
+Cólera de Azgher;;;;;;;Aumento de Área (Área);Aumenta a área em +6m de raio.;+2 PM
+Cólera de Azgher;;;;;;;"Dissipar Trevas (Efeito Adicional; Requer 5º círculo)";A luz purificadora dissipa todas as magias de necromancia ativas na área. Requer 5º círculo.;+5 PM
+Conceder Milagre;Divina;Encantamento;Alvo tocado pode lançar 1 magia sua (até 2º círculo) uma vez, sem custo de PM para ele. Você sofre -3 PM até ser usada.;4º;10;Padrão;Magia de Círculo Maior (Círculo da Magia Concedida / Penalidade PM);Muda o círculo da magia concedida para 3º e a penalidade de PM para –6.;+4 PM
+Conjurar Elemental;Arcana;Convocação;Transforma porção de elemento em elemental Grande (Ar, Água, Fogo ou Terra) parceiro mestre (Destruidor + 1 outro tipo).;4º;10;Completa;Elemental Enorme (Tamanho do Elemental / Tipos de Parceiro);O elemental muda para Enorme e recebe dois tipos de parceiro indicados em seu elemento.;+5 PM
+Conjurar Elemental;;;;;;;"Múltiplos Elementais (Quantidade / Alvo; Requer 5º círculo)";Você convoca um elemental de cada tipo. Pode escolher se cada elemental auxilia você ou um aliado no alcance. Requer 5º círculo.;+5 PM
+Controlar a Gravidade;Arcana;Transmutação;Controla gravidade em cubo de 12m (Aumentar, Inverter ou Reduzir). Sustentada.;4º;10;Padrão;-;-;-
+Controlar o Clima;Divina;Transmutação;Muda o clima em área (2km raio) por 4d12 horas (chuva, neve, ventos, névoas).;4º;10;Completa;Aumento de Área e Duração (Área / Duração - Apenas Druidas);(Apenas Druidas) Muda o raio da área para 3km e duração para 1d4 dias.;+1 PM
+Cúpula de Repulsão;Divina;Abjuração;Cúpula impede aproximação (<3m) de 1 tipo de criatura/raça (Vontade anula). Sustentada.;4º;10;Padrão;Distância Aumentada (Distância);A cúpula impede criaturas de se aproximarem a menos de 4,5m de você.;+2 PM
+Cúpula de Repulsão;;;;;;;"Repulsão à Distância (Efeito Adicional; Requer 5º círculo)";Além do normal, criaturas afetadas também precisam fazer teste de Vontade se fizerem ataque ou efeito à distância contra você. Se falharem, efeito é desviado. Requer 5º círculo.;+5 PM
+Desintegrar;Arcana;Transmutação;Raio esverdeado causa 10d12 dano de essência. Se PV ≤ 0, alvo vira pó.;4º;10;Padrão;Aumento de Dano (Dano);Aumenta o dano total em +2d12 e o dano mínimo (se passar na resistência) em +1d12.;+4 PM
+Duplicata Ilusória;Arcana;Ilusão;Cria cópia ilusória sua, intangível. Pode ver/ouvir por ela. Magias podem se originar dela.;4º;10;Padrão;Cópia Adicional (Quantidade);Cria uma cópia adicional.;+3 PM
+Explosão Caleidoscópica;Arcana;Ilusão;Explosão de luzes/sons (6m raio) causa efeitos baseados no nível/ND do alvo (inconsciente, atordoado, enjoado, desprevenido).;4º;10;Padrão;-;-;-
+Forma Etérea;Arcana;Transmutação;Você e seu equipamento se tornam etéreos (invisível, incorpóreo, voo). Sustentada.;4º;10;Completa;"Grupo Etéreo (Alcance / Alvo; Requer 5º círculo)";Muda o alcance para toque e o alvo para até 5 criaturas voluntárias de mãos dadas. Requer 5º círculo.;+5 PM
+Guardião Divino;Divina;Convocação;Invoca elemental de luz Pequeno (100 pontos de luz) que cura PV ou condições de aliados.;4º;10;Padrão;-;-;-
+Libertação;Universal;Abjuração;Alvo fica imune a efeitos de movimento e ignora restrições de deslocamento. Pode usar habilidades de movimento livre com armadura/escudo.;4º;10;Padrão;Caminhar Sobre Líquidos (Efeito Adicional);Além do normal, o alvo pode caminhar sobre a água ou outros líquidos com seu deslocamento normal (não protege contra efeitos do líquido).;+2 PM
+Libertação;;;;;;;Maestria Atlética (Efeito Adicional);Além do normal, o alvo pode escolher 20 em todos os testes de Atletismo.;+2 PM
+Libertação;;;;;;;Maestria Acrobática (Efeito Adicional);Além do normal, o alvo pode escolher 20 em todos os testes de Acrobacia e pode fazer todas as manobras desta perícia mesmo sem treinamento.;+2 PM
+Libertação;;;;;;;Libertação em Massa (Alcance / Alvo);Muda o alcance para curto e o alvo para até 5 criaturas.;+5 PM
+Libertação;;;;;;;Dissipar Aprisionamento (Efeito Adicional);Pode dissipar Aprisionamento.;+5 PM
+Ligação Sombria;Divina;Necromancia;"Conecta seu corpo ao do alvo (1 dia); se você sofrer dano/condição, alvo pode sofrer também (Fortitude anula).";4º;10;Padrão;Vínculo Mortal (Efeito Adicional);A magia não termina se o alvo chegar a 0 PV (dano da magia pode matá-lo).;+5 PM
+Mão Poderosa de Talude;Arcana;Convocação;Cria mão gigante de energia que protege (+5 Defesa vs 1 oponente) ou realiza ações (Agarrar, Esmagar, Empurrar). Sustentada.;4º;10;Padrão;Aumento de Dano (Dano - Esmagar);Aumenta o dano em +1d6+5.;+2 PM
+Mão Poderosa de Talude;;;;;;;"Força Aumentada (Bônus de Manobra; Requer 5º círculo)";Muda o bônus adicional em Misticismo para +20. Requer 5º círculo.;+5 PM
+Manto do Cruzado;Divina;Evocação;Invoca manto de energia (Luz ou Trevas) com efeitos de cura/dano e bônus. Sustentada.;4º;10;Padrão;-;-;-
+Marionete;Arcana;Encantamento;Controla ações físicas do alvo (Fortitude anula a cada turno). Sustentada.;4º;10;Padrão;-;-;-
+Muralha de Ossos;Universal;Necromancia;Parede de ossos (15m compr. x 9m alt. x 1,5m esp.) causa 4d8 dano de corte e agarra quem surge nela/adjacente.;4º;10;Padrão;Aumento de Dimensões (Área);Aumenta o comprimento em +15m e a altura em +3m.;+3 PM
+Muralha de Ossos;;;;;;;Esqueletos Animados (Efeito Adicional);Muro feito de esqueletos animados. Criatura adjacente/escalando deve passar em Reflexos no início do turno ou fica agarrada.;+5 PM
+Premonição;Divina;Adivinhação;1x/rodada, pode rolar novamente um teste recém realizado (deve aceitar 2º resultado).;4º;10;Padrão;Alterar Destino Alheio (Execução / Alcance / Alvo / Duração / Efeito Alterado);Muda execução para reação, alcance curto, alvo 1 criatura, duração instantânea. Obriga criatura a refazer teste (Vontade anula).;+3 PM
+Premonição;;;;;;;Duração Estendida (Duração);Muda a duração para um dia.;+10 PM
+Raio Polar;Arcana;Evocação;Raio causa 10d8 dano de frio e paralisa (bloco de gelo). Fortitude parcial (metade dano, lento).;4º;10;Padrão;Aumento de Dano (Dano);Aumenta o dano em +2d8.;+3 PM
+Raio Polar;;;;;;;Explosão Polar (Alvo / Área);Muda o alvo para área de esfera com 6m de raio. Dispara bola de gelo que explode.;+5 PM
+Relâmpago Flamejante de Reynard;Arcana;Evocação;Mãos em chamas e eletrificadas. Pode disparar bola de fogo (10d6) ou relâmpago (10d6) ou ataque misto (20d12). Sustentada.;4º;10;2 Rodadas;Aumento de Dano (Dano);Aumenta o dano das rajadas em +1d6 e o dano da rajada mista em +2d12.;+2 PM
+Sonho;Arcana;Adivinhação;Entra nos sonhos de 1 criatura viva para conversar.;4º;10;10 Minutos;Pesadelo (Efeito Adicional);Transforma sonho em pesadelo. Vítima (Vontade anula) não recupera PV/PM, sofre 1d10 dano de trevas, acorda fatigada. Modificadores no teste baseado no conhecimento do alvo.;+2 PM
+Sonho;;;;;;;Sonho Compartilhado (Alvo);Aumenta o número de alvos em +1. Todos compartilham mesmo sonho/pesadelo.;+1 PM
+Talho Invisível de Edauros;Arcana;Evocação;Cone de 9m de lâmina de ar causa 10d8 dano de corte e sangramento. Fortitude parcial.;4º;10;Padrão;Aumento de Dano (Dano);Aumenta o dano em +2d8.;+2 PM
+Talho Invisível de Edauros;;;;;;;Lâminas Contínuas (Alvo / Duração / Efeito Alterado);Muda alvo para você, duração sustentada. 1x/rodada (ação de movimento) dispara lâmina em alvo (alcance médio, 6d8 dano corte, Fortitude reduz à metade).;+2 PM
+Terremoto;Divina;Evocação;Tremor de terra (30m raio) por 1 rodada. Efeitos variam com terreno (desabamento, fendas, etc.).;4º;10;Padrão;-;-;-
+Viagem Planar;Universal;Convocação;Viaja instantaneamente para outro plano. Comp. Material: bastão de metal precioso (T$ 1.000).;4º;10;Completa;Viagem em Grupo (Alvo);Muda o alvo para até cinco criaturas voluntárias que você esteja tocando.;+2 PM
+Visão da Verdade;Universal;Adivinhação;Enxerga forma real das coisas (camuflagem, escuridão, ilusão, transmutação).;4º;10;Movimento;Alvo Criatura (Alcance / Alvo);Muda o alcance para toque e o alvo para 1 criatura.;+1 PM
+Visão da Verdade;;;;;;;Sentidos Aguçados (Efeito Adicional);Além do normal, o alvo recebe +10 em todos os testes de Percepção.;+1 PM
+Visão da Verdade;;;;;;;Audição da Verdade (Efeito Adicional);"Além do normal, o alvo escuta falsidades; ele recebe +10 em todos os testes de Intuição.";+2 PM
+Visão da Verdade;;;;;;;Ver Através (Efeito Adicional);Além do normal, o alvo enxerga através de paredes e barreiras com 30cm de espessura ou menos (parecem translúcidas).;+4 PM
+Alterar Destino;Arcana;Adivinhação;Permite rolar novamente um teste de resistência seu com +10 ou um inimigo refazer um ataque contra você com -10.;5º;15;Reação;-;-;-
+Aprisionamento;Arcana;Abjuração;Cria prisão mágica (Acorrentamento, Contenção Mínima, Prisão Dimensional, Sepultamento ou Sono Eterno). Componente material T$ 1.000.;5º;15;Completa;-;-;-
+Aura Divina;Divina;Abjuração;Você e aliados devotos na aura (9m raio) ficam imunes a encantamento, +10 Defesa/resistência. Outros aliados +5. Inimigos podem ficar esmorecidos/debilitados/lentos.;5º;15;Padrão;Aumento de Bônus (Bônus);Aumenta os bônus na Defesa e em testes de resistência em +1.;+2 PM
+Barragem Elemental de Vectorius;Arcana;Evocação;Cria 4 esferas (ácido, eletricidade, fogo, frio) que explodem (12m raio) causando 6d6 dano do tipo e efeitos adicionais.;5º;15;Padrão;Aumento de Dano (Dano);Aumenta o dano de cada esfera em +2d6.;+5 PM
+Barragem Elemental de Vectorius;;;;;;;Dano de Essência (Tipo de Dano);Muda o tipo de dano de todas as esferas para essência (mantém efeitos adicionais).;+5 PM
+Buraco Negro;Universal;Convocação;Cria vácuo que suga criaturas e objetos (alcance longo) por 3 rodadas (Fortitude evita). Quem terminar turno no buraco é sugado.;5º;15;Completa;Imunidade Pessoal (Alvo);Você não é afetado pela magia.;+5 PM
+Chuva de Meteoros;Arcana;Convocação;Meteoros causam 15d6 impacto + 15d6 fogo em área (quadrado 18m), deixam caídos e agarrados. Só a céu aberto.;5º;15;Completa;Aumento de Dano (Dano);Aumenta o dano em +2d6 de impacto e +2d6 de fogo.;+2 PM
+Controlar o Tempo;Arcana;Transmutação;Permite Congelar o tempo (3 rodadas para você), Saltar no tempo (você e até 5 outros, 1-24h para o futuro) ou Voltar no tempo (desfaz ações da rodada anterior).;5º;15;Padrão;-;-;-
+Deflagração de Mana;Arcana;Evocação;"Explosão (15m raio) causa 150 dano de essência; itens mágicos viram mundanos (Fortitude parcial). Você não é afetado.";5º;15;Completa;Aumento de Dano (Dano);Aumenta o dano em 10.;+1 PM
+Deflagração de Mana;;;;;;;Seletividade (Alvo);Afeta apenas criaturas à sua escolha.;+5 PM
+Desejo;Arcana;Transmutação;Altera a realidade: dissipa magia (até 4º círculo), transporta (até 10 criaturas), refaz teste recente. Com sacrifício de 2 PM: cria item mundano (até T$ 30.000), duplica magia (até 4º círculo), +1 atributo (1x/atributo).;5º;15;Completa;-;-;-
+Engenho de Mana;Arcana;Abjuração;Cria disco de energia flutuante que faz contramágica automática e absorve PM para seu uso. Sustentada.;5º;15;Padrão;Acompanhar Conjurador (Efeito Alterado);Em vez de flutuar no ponto, o disco flutua atrás de você, mantendo-se adjacente.;+1 PM
+Engenho de Mana;;;;;;;Duração Estendida (Duração);Muda a duração para um dia.;+4 PM
+Fúria do Panteão;Divina;Evocação;Cria nuvem de tempestade (cubo 90m) com efeitos destrutivos (Nevasca, Raios, Siroco, Trovões) 1x/turno. Sustentada.;5º;15;Completa;-;-;-
+Intervenção Divina;Divina;Convocação;Pede à divindade para interceder: cura PV/condições (até 10 criaturas), dissipa magia (até 4º círculo). Com sacrifício de 2 PM: cria item mundano (até T$ 30.000), duplica magia (até 4º círculo), protege cidade, ressuscita criatura recém-morta, ou outro efeito (mestre decide).;5º;15;Completa;-;-;-
+Invulnerabilidade;Universal;Abjuração;Cria barreira que concede imunidade a efeitos mentais OU físicos (incluindo várias condições).;5º;15;Padrão;Alvo Criatura (Alcance / Alvo);Muda o alcance para curto e o alvo para 1 criatura.;+5 PM
+Lágrimas de Wynna;Divina;Abjuração;Alvo perde habilidade de lançar magias arcanas até fim da cena (Vontade parcial: 1 rodada).;5º;15;Padrão;Área de Supressão (Área / Alvo);Muda a área para esfera com 6m de raio e o alvo para criaturas escolhidas.;+2 PM
+Lágrimas de Wynna;;;;;;;Supressão Permanente (Execução / Custo Adicional);Muda execução para 1 dia, adiciona custo (sacrifício 1 PM). Alvo (Vontade anula) perde permanentemente hab. de lançar magias arcanas. Só poder mortal não reverte.;+5 PM
+Legião;Arcana;Encantamento;Domina mente de até 10 criaturas, que obedecem cegamente (exceto suicídio). Vontade anula a cada turno. Sustentada.;5º;15;Padrão;Aumento de Alvos (Alvo);Aumenta o número de alvos em +1.;+1 PM
+Mata-Dragão;Arcana;Evocação;"Rajada de energia em cone de 30m causa 20d12 dano de essência. Se rolar ""12"" no dado de dano, causa +1d12.";5º;15;2 Rodadas;Aumento de Dano (Dano);Aumenta o dano em 1d12.;+1 PM
+Palavra Primordial;Universal;Encantamento;Pronuncia palavra da Criação causando Atordoar, Cegar ou Matar em 1 criatura com menos níveis que você.;5º;15;Padrão;-;-;-
+Possessão;Arcana;Encantamento;Transfere sua consciência para corpo do alvo (Vontade anula), controlando-o. Seu corpo fica inconsciente. Dura 1 dia.;5º;15;Padrão;Absorver Habilidades (Efeito Adicional);Você ganha acesso às habilidades de raça e classe da criatura.;+5 PM
+Possessão;;;;;;;Salto de Consciência (Efeito Adicional);"Pode ""saltar"" de uma criatura possuída para outra (alcance curto, Vontade anula). Alvo anterior recobra consciência.";+5 PM
+Possessão;;;;;;;Possessão Permanente (Duração / Efeito Alterado);Muda duração para permanente, mas destrói seu corpo original. Criatura possuída testa Vontade/dia para retomar corpo. Se corpo morrer, pode tentar possuir outro (alcance curto).;+5 PM
+Projetar Consciência;Universal;Adivinhação;Consciência viaja para local/criatura conhecida (mesmo plano). Forma fantasmagórica invisível/incorpórea, voo 18m. Sustentada.;5º;15;Padrão;Lançar Magias à Distância (Efeito Adicional);Projeção pode lançar magias (sem comp. material, não sustentadas), afetando criaturas corpóreas.;+10 PM
+Reanimação Impura;Divina;Necromancia;Reanima criatura morta recentemente como zumbi sob seu comando. Tipo muda para morto-vivo, mantém memórias/habilidades.;5º;15;Completa;-;-;-
+Réquiem;Arcana;Ilusão;Alvos ficam presos em realidade ilusória que se repete (Vontade anula). A cada turno, Vontade ou repete ações com -5 cumulativo. Sustentada.;5º;15;Padrão;-;-;-
+Roubar a Alma;Universal;Necromancia;Arranca alma da vítima (Vontade parcial: abalado) e a prende em objeto (custo T$ 1.000/nível ou ND). Corpo fica inerte. Custo Adicional: sacrifício 1 PM.;5º;15;Padrão;Repositório de Mana (Efeito Adicional);O objeto que abriga a alma detém os mesmos PM totais que o alvo. Pode usar esses PM para lançar magias. Objeto recupera PM normalmente.;+5 PM
+Roubar a Alma;;;;;;;Tomar Controle (Efeito Adicional);Como uma reação ao lançar esta magia, você possui o corpo sem alma do alvo, como na magia Possessão.;+10 PM
+Segunda Chance;Divina;Evocação;Alvo tocado recupera 200 PV e se cura de diversas condições.;5º;15;Padrão;Aumento de Cura (Cura);Aumenta a cura em +20 PV.;+1 PM
+Segunda Chance;;;;;;;Cura em Massa (Alcance / Alvo);Muda o alcance para curto e o alvo para até 5 criaturas.;+2 PM
+Segunda Chance;;;;;;;Ressurreição Imediata (Alvo / Efeito Adicional);Muda o alvo para uma criatura que tenha morrido há até uma rodada. Esta magia pode curá-la (volta com 1 PV).;+5 PM
+Semiplano;Arcana;Convocação;Cria dimensão particular (30m de lado) por 1 dia. Pode entrar/sair (ação padrão, 10 PM + 1 PM/criatura ou PM/objeto).;5º;15;Completa;Labirinto Dimensional (Alvo / Efeito Alterado);Cria semiplano labiríntico e expulsa 1 criatura para ele. Vítima testa Investigação/Sobrevivência para escapar.;+2 PM
+Semiplano;;;;;;;Semiplano Permanente (Duração / Comp. Material);Muda duração para permanente, adiciona comp. material (maquete T$ 5.000). Pode aumentar dimensões (+30m/lado) com novos lançamentos.;+5 PM
+Sombra Assassina;Arcana;Ilusão;Cria duplicata ilusória sombria do alvo que o ataca com as mesmas estatísticas e rolagens. Desaparece se alvo passar em Vontade ou PV da sombra = 0.;5º;15;Padrão;Sombras Múltiplas (Alvo);Muda o alvo para criaturas escolhidas na área.;+10 PM
+Toque da Morte;Universal;Necromancia;Mão causa 10d8+10 dano de trevas. Se alvo < metade PV, Fortitude ou PV = -10.;5º;15;Padrão;Alcance Curto (Alcance);Muda o alcance para curto. Dispara raio púrpura.;+2 PM
+Toque da Morte;;;;;;;Morte em Massa (Alcance / Alvo);Muda o alcance para curto e o alvo para inimigos no alcance. Dispara raios púrpuras.;+10 PM
