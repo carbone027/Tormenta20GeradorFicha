@@ -45,6 +45,20 @@ Bônus de Perícia = Metade do Nível do Personagem (arredondado para baixo) + A
 | Sobrevivência  | Sabedoria (Sab)|
 | Vontade        | Sabedoria (Sab)|
 
+As seguintes perícias precisam ser treinadas para serem utilizáveis:
+
+Adestramento 
+Atuação 
+Conhecimento 
+Guerra 
+Jogatina 
+Ladinagem 
+Misticismo 
+Nobreza 
+Ofício 
+Pilotagem 
+Religião 
+
 *Nota: Além das perícias de classe, um personagem recebe um número de perícias treinadas adicionais igual ao seu modificador de Inteligência (se positivo). Essas perícias podem ser de qualquer tipo, não se limitando à lista da classe.
 
 ---
