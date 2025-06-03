@@ -1,4 +1,4 @@
-const Pericia = require('../models/Pericia');
+const Pericia = require('../models/pericia');
 const pool = require('../config/database');
 
 class PericiaController {
