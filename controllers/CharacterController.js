@@ -337,9 +337,7 @@ exports.view = async (req, res) => {
 
     try {
       console.log(`🎯 Carregando perícias para personagem ${characterId}`);
-      
-      // CORREÇÃO: Buscar perícias do personagem E todas as perícias não-treinadas utilizáveis
-      pericias = await Character.getCharacterSkillsComplete(characterId);
+      pericias = await Character.getCharacterSkills(characterId);
 
       // Organizar por categoria
       pericias.forEach(pericia => {
@@ -350,7 +348,7 @@ exports.view = async (req, res) => {
         periciasPorCategoria[categoria].push(pericia);
       });
 
-      console.log(`✅ ${pericias.length} perícias carregadas (incluindo não-treinadas utilizáveis)`);
+      console.log(`✅ ${pericias.length} perícias carregadas`);
     } catch (error) {
       console.error('❌ Erro ao carregar perícias:', error);
     }
