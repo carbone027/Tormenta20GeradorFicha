@@ -378,6 +378,120 @@ class Character {
     return Math.max(0, modInteligencia); // Não pode ser negativo
   }
 
+  static async getCharacterSkillsComplete(characterId) {
+    try {
+      // Lista de perícias que precisam ser treinadas para serem utilizáveis
+      const skillsRequireTraining = [
+        'adestramento', 'atuação', 'conhecimento', 'guerra',
+        'jogatina', 'ladinagem', 'misticismo', 'nobreza',
+        'ofício', 'pilotagem', 'religião'
+      ];
+
+      const skillsRequireTrainingStr = skillsRequireTraining.map(skill => `'${skill}'`).join(',');
+
+      const result = await pool.query(`
+      WITH personagem_info AS (
+        SELECT id, nivel, forca, destreza, constituicao, inteligencia, sabedoria, carisma
+        FROM personagens WHERE id = $1
+      ),
+      pericias_personagem AS (
+        SELECT 
+          pp.*,
+          p.nome,
+          p.atributo_chave,
+          p.categoria,
+          p.descricao,
+          TRUE as tem_no_personagem
+        FROM personagem_pericias pp
+        INNER JOIN pericias p ON pp.pericia_id = p.id
+        WHERE pp.personagem_id = $1
+      ),
+      pericias_utilizaveis AS (
+        SELECT 
+          p.id as pericia_id,
+          NULL::integer as personagem_id,
+          p.nome,
+          p.atributo_chave,
+          p.categoria,
+          p.descricao,
+          FALSE as treinado,
+          FALSE as especialista,
+          'utilizavel'::text as origem,
+          'Perícia utilizável sem treinamento'::text as observacoes,
+          FALSE as tem_no_personagem
+        FROM pericias p
+        WHERE LOWER(p.nome) NOT IN (${skillsRequireTrainingStr})
+        AND p.id NOT IN (
+          SELECT pericia_id FROM personagem_pericias WHERE personagem_id = $1
+        )
+      )
+      SELECT 
+        COALESCE(pp.id, nextval('personagem_pericias_id_seq')) as id,
+        COALESCE(pp.personagem_id, $1) as personagem_id,
+        COALESCE(pp.pericia_id, pu.pericia_id) as pericia_id,
+        COALESCE(pp.nome, pu.nome) as nome,
+        COALESCE(pp.atributo_chave, pu.atributo_chave) as atributo_chave,
+        COALESCE(pp.categoria, pu.categoria) as categoria,
+        COALESCE(pp.descricao, pu.descricao) as descricao,
+        COALESCE(pp.treinado, pu.treinado) as treinado,
+        COALESCE(pp.especialista, pu.especialista) as especialista,
+        COALESCE(pp.origem, pu.origem) as origem,
+        COALESCE(pp.observacoes, pu.observacoes) as observacoes,
+        COALESCE(pp.tem_no_personagem, pu.tem_no_personagem) as tem_no_personagem,
+        -- Calcular bônus baseado no personagem
+        CASE COALESCE(pp.atributo_chave, pu.atributo_chave)
+          WHEN 'for' THEN (pi.forca - 10) / 2
+          WHEN 'des' THEN (pi.destreza - 10) / 2
+          WHEN 'con' THEN (pi.constituicao - 10) / 2
+          WHEN 'int' THEN (pi.inteligencia - 10) / 2
+          WHEN 'sab' THEN (pi.sabedoria - 10) / 2
+          WHEN 'car' THEN (pi.carisma - 10) / 2
+          ELSE 0
+        END as bonus_atributo,
+        pi.nivel / 2 as bonus_nivel,
+        CASE 
+          WHEN NOT COALESCE(pp.treinado, pu.treinado) THEN 0
+          WHEN pi.nivel BETWEEN 1 AND 6 THEN 2
+          WHEN pi.nivel BETWEEN 7 AND 14 THEN 4
+          WHEN pi.nivel >= 15 THEN 6
+          ELSE 0
+        END as bonus_treinamento
+      FROM personagem_info pi
+      FULL OUTER JOIN pericias_personagem pp ON TRUE
+      FULL OUTER JOIN pericias_utilizaveis pu ON TRUE
+      WHERE (pp.nome IS NOT NULL OR pu.nome IS NOT NULL)
+      ORDER BY 
+        COALESCE(pp.categoria, pu.categoria),
+        COALESCE(pp.treinado, pu.treinado) DESC,
+        COALESCE(pp.nome, pu.nome)
+    `, [characterId]);
+
+      // Calcular bônus total para cada perícia
+      const pericias = result.rows.map(pericia => {
+        let bonusTotal = parseInt(pericia.bonus_nivel) + parseInt(pericia.bonus_atributo);
+
+        if (pericia.treinado) {
+          bonusTotal += parseInt(pericia.bonus_treinamento);
+
+          // Bonus adicional para especialista (Ladino)
+          if (pericia.especialista) {
+            bonusTotal += parseInt(pericia.bonus_treinamento);
+          }
+        }
+
+        return {
+          ...pericia,
+          bonus_total: bonusTotal
+        };
+      });
+
+      return pericias;
+    } catch (error) {
+      console.error('Erro ao buscar perícias completas do personagem:', error);
+      throw error;
+    }
+  }
+
 
 }
 
