@@ -1,0 +1,31 @@
+As magias só devem aparecer para classes mágicas:
+
+Bardo (Apenas Arcanas e Universais)
+Arcanista (Apenas Arcanas e Universais)
+Clérigo (Apenas Divinas e Universais)
+Druida (Apenas Divinas e Universais)
+
+Os Circulos da magias devem ser limitadas por nivel de cada classe (Por tanto, so podem aparecer na criação ou edição do personagem se tiver nivel suficiente)
+
+Arcanista: 
+1º círculo: 1º nível
+2º círculo: 5º nível
+3º círculo: 9º nível
+4º círculo: 13º nível
+5º círculo: 17º nível
+Bardo: 
+1º círculo: 1º nível
+2º círculo: 6º nível
+3º círculo: 10º nível
+4º círculo: 14º nível
+Clérigo: 
+1º círculo: 1º nível
+2º círculo: 5º nível
+3º círculo: 9º nível
+4º círculo: 13º nível
+5º círculo: 17º nível
+Druida: 
+1º círculo: 1º nível
+2º círculo: 6º nível
+3º círculo: 10º nível
+4º círculo: 14º nível
