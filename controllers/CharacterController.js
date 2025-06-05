@@ -1,6 +1,7 @@
 const Character = require('../models/character');
 const PowerController = require('../controllers/PowerController');
 const Pericia = require('../models/pericia');
+const Magia = require('../models/magia');
 const pool = require('../config/database');
 const express = require('express');
 const app = express();
@@ -47,6 +48,14 @@ exports.createForm = async (req, res) => {
     // Buscar perícias organizadas
     const periciasSistema = await Pericia.getOrganizedSkills();
 
+    let magiasDisponiveis = {};
+    try {
+      // Buscar todas as magias organizadas por círculo e tipo
+      magiasDisponiveis = await Magia.getOrganizedSpells();
+    } catch (magiaError) {
+      console.log('⚠️ Erro ao carregar magias para criação:', magiaError.message);
+    }
+
     res.render('pages/character-create', {
       title: 'Criar Personagem',
       activePage: 'createCharacter',
@@ -55,7 +64,8 @@ exports.createForm = async (req, res) => {
       classes: classes.rows,
       deuses: deuses.rows,
       poderesDisponiveis,
-      periciasSistema
+      periciasSistema,
+      magiasDisponiveis
     });
   } catch (error) {
     console.error('Erro ao carregar formulário:', error);
@@ -216,7 +226,7 @@ exports.create = async (req, res) => {
 
           // Aplicar apenas a quantidade permitida pelo bônus de inteligência
           const periciasProcessar = periciasInteligencia.slice(0, bonusSkills);
-          
+
           for (const periciaId of periciasProcessar) {
             if (periciaId && !isNaN(periciaId)) {
               await Pericia.addToCharacter(character.id, parseInt(periciaId), true, 'inteligencia', 'Perícia adicional por bônus de Inteligência');
@@ -226,6 +236,23 @@ exports.create = async (req, res) => {
         }
       } catch (skillError) {
         console.log('⚠️ Erro ao aplicar perícias de inteligência:', skillError.message);
+      }
+    }
+
+    if (req.body.magias_selecionadas) {
+      try {
+        const magiasSelecionadas = Array.isArray(req.body.magias_selecionadas)
+          ? req.body.magias_selecionadas
+          : [req.body.magias_selecionadas];
+
+        for (const magiaId of magiasSelecionadas) {
+          if (magiaId && !isNaN(magiaId)) {
+            await Magia.addToCharacter(character.id, parseInt(magiaId), 'escolha', 'Magia escolhida na criação');
+          }
+        }
+        console.log('✅ Magias selecionadas aplicadas');
+      } catch (magiaError) {
+        console.log('⚠️ Erro ao aplicar magias selecionadas:', magiaError.message);
       }
     }
 
@@ -359,6 +386,36 @@ exports.view = async (req, res) => {
       console.error('❌ Erro ao carregar perícias:', error);
     }
 
+    let magias = [];
+    let magiasPorCirculo = {};
+
+    try {
+      console.log(`🔮 Carregando magias para personagem ${characterId}`);
+      magias = await Magia.findByCharacter(characterId);
+
+      // Organizar por círculo
+      magias.forEach(magia => {
+        const circulo = magia.circulo || 1;
+        if (!magiasPorCirculo[circulo]) {
+          magiasPorCirculo[circulo] = [];
+        }
+        magiasPorCirculo[circulo].push(magia);
+      });
+
+      console.log(`✅ ${magias.length} magias carregadas`);
+
+      // Log para debug
+      const magiasPorTipo = {};
+      magias.forEach(m => {
+        if (!magiasPorTipo[m.tipo]) magiasPorTipo[m.tipo] = 0;
+        magiasPorTipo[m.tipo]++;
+      });
+      console.log(`📊 Magias por tipo:`, magiasPorTipo);
+
+    } catch (error) {
+      console.error('❌ Erro ao carregar magias:', error);
+    }
+
 
     res.render('pages/character-view', {
       character,
@@ -366,6 +423,8 @@ exports.view = async (req, res) => {
       poderesPorTipo,
       pericias,
       periciasPorCategoria,
+      magias,
+      magiasPorCirculo,
     });
 
   } catch (error) {
@@ -406,7 +465,7 @@ exports.editForm = async (req, res) => {
       console.log('⚠️ Erro ao carregar poderes para edição:', powerError.message);
     }
 
-        // NOVO: Buscar perícias do personagem e disponíveis
+    // NOVO: Buscar perícias do personagem e disponíveis
     let periciasPersonagem = [];
     let periciasSistema = {};
     let periciasDaClasse = [];
@@ -414,13 +473,29 @@ exports.editForm = async (req, res) => {
     try {
       periciasPersonagem = await Character.getCharacterSkills(id);
       periciasSistema = await Pericia.getOrganizedSkills();
-      
+
       // Se o personagem tem classe, buscar perícias da classe
       if (character.classe_id) {
         periciasDaClasse = await Character.getAvailableSkillsForClass(character.classe_id);
       }
     } catch (skillError) {
       console.log('⚠️ Erro ao carregar perícias para edição:', skillError.message);
+    }
+
+    let magiasPersonagem = [];
+    let magiasDisponiveis = {};
+    let magiasDaClasse = [];
+
+    try {
+      magiasPersonagem = await Magia.findByCharacter(id);
+      magiasDisponiveis = await Magia.getOrganizedSpells();
+
+      // Se o personagem tem classe mágica, buscar magias da classe
+      if (character.classe_id) {
+        magiasDaClasse = await Magia.findByClass(character.classe_id, character.nivel);
+      }
+    } catch (magiaError) {
+      console.log('⚠️ Erro ao carregar magias para edição:', magiaError.message);
     }
 
     res.render('pages/character-edit', {
@@ -435,7 +510,10 @@ exports.editForm = async (req, res) => {
       poderesDisponiveis,
       periciasPersonagem,
       periciasSistema,
-      periciasDaClasse
+      periciasDaClasse,
+      magiasPersonagem,
+      magiasDisponiveis,
+      magiasDaClasse
     });
   } catch (error) {
     console.error('Erro ao carregar formulário de edição:', error);
@@ -588,7 +666,7 @@ exports.update = async (req, res) => {
         `, [id]);
 
         const bonusSkills = await Character.calculateBonusSkillsFromIntelligence(req.body.inteligencia);
-        
+
         if (bonusSkills > 0 && req.body.pericias_inteligencia) {
           const periciasInteligencia = Array.isArray(req.body.pericias_inteligencia)
             ? req.body.pericias_inteligencia
@@ -596,7 +674,7 @@ exports.update = async (req, res) => {
 
           // Aplicar apenas a quantidade permitida pelo bônus de inteligência
           const periciasProcessar = periciasInteligencia.slice(0, bonusSkills);
-          
+
           for (const periciaId of periciasProcessar) {
             if (periciaId && !isNaN(periciaId)) {
               await Pericia.addToCharacter(id, parseInt(periciaId), true, 'inteligencia', 'Perícia adicional por bônus de Inteligência');
@@ -606,6 +684,52 @@ exports.update = async (req, res) => {
         console.log('✅ Perícias de inteligência atualizadas');
       } catch (skillError) {
         console.log('⚠️ Erro ao atualizar perícias de inteligência:', skillError.message);
+      }
+    }
+
+    // Se a classe mudou, atualizar magias de classe
+    if (classeMudou && req.body.classe_id) {
+      try {
+        // Remover magias de classe antigas
+        await pool.query(`
+          DELETE FROM personagem_magias 
+          WHERE personagem_id = $1 AND fonte = 'classe'
+        `, [id]);
+
+        // Aplicar novas magias de classe
+        const magiasAplicadas = await Magia.applyClassSpells(id, req.body.classe_id, req.body.nivel);
+        if (magiasAplicadas > 0) {
+          console.log(`✅ ${magiasAplicadas} magias de classe atualizadas devido à mudança de classe`);
+        }
+      } catch (magiaError) {
+        console.log('⚠️ Erro ao atualizar magias de classe:', magiaError.message);
+      }
+    }
+
+    // NOVO: Atualizar magias selecionadas
+    if (req.body.magias_selecionadas !== undefined) {
+      try {
+        // Remover magias de escolha existentes
+        await pool.query(`
+          DELETE FROM personagem_magias 
+          WHERE personagem_id = $1 AND fonte = 'escolha'
+        `, [id]);
+
+        // Adicionar novas magias selecionadas
+        if (req.body.magias_selecionadas) {
+          const magiasSelecionadas = Array.isArray(req.body.magias_selecionadas)
+            ? req.body.magias_selecionadas
+            : [req.body.magias_selecionadas];
+
+          for (const magiaId of magiasSelecionadas) {
+            if (magiaId && !isNaN(magiaId)) {
+              await Magia.addToCharacter(id, parseInt(magiaId), 'escolha', 'Magia escolhida na edição');
+            }
+          }
+        }
+        console.log('✅ Magias selecionadas atualizadas');
+      } catch (magiaError) {
+        console.log('⚠️ Erro ao atualizar magias selecionadas:', magiaError.message);
       }
     }
 
@@ -700,9 +824,9 @@ exports.calculateBonusSkills = async (req, res) => {
     }
 
     const bonusSkills = await Character.calculateBonusSkillsFromIntelligence(parseInt(inteligencia));
-    
-    res.json({ 
-      success: true, 
+
+    res.json({
+      success: true,
       bonusSkills,
       inteligencia: parseInt(inteligencia),
       modificador: Math.floor((parseInt(inteligencia) - 10) / 2)
@@ -710,5 +834,67 @@ exports.calculateBonusSkills = async (req, res) => {
   } catch (error) {
     console.error('Erro ao calcular perícias de inteligência:', error);
     res.status(500).json({ error: 'Erro ao calcular perícias de inteligência' });
+  }
+};
+
+exports.getClassSpells = async (req, res) => {
+  try {
+    const { classe_id } = req.params;
+    const { nivel = 20, circulo } = req.query;
+
+    if (!classe_id || isNaN(classe_id)) {
+      return res.status(400).json({ error: 'ID da classe inválido' });
+    }
+
+    let magias;
+    if (circulo) {
+      // Buscar magias de um círculo específico
+      const result = await pool.query(`
+        SELECT 
+          m.*,
+          cm.nivel_minimo
+        FROM magias m
+        INNER JOIN classe_magias cm ON m.id = cm.magia_id
+        WHERE cm.classe_id = $1 AND cm.nivel_minimo <= $2 AND m.circulo = $3
+        ORDER BY m.nome
+      `, [classe_id, nivel, circulo]);
+      magias = result.rows;
+    } else {
+      magias = await Magia.findByClass(classe_id, nivel);
+    }
+
+    res.json({ success: true, magias });
+  } catch (error) {
+    console.error('Erro ao buscar magias da classe:', error);
+    res.status(500).json({ error: 'Erro ao buscar magias da classe' });
+  }
+};
+
+// Endpoint para verificar se classe é mágica
+exports.isClassMagical = async (req, res) => {
+  try {
+    const { classe_id } = req.params;
+
+    if (!classe_id || isNaN(classe_id)) {
+      return res.status(400).json({ error: 'ID da classe inválido' });
+    }
+
+    // Verificar se a classe tem acesso a alguma magia
+    const result = await pool.query(`
+      SELECT COUNT(*) as total_magias
+      FROM classe_magias
+      WHERE classe_id = $1
+    `, [classe_id]);
+
+    const isMagical = parseInt(result.rows[0].total_magias) > 0;
+
+    res.json({ 
+      success: true, 
+      isMagical,
+      totalMagias: parseInt(result.rows[0].total_magias)
+    });
+  } catch (error) {
+    console.error('Erro ao verificar se classe é mágica:', error);
+    res.status(500).json({ error: 'Erro ao verificar se classe é mágica' });
   }
 };
