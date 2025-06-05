@@ -15,7 +15,7 @@ const pool = new Pool({
 });
 
 const runSQLScript = async () => {
-  const filePath = path.join(__dirname, 'BD12_MAGIAS_ESTRUTURA.sql');
+  const filePath = path.join(__dirname, 'BD13_MAGIAS_1_CIRCULO.sql');
   const sql = fs.readFileSync(filePath, 'utf8');
 
   try {
