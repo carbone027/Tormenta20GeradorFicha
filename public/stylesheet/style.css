@@ -10029,3 +10029,1024 @@ footer > * {
   opacity: 0.3;
   transform: scale(0.95);
 }
+
+/* ========================================
+   SISTEMA DE MAGIAS - CSS
+   Adicionar ao arquivo style.css
+   ======================================== */
+
+/* Container Principal de Magias */
+.spells-main-container {
+  background: linear-gradient(135deg, rgba(37, 40, 80, 0.9), rgba(25, 28, 60, 0.9));
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.spells-main-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(212,175,55,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(212,175,55,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(212,175,55,0.1)"/></svg>');
+  pointer-events: none;
+}
+
+/* Header de Magias */
+.spells-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.spells-header h3 {
+  color: var(--accent-gold);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.spells-header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* Explicação do Sistema */
+.spells-explanation {
+  margin-bottom: 2rem;
+}
+
+.spells-explanation .explanation-card {
+  background: rgba(25, 28, 60, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.spells-explanation h4 {
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Verificação de Classe Mágica */
+.class-magic-check {
+  margin: 1.5rem 0;
+}
+
+.magic-check-card {
+  background: linear-gradient(135deg, rgba(100, 50, 200, 0.2), rgba(150, 100, 255, 0.2));
+  border: 2px solid rgba(150, 100, 255, 0.4);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  animation: magicPulse 2s infinite;
+}
+
+@keyframes magicPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(150, 100, 255, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(150, 100, 255, 0.6); }
+}
+
+.magic-check-card h4 {
+  color: #9966ff;
+  margin-bottom: 0.5rem;
+}
+
+.magic-check-card p {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Magias de Classe */
+.class-spells-section {
+  margin: 2rem 0;
+  background: rgba(37, 40, 80, 0.6);
+  border: 2px solid rgba(0, 255, 100, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.class-spells-header h4 {
+  color: #00ff64;
+  margin-bottom: 0.5rem;
+}
+
+.class-spells-description {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.class-spells-circle-section {
+  margin: 1.5rem 0;
+}
+
+.class-spells-circle-title {
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.level-requirement {
+  color: var(--warning-orange);
+  font-size: 0.8rem;
+  background: rgba(255, 140, 0, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--warning-orange);
+}
+
+.class-spells-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.class-spell-card {
+  background: rgba(25, 28, 60, 0.8);
+  border: 1px solid rgba(0, 255, 100, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.class-spell-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 255, 100, 0.2);
+}
+
+.class-spell-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.class-spell-header .spell-icon {
+  font-size: 1.2rem;
+}
+
+.class-spell-header .spell-name {
+  font-weight: bold;
+  color: var(--text-light);
+  flex: 1;
+}
+
+.class-spell-header .spell-auto {
+  background: rgba(0, 255, 100, 0.2);
+  color: #00ff64;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  border: 1px solid #00ff64;
+}
+
+/* Seleção de Magias */
+.spell-selection-section {
+  margin: 2rem 0;
+  background: rgba(37, 40, 80, 0.6);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.spell-selection-header h4 {
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+.spell-selection-description {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* Filtros de Magias */
+.spells-filters {
+  margin: 1.5rem 0;
+}
+
+.spells-search-container {
+  margin-bottom: 1rem;
+}
+
+.spells-search-box {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.spells-search-input {
+  width: 100%;
+  padding: 0.8rem 0.8rem 0.8rem 2.5rem;
+  background: rgba(25, 28, 60, 0.9);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  color: var(--text-light);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.spells-search-input:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  outline: none;
+}
+
+.spells-search-icon {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.spells-quick-filters,
+.spells-type-filters {
+  margin: 1rem 0;
+}
+
+.quick-filters-title {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+
+.quick-filters-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.quick-filter-btn {
+  background: rgba(25, 28, 60, 0.8);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  color: var(--text-light);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.quick-filter-btn:hover:not(:disabled) {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+
+.quick-filter-btn.active {
+  background: var(--accent-gold);
+  color: var(--dark-bg);
+  border-color: var(--accent-gold);
+  font-weight: bold;
+}
+
+.quick-filter-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(25, 28, 60, 0.4);
+  border-color: rgba(212, 175, 55, 0.1);
+}
+
+/* Círculos de Magias */
+.spells-circles-container {
+  margin: 2rem 0;
+}
+
+.spell-circle-section {
+  margin: 2rem 0;
+  background: rgba(25, 28, 60, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.spell-circle-header {
+  background: rgba(37, 40, 80, 0.8);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.spell-circle-title {
+  color: var(--accent-gold);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.spell-circle-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.circle-count {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.circle-locked {
+  color: var(--warning-orange);
+  font-size: 0.8rem;
+  background: rgba(255, 140, 0, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--warning-orange);
+}
+
+.spell-circle-toggle {
+  background: none;
+  border: none;
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.spell-circle-toggle:hover {
+  background: rgba(212, 175, 55, 0.2);
+}
+
+/* Grid de Magias */
+.spells-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+/* Cards de Magias */
+.spell-checkbox-label {
+  display: block;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.spell-checkbox-label:hover {
+  transform: translateY(-2px);
+}
+
+.spell-checkbox-label.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spell-checkbox-label.disabled:hover {
+  transform: none;
+}
+
+.spell-checkbox {
+  display: none;
+}
+
+.spell-card {
+  background: rgba(37, 40, 80, 0.8);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 1.2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.spell-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(212, 175, 55, 0.05) 50%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.spell-card:hover::before {
+  opacity: 1;
+}
+
+.spell-card:hover {
+  border-color: var(--accent-gold);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  transform: translateY(-3px);
+}
+
+.spell-card.selected {
+  border-color: var(--success-green);
+  background: rgba(0, 255, 100, 0.1);
+  box-shadow: 0 0 15px rgba(0, 255, 100, 0.3);
+}
+
+.spell-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.spell-card-source {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background: var(--success-green);
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  z-index: 3;
+}
+
+.spell-card-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.spell-card-name {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0 0 0.3rem 0;
+  line-height: 1.2;
+}
+
+.spell-card-type {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.spell-card-content {
+  position: relative;
+  z-index: 2;
+}
+
+.spell-card-description {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+/* Detalhes da Magia */
+.spell-card-details {
+  margin: 1rem 0;
+}
+
+.spell-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.spell-detail-label {
+  font-size: 1rem;
+  width: 1.2rem;
+  text-align: center;
+}
+
+.spell-detail-value {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Tags de Magias */
+.spell-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.spell-tag {
+  background: rgba(37, 40, 80, 0.8);
+  color: var(--text-light);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  white-space: nowrap;
+}
+
+.spell-tag.circle {
+  background: rgba(100, 50, 200, 0.3);
+  border-color: #9966ff;
+  color: #ddccff;
+}
+
+.spell-tag.type.arcana {
+  background: rgba(100, 50, 200, 0.3);
+  border-color: #9966ff;
+  color: #ddccff;
+}
+
+.spell-tag.type.divina {
+  background: rgba(255, 215, 0, 0.3);
+  border-color: #ffd700;
+  color: #fff8dc;
+}
+
+.spell-tag.type.universal {
+  background: rgba(50, 200, 100, 0.3);
+  border-color: #32c864;
+  color: #dcffdc;
+}
+
+.spell-tag.school {
+  background: rgba(37, 40, 80, 0.6);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+.spell-tag.cost {
+  background: rgba(0, 100, 255, 0.3);
+  border-color: #0064ff;
+  color: #cce6ff;
+}
+
+.spell-tag.free {
+  background: rgba(0, 200, 100, 0.3);
+  border-color: #00c864;
+  color: #ccffdc;
+}
+
+.spell-tag.selected {
+  background: var(--success-green);
+  color: white;
+  border-color: var(--success-green);
+  font-weight: bold;
+}
+
+.spell-tag.locked {
+  background: rgba(255, 140, 0, 0.3);
+  border-color: var(--warning-orange);
+  color: #ffe0b3;
+}
+
+/* Classe Não-Mágica */
+.non-magical-class {
+  margin: 2rem 0;
+}
+
+.non-magical-card {
+  background: rgba(60, 25, 25, 0.8);
+  border: 2px solid rgba(255, 100, 100, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.non-magical-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.non-magical-title {
+  color: #ff6464;
+  margin-bottom: 1rem;
+}
+
+.non-magical-description {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Estado Vazio */
+.spells-empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  margin: 2rem 0;
+}
+
+.spells-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.spells-empty-title {
+  color: var(--accent-gold);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.spells-empty-description {
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Visualização de Personagem - Magias */
+.character-spells-section {
+  margin: 2rem 0;
+  background: linear-gradient(135deg, rgba(37, 40, 80, 0.9), rgba(25, 28, 60, 0.9));
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.character-spells-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(212,175,55,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(212,175,55,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(212,175,55,0.1)"/></svg>');
+  pointer-events: none;
+}
+
+.spellcaster-info {
+  margin: 1.5rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.spellcaster-card {
+  background: rgba(25, 28, 60, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.spellcaster-card h4 {
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.spellcaster-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.spellcaster-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(37, 40, 80, 0.6);
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.spellcaster-stat .stat-icon {
+  font-size: 1.2rem;
+}
+
+.spellcaster-stat .stat-label {
+  color: var(--text-muted);
+  flex: 1;
+}
+
+.spellcaster-stat .stat-value {
+  color: var(--accent-gold);
+  font-weight: bold;
+}
+
+/* Cards de Magias do Personagem */
+.character-spell-card {
+  background: rgba(37, 40, 80, 0.8);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 1.2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.character-spell-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+  border-color: var(--accent-gold);
+}
+
+.spell-icon-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  position: relative;
+}
+
+.spell-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.spell-status-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  position: absolute;
+  top: -0.3rem;
+  right: -0.3rem;
+}
+
+.spell-status-badge {
+  background: var(--accent-gold);
+  color: var(--dark-bg);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.spell-status-badge.class {
+  background: #00ff64;
+}
+
+.spell-status-badge.chosen {
+  background: #ffaa00;
+}
+
+.spell-status-badge.cost {
+  background: #0088ff;
+  color: white;
+}
+
+.spell-status-badge.circle {
+  background: #9966ff;
+  color: white;
+}
+
+.spell-info {
+  flex: 1;
+}
+
+.spell-name {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0 0 0.3rem 0;
+  line-height: 1.2;
+}
+
+.spell-school-type {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.spell-cost-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.spell-cost {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  border-radius: 8px;
+  padding: 0.5rem;
+  border: 2px solid;
+  min-width: 50px;
+}
+
+.spell-cost.available {
+  background: rgba(0, 100, 255, 0.2);
+  border-color: #0064ff;
+}
+
+.spell-cost.insufficient {
+  background: rgba(255, 100, 100, 0.2);
+  border-color: #ff6464;
+}
+
+.spell-cost.free {
+  background: rgba(0, 200, 100, 0.2);
+  border-color: #00c864;
+}
+
+.cost-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--text-light);
+  line-height: 1;
+}
+
+.cost-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Mecânicas da Magia */
+.spell-mechanics {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: rgba(25, 28, 60, 0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.spell-mechanic {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.spell-mechanic:last-child {
+  margin-bottom: 0;
+}
+
+.mechanic-icon {
+  font-size: 1rem;
+  width: 1.2rem;
+  text-align: center;
+}
+
+.mechanic-label {
+  color: var(--text-muted);
+  min-width: 80px;
+}
+
+.mechanic-value {
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* Resumo das Magias */
+.spells-summary {
+  margin-top: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.spells-summary .summary-card {
+  background: rgba(212, 175, 55, 0.1);
+  border: 2px solid var(--accent-gold);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.spells-summary h4 {
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.spells-summary .summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.spells-summary .summary-stat {
+  text-align: center;
+  background: rgba(37, 40, 80, 0.6);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.spells-summary .stat-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.spells-summary .stat-value {
+  color: var(--accent-gold);
+  font-weight: bold;
+  font-size: 1.8rem;
+  display: block;
+}
+
+.spells-summary .stat-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  display: block;
+}
+
+/* Mensagens de Estados */
+.no-spells-message {
+  text-align: center;
+  padding: 3rem 2rem;
+  margin: 2rem 0;
+  border-radius: 12px;
+}
+
+.no-spells-message.magical-class {
+  background: rgba(100, 50, 200, 0.1);
+  border: 2px solid rgba(150, 100, 255, 0.3);
+}
+
+.no-spells-message.non-magical-class {
+  background: rgba(60, 25, 25, 0.8);
+  border: 2px solid rgba(255, 100, 100, 0.3);
+}
+
+.no-spells-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.spell-recommendations {
+  margin-top: 1.5rem;
+}
+
+.spell-recommendations p {
+  margin-bottom: 1rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .spells-main-container {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .spells-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  
+  .class-spells-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-filters-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .quick-filter-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .spell-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .spell-cost-info {
+    align-self: flex-end;
+    margin-top: 1rem;
+  }
+  
+  .spellcaster-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animações */
+@keyframes spellGlow {
+  0%, 100% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.6); }
+}
+
+.spell-card.selected {
+  animation: spellGlow 2s infinite;
+}
+
+/* Dark mode específico para magias */
+@media (prefers-color-scheme: dark) {
+  .spell-card {
+    background: rgba(20, 23, 50, 0.9);
+  }
+  
+  .class-spell-card {
+    background: rgba(15, 18, 40, 0.9);
+  }
+  
+  .spell-mechanics {
+    background: rgba(15, 18, 40, 0.8);
+  }
+}

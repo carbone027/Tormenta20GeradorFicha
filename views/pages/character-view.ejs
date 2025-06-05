@@ -1008,6 +1008,355 @@ function getPowerIcon(poder, tipo) {
   <% } %>
 </div>
 
+<!-- Magias do Personagem (SUBSTITUIR a seção de magias existente em character-view.ejs) -->
+<% if (magias && magias.length > 0) { %>
+  <div class="character-spells-section">
+    <div class="section-header">
+      <h3>
+        <span>🔮</span>
+        Magias Conhecidas
+        <span class="spells-count">(<%= magias.length %> <%= magias.length === 1 ? 'magia' : 'magias' %>)</span>
+      </h3>
+      
+      <!-- Filtros para magias -->
+      <div class="spells-filters">
+        <button type="button" class="quick-filter-btn active" data-filter="all">
+          ✨ Todas
+        </button>
+        <button type="button" class="quick-filter-btn" data-filter="arcana">
+          🔮 Arcana
+        </button>
+        <button type="button" class="quick-filter-btn" data-filter="divina">
+          ✨ Divina
+        </button>
+        <button type="button" class="quick-filter-btn" data-filter="universal">
+          🌟 Universal
+        </button>
+      </div>
+    </div>
+
+    <!-- Informações da Classe Mágica -->
+    <div class="spellcaster-info">
+      <div class="spellcaster-card">
+        <h4>📊 Informações do Conjurador</h4>
+        <div class="spellcaster-stats">
+          <div class="spellcaster-stat">
+            <span class="stat-icon">⚔️</span>
+            <span class="stat-label">Classe:</span>
+            <span class="stat-value"><%= character.classe_nome || 'N/A' %></span>
+          </div>
+          <div class="spellcaster-stat">
+            <span class="stat-icon">📊</span>
+            <span class="stat-label">Nível:</span>
+            <span class="stat-value"><%= character.nivel || 1 %></span>
+          </div>
+          <div class="spellcaster-stat">
+            <span class="stat-icon">💙</span>
+            <span class="stat-label">PM Disponíveis:</span>
+            <span class="stat-value"><%= character.pontos_mana || 0 %></span>
+          </div>
+          <div class="spellcaster-stat">
+            <span class="stat-icon">🔘</span>
+            <span class="stat-label">Círculos Acessíveis:</span>
+            <span class="stat-value">
+              <% 
+                const classe = character.classe_nome ? character.classe_nome.toLowerCase() : '';
+                const nivel = character.nivel || 1;
+                let maxCircle = 1;
+                
+                if (classe === 'arcanista' || classe === 'clérigo') {
+                  if (nivel >= 17) maxCircle = 5;
+                  else if (nivel >= 13) maxCircle = 4;
+                  else if (nivel >= 9) maxCircle = 3;
+                  else if (nivel >= 5) maxCircle = 2;
+                  else maxCircle = 1;
+                } else if (classe === 'bardo' || classe === 'druida') {
+                  if (nivel >= 14) maxCircle = 4;
+                  else if (nivel >= 10) maxCircle = 3;
+                  else if (nivel >= 6) maxCircle = 2;
+                  else maxCircle = 1;
+                }
+              %>
+              1º ao <%= maxCircle %>º
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Container das Magias por Círculo -->
+    <div class="spells-circles-container">
+      <% Object.entries(magiasPorCirculo).sort(([a], [b]) => parseInt(a) - parseInt(b)).forEach(([circulo, magiasCirculo]) => { %>
+        <% if (magiasCirculo && magiasCirculo.length > 0) { %>
+          <div class="spell-circle-section" data-circle="<%= circulo %>">
+            <div class="spell-circle-header">
+              <h4 class="spell-circle-title">
+                <span>🔘</span>
+                <%= circulo %>º Círculo
+              </h4>
+              <div class="spell-circle-count">(<%= magiasCirculo.length %> <%= magiasCirculo.length === 1 ? 'magia' : 'magias' %>)</div>
+              <button type="button" class="spell-circle-toggle" data-target="<%= circulo %>">
+                <span class="toggle-icon">📂</span>
+              </button>
+            </div>
+
+            <div class="spells-grid" id="spellsGrid-<%= circulo %>">
+              <% magiasCirculo.forEach(magia => { %>
+                <div class="character-spell-card" 
+                     data-spell-id="<%= magia.id %>" 
+                     data-type="<%= magia.tipo.toLowerCase() %>"
+                     data-circle="<%= circulo %>"
+                     data-school="<%= magia.escola.toLowerCase() %>">
+                  
+                  <div class="spell-card-header">
+                    <div class="spell-icon-container">
+                      <% 
+                        let spellIcon = '✨';
+                        const nome = (magia.nome || '').toLowerCase();
+                        
+                        // Ícones específicos por nome e tipo
+                        if (nome.includes('cura') || nome.includes('curar') || nome.includes('restaurar')) spellIcon = '💚';
+                        else if (nome.includes('fogo') || nome.includes('chama') || nome.includes('incendiar')) spellIcon = '🔥';
+                        else if (nome.includes('gelo') || nome.includes('frio') || nome.includes('congelar')) spellIcon = '❄️';
+                        else if (nome.includes('raio') || nome.includes('relâmpago') || nome.includes('elétrico')) spellIcon = '⚡';
+                        else if (nome.includes('luz') || nome.includes('brilho') || nome.includes('clarão')) spellIcon = '☀️';
+                        else if (nome.includes('trevas') || nome.includes('sombra') || nome.includes('escuridão')) spellIcon = '🌑';
+                        else if (nome.includes('proteção') || nome.includes('escudo') || nome.includes('barreira')) spellIcon = '🛡️';
+                        else if (nome.includes('ilusão') || nome.includes('invisibilidade') || nome.includes('disfarce')) spellIcon = '👻';
+                        else if (nome.includes('voo') || nome.includes('voar') || nome.includes('levitar')) spellIcon = '🦅';
+                        else if (nome.includes('teleporte') || nome.includes('portal') || nome.includes('dimensão')) spellIcon = '🌀';
+                        else if (nome.includes('invocação') || nome.includes('convocar') || nome.includes('conjurar')) spellIcon = '👤';
+                        else if (nome.includes('detecção') || nome.includes('detectar') || nome.includes('sentir')) spellIcon = '👁️';
+                        else if (nome.includes('transformação') || nome.includes('forma') || nome.includes('metamorfose')) spellIcon = '🔄';
+                        else if (nome.includes('explosão') || nome.includes('área') || nome.includes('rajada')) spellIcon = '💥';
+                        else if (nome.includes('míssil') || nome.includes('projétil') || nome.includes('dardo')) spellIcon = '🎯';
+                        else if (nome.includes('sono') || nome.includes('dormir') || nome.includes('adormecer')) spellIcon = '😴';
+                        else if (nome.includes('medo') || nome.includes('terror') || nome.includes('pânico')) spellIcon = '😱';
+                        else if (nome.includes('charme') || nome.includes('sedução') || nome.includes('fascinar')) spellIcon = '😍';
+                        else if (nome.includes('força') || nome.includes('potência') || nome.includes('poder')) spellIcon = '💪';
+                        else if (nome.includes('velocidade') || nome.includes('pressa') || nome.includes('rapidez')) spellIcon = '💨';
+                        else if (nome.includes('água') || nome.includes('aquático') || nome.includes('maremoto')) spellIcon = '💧';
+                        else if (nome.includes('terra') || nome.includes('pedra') || nome.includes('rocha')) spellIcon = '🌍';
+                        else if (nome.includes('vento') || nome.includes('ar') || nome.includes('brisa')) spellIcon = '💨';
+                        else if (nome.includes('ácido') || nome.includes('corrosão') || nome.includes('dissolver')) spellIcon = '🧪';
+                        else if (nome.includes('veneno') || nome.includes('tóxico') || nome.includes('envenenar')) spellIcon = '☣️';
+                        else if (nome.includes('maldição') || nome.includes('amaldiçoar') || nome.includes('azarar')) spellIcon = '🖤';
+                        else if (nome.includes('bênção') || nome.includes('abençoar') || nome.includes('sagrar')) spellIcon = '🙏';
+                        else if (nome.includes('comunicação') || nome.includes('falar') || nome.includes('línguas')) spellIcon = '💬';
+                        else if (nome.includes('reparar') || nome.includes('consertar') || nome.includes('restaurar')) spellIcon = '🔧';
+                        else if (nome.includes('criar') || nome.includes('criação') || nome.includes('fabricar')) spellIcon = '🎨';
+                        else if (nome.includes('destruir') || nome.includes('destruição') || nome.includes('aniquilar')) spellIcon = '💀';
+                        else if (nome.includes('tempo') || nome.includes('temporal') || nome.includes('cronologia')) spellIcon = '⏰';
+                        else if (nome.includes('espaço') || nome.includes('espacial') || nome.includes('dimensional')) spellIcon = '🌌';
+                        else if (nome.includes('moral') || nome.includes('espírito') || nome.includes('ânimo')) spellIcon = '💫';
+                        else if (nome.includes('resistência') || nome.includes('tolerância') || nome.includes('imunidade')) spellIcon = '🛡️';
+                        else if (magia.tipo === 'Divina') spellIcon = '✨';
+                        else if (magia.tipo === 'Arcana') spellIcon = '🔮';
+                        else if (magia.tipo === 'Universal') spellIcon = '🌟';
+                      %>
+                      <div class="spell-icon"><%= spellIcon %></div>
+                      
+                      <!-- Status Indicators -->
+                      <div class="spell-status-indicators">
+                        <% if (magia.fonte === 'classe') { %>
+                          <span class="spell-status-badge class" title="Magia de Classe">⚔️</span>
+                        <% } else { %>
+                          <span class="spell-status-badge chosen" title="Magia Escolhida">⚡</span>
+                        <% } %>
+                        
+                        <% if (magia.custo_pm && magia.custo_pm > 0) { %>
+                          <span class="spell-status-badge cost" title="<%= magia.custo_pm %> PM">💙</span>
+                        <% } %>
+                        
+                        <span class="spell-status-badge circle" title="<%= circulo %>º Círculo">🔘</span>
+                      </div>
+                    </div>
+
+                    <div class="spell-info">
+                      <h5 class="spell-name"><%= magia.nome %></h5>
+                      <p class="spell-school-type">
+                        <%= magia.escola %> • <%= magia.tipo %>
+                      </p>
+                    </div>
+
+                    <div class="spell-cost-info">
+                      <% if (magia.custo_pm && magia.custo_pm > 0) { %>
+                        <div class="spell-cost <%= magia.custo_pm > (character.pontos_mana || 0) ? 'insufficient' : 'available' %>">
+                          <div class="cost-value"><%= magia.custo_pm %></div>
+                          <small class="cost-label">PM</small>
+                        </div>
+                      <% } else { %>
+                        <div class="spell-cost free">
+                          <div class="cost-value">0</div>
+                          <small class="cost-label">PM</small>
+                        </div>
+                      <% } %>
+                    </div>
+                  </div>
+
+                  <div class="spell-card-content">
+                    <p class="spell-description"><%= magia.descricao %></p>
+
+                    <!-- Detalhes da Magia -->
+                    <div class="spell-mechanics">
+                      <% if (magia.execucao) { %>
+                        <div class="spell-mechanic">
+                          <span class="mechanic-icon">⏰</span>
+                          <span class="mechanic-label">Execução:</span>
+                          <span class="mechanic-value"><%= magia.execucao %></span>
+                        </div>
+                      <% } %>
+                      
+                      <% if (magia.alcance) { %>
+                        <div class="spell-mechanic">
+                          <span class="mechanic-icon">🎯</span>
+                          <span class="mechanic-label">Alcance:</span>
+                          <span class="mechanic-value"><%= magia.alcance %></span>
+                        </div>
+                      <% } %>
+                      
+                      <% if (magia.duracao) { %>
+                        <div class="spell-mechanic">
+                          <span class="mechanic-icon">⏱️</span>
+                          <span class="mechanic-label">Duração:</span>
+                          <span class="mechanic-value"><%= magia.duracao %></span>
+                        </div>
+                      <% } %>
+                    </div>
+
+                    <!-- Tags da Magia -->
+                    <div class="spell-tags">
+                      <span class="spell-tag circle"><%= circulo %>º Círculo</span>
+                      <span class="spell-tag type <%= magia.tipo.toLowerCase() %>">
+                        <%= magia.tipo %>
+                      </span>
+                      <span class="spell-tag school"><%= magia.escola %></span>
+                      
+                      <% if (magia.fonte === 'classe') { %>
+                        <span class="spell-tag source-class">Classe</span>
+                      <% } else { %>
+                        <span class="spell-tag source-choice">Escolhida</span>
+                      <% } %>
+                      
+                      <% if (magia.custo_pm && magia.custo_pm > 0) { %>
+                        <span class="spell-tag cost">
+                          <%= magia.custo_pm %> PM
+                        </span>
+                      <% } else { %>
+                        <span class="spell-tag free">Gratuita</span>
+                      <% } %>
+                    </div>
+
+                    <!-- Origem da Magia -->
+                    <% if (magia.observacoes) { %>
+                      <div class="spell-origin">
+                        <small><strong>Origem:</strong> <%= magia.observacoes %></small>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        <% } %>
+      <% }); %>
+    </div>
+
+    <!-- Resumo das Magias -->
+    <div class="spells-summary">
+      <div class="summary-card">
+        <h4>📊 Resumo das Magias</h4>
+        <div class="summary-stats">
+          <div class="summary-stat">
+            <span class="stat-icon">🔮</span>
+            <span class="stat-label">Total:</span>
+            <span class="stat-value"><%= magias.length %></span>
+          </div>
+          
+          <% 
+            const magiasArcanas = magias.filter(m => m.tipo === 'Arcana').length;
+            const magiasDivinas = magias.filter(m => m.tipo === 'Divina').length;
+            const magiasUniversais = magias.filter(m => m.tipo === 'Universal').length;
+            const magiasClasse = magias.filter(m => m.fonte === 'classe').length;
+            const magiasEscolhidas = magias.filter(m => m.fonte === 'escolha').length;
+            const custoTotal = magias.reduce((total, m) => total + (m.custo_pm || 0), 0);
+          %>
+          
+          <% if (magiasArcanas > 0) { %>
+            <div class="summary-stat">
+              <span class="stat-icon">🔮</span>
+              <span class="stat-label">Arcanas:</span>
+              <span class="stat-value"><%= magiasArcanas %></span>
+            </div>
+          <% } %>
+          
+          <% if (magiasDivinas > 0) { %>
+            <div class="summary-stat">
+              <span class="stat-icon">✨</span>
+              <span class="stat-label">Divinas:</span>
+              <span class="stat-value"><%= magiasDivinas %></span>
+            </div>
+          <% } %>
+          
+          <% if (magiasUniversais > 0) { %>
+            <div class="summary-stat">
+              <span class="stat-icon">🌟</span>
+              <span class="stat-label">Universais:</span>
+              <span class="stat-value"><%= magiasUniversais %></span>
+            </div>
+          <% } %>
+          
+          <div class="summary-stat">
+            <span class="stat-icon">⚔️</span>
+            <span class="stat-label">De Classe:</span>
+            <span class="stat-value"><%= magiasClasse %></span>
+          </div>
+          
+          <div class="summary-stat">
+            <span class="stat-icon">⚡</span>
+            <span class="stat-label">Escolhidas:</span>
+            <span class="stat-value"><%= magiasEscolhidas %></span>
+          </div>
+          
+          <div class="summary-stat">
+            <span class="stat-icon">💙</span>
+            <span class="stat-label">Custo Total:</span>
+            <span class="stat-value"><%= custoTotal %> PM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% } else if (character.classe_nome && ['Arcanista', 'Bardo', 'Clérigo', 'Druida'].includes(character.classe_nome)) { %>
+  <!-- Classe mágica sem magias -->
+  <div class="no-spells-message magical-class">
+    <div class="no-spells-icon">🔮</div>
+    <h4>Nenhuma Magia Conhecida</h4>
+    <p>
+      Este personagem é da classe mágica <strong><%= character.classe_nome %></strong> mas ainda não possui magias registradas.
+      <br>
+      <strong>Nível:</strong> <%= character.nivel || 1 %> • <strong>PM Disponíveis:</strong> <%= character.pontos_mana || 0 %>
+    </p>
+    <div class="spell-recommendations">
+      <p><strong>💡 Dica:</strong> Use a edição para adicionar magias da sua classe.</p>
+      <a href="/personagens/<%= character.id %>/editar" class="btn btn-secondary">
+        ✏️ Adicionar Magias
+      </a>
+    </div>
+  </div>
+<% } else { %>
+  <!-- Classe não-mágica -->
+  <div class="no-spells-message non-magical-class">
+    <div class="no-spells-icon">⚔️</div>
+    <h4>Classe Não-Mágica</h4>
+    <p>
+      A classe <strong><%= character.classe_nome || 'do personagem' %></strong> não possui acesso a magias.
+      <br>
+      <strong>Classes Mágicas disponíveis:</strong> Arcanista, Bardo, Clérigo, Druida
+    </p>
+  </div>
+<% } %>
+
     <!-- História e Personalidade -->
     <% if (character.historia_pessoal || character.personalidade || character.objetivos) { %>
       <div class="background-section">

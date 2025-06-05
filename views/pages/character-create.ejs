@@ -784,6 +784,144 @@ function getPowerIcon(poder, tipo) {
         </div>
       </div>
 
+      <!-- Magias (ADICIONAR APÓS A SEÇÃO DE PODERES em character-create.ejs) -->
+<div class="form-section">
+  <h3>🔮 Magias do Personagem</h3>
+
+  <div class="spells-main-container">
+    <!-- Header Principal -->
+    <div class="spells-header">
+      <h3>
+        <span>🔮</span>
+        Sistema de Magias
+        <span>🔮</span>
+      </h3>
+      <p>Configure as magias que seu personagem conhece</p>
+    </div>
+
+    <!-- Explicação do Sistema -->
+    <div class="spells-explanation">
+      <div class="card explanation-card">
+        <h4>📋 Como Funcionam as Magias</h4>
+        <div class="explanation-grid">
+          <div class="explanation-item">
+            <h5>🎭 Classes Mágicas</h5>
+            <p>Apenas certas classes podem lançar magias</p>
+          </div>
+          <div class="explanation-item">
+            <h5>🔘 Círculos</h5>
+            <p>Magias são organizadas em círculos (1º ao 5º)</p>
+          </div>
+          <div class="explanation-item">
+            <h5>📊 Nível Mínimo</h5>
+            <p>Cada círculo requer um nível mínimo da classe</p>
+          </div>
+          <div class="explanation-item">
+            <h5>🎯 Tipos de Magia</h5>
+            <p>Arcana, Divina ou Universal conforme a classe</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verificação de Classe Mágica -->
+    <div class="class-magic-check" id="classMagicCheck" style="display: none;">
+      <div class="magic-check-card">
+        <h4 id="magicCheckTitle">🔮 Verificando Capacidade Mágica...</h4>
+        <p id="magicCheckDescription">Analisando se a classe selecionada pode lançar magias...</p>
+      </div>
+    </div>
+
+    <!-- Magias Automáticas de Classe -->
+    <div class="class-spells-section" id="classSpellsSection" style="display: none;">
+      <div class="class-spells-header">
+        <h4 class="class-spells-title">
+          <span>⚔️</span>
+          Magias de Classe
+        </h4>
+        <p class="class-spells-description">
+          Estas magias serão aplicadas automaticamente baseadas na classe e nível escolhidos
+        </p>
+      </div>
+
+      <div id="classSpellsList" class="class-spells-list">
+        <!-- Preenchido via JavaScript quando classe for selecionada -->
+      </div>
+    </div>
+
+    <!-- Seleção de Magias Disponíveis -->
+    <div class="spell-selection-section" id="spellSelectionSection" style="display: none;">
+      <div class="spell-selection-header">
+        <h4 class="spell-selection-title">
+          <span>✨</span>
+          Magias Disponíveis
+        </h4>
+        <p class="spell-selection-description" id="spellSelectionDescription">
+          Escolha magias adicionais para seu personagem
+        </p>
+      </div>
+
+      <!-- Filtros para Magias -->
+      <div class="spells-filters">
+        <div class="spells-search-container">
+          <div class="spells-search-box">
+            <span class="spells-search-icon">🔍</span>
+            <input type="text" id="spellsSearchInput" class="spells-search-input"
+              placeholder="Buscar magias por nome ou descrição..." autocomplete="off">
+            <div id="spellsSearchResults" class="spells-search-results"></div>
+          </div>
+        </div>
+
+        <!-- Filtros Rápidos -->
+        <div class="spells-quick-filters">
+          <div class="quick-filters-title">🎯 Filtros por Círculo</div>
+          <div class="quick-filters-buttons" id="spellCircleFilters">
+            <button type="button" class="quick-filter-btn active" data-filter="all">
+              ✨ Todas
+            </button>
+            <!-- Círculos serão adicionados dinamicamente baseado na classe -->
+          </div>
+        </div>
+
+        <!-- Filtros por Tipo -->
+        <div class="spells-type-filters" id="spellTypeFilters">
+          <div class="quick-filters-title">🌟 Filtros por Tipo</div>
+          <div class="quick-filters-buttons">
+            <!-- Tipos serão adicionados dinamicamente baseado na classe -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Container das Magias por Círculo -->
+      <div class="spells-circles-container" id="spellsCirclesContainer">
+        <!-- Preenchido via JavaScript baseado na classe e nível -->
+      </div>
+    </div>
+
+    <!-- Estado: Classe Não-Mágica -->
+    <div class="non-magical-class" id="nonMagicalClass" style="display: none;">
+      <div class="non-magical-card">
+        <div class="non-magical-icon">⚔️</div>
+        <h4 class="non-magical-title">Classe Não-Mágica</h4>
+        <p class="non-magical-description">
+          A classe selecionada não possui acesso a magias.
+          <br>
+          <strong>Classes Mágicas:</strong> Arcanista, Bardo, Clérigo, Druida
+        </p>
+      </div>
+    </div>
+
+    <!-- Estado Vazio -->
+    <div class="spells-empty-state" id="spellsEmptyState">
+      <div class="spells-empty-icon">🔮</div>
+      <h4 class="spells-empty-title">Selecione uma Classe</h4>
+      <p class="spells-empty-description">
+        Escolha uma classe mágica para visualizar as magias disponíveis.
+      </p>
+    </div>
+  </div>
+</div>
+
       <!-- Características Derivadas -->
       <div class="form-section">
         <h3>📊 Características Derivadas</h3>

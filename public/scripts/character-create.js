@@ -1066,31 +1066,31 @@ document.addEventListener('DOMContentLoaded', function () {
   let periciasClasseCarregadas = [];
   let bonusPericiasPorInteligencia = 0;
 
-async function carregarPericiasClasse(classeId) {
-  try {
-    console.log('📚 Carregando perícias de classe para ID:', classeId);
+  async function carregarPericiasClasse(classeId) {
+    try {
+      console.log('📚 Carregando perícias de classe para ID:', classeId);
 
-    const response = await fetch(`/api/classes/${classeId}/pericias?tipo=todas`);
-    if (!response.ok) {
-      throw new Error('Erro ao carregar perícias de classe');
-    }
+      const response = await fetch(`/api/classes/${classeId}/pericias?tipo=todas`);
+      if (!response.ok) {
+        throw new Error('Erro ao carregar perícias de classe');
+      }
 
-    const data = await response.json();
-    if (data.success) {
-      periciasClasseCarregadas = data.pericias || [];
-      exibirPericiasOpcionaisClasse(periciasClasseCarregadas); // USAR A NOVA FUNÇÃO
-      console.log('✅ Perícias de classe carregadas:', periciasClasseCarregadas.length);
-    } else {
-      console.warn('⚠️ Nenhuma perícia de classe encontrada');
+      const data = await response.json();
+      if (data.success) {
+        periciasClasseCarregadas = data.pericias || [];
+        exibirPericiasOpcionaisClasse(periciasClasseCarregadas); // USAR A NOVA FUNÇÃO
+        console.log('✅ Perícias de classe carregadas:', periciasClasseCarregadas.length);
+      } else {
+        console.warn('⚠️ Nenhuma perícia de classe encontrada');
+        periciasClasseCarregadas = [];
+        esconderPericiasClasse();
+      }
+    } catch (error) {
+      console.error('❌ Erro ao carregar perícias de classe:', error);
       periciasClasseCarregadas = [];
       esconderPericiasClasse();
     }
-  } catch (error) {
-    console.error('❌ Erro ao carregar perícias de classe:', error);
-    periciasClasseCarregadas = [];
-    esconderPericiasClasse();
   }
-}
 
   // Função para esconder perícias de classe
   function esconderPericiasClasse() {
@@ -1134,16 +1134,16 @@ async function carregarPericiasClasse(classeId) {
   }
 
   // Função para exibir perícias disponíveis por inteligência
-function exibirPericiasInteligencia(pericias) {
-  const gridElement = document.getElementById('intelligenceSkillsGrid');
-  if (!gridElement) return;
+  function exibirPericiasInteligencia(pericias) {
+    const gridElement = document.getElementById('intelligenceSkillsGrid');
+    if (!gridElement) return;
 
-  gridElement.innerHTML = '';
+    gridElement.innerHTML = '';
 
-  pericias.forEach(pericia => {
-    const periciaCard = document.createElement('div');
-    periciaCard.className = 'intelligence-skill-card';
-    periciaCard.innerHTML = `
+    pericias.forEach(pericia => {
+      const periciaCard = document.createElement('div');
+      periciaCard.className = 'intelligence-skill-card';
+      periciaCard.innerHTML = `
       <label class="intelligence-skill-label">
         <input type="checkbox" name="pericias_inteligencia" value="${pericia.id}" class="intelligence-skill-checkbox">
         <div class="intelligence-skill-content">
@@ -1158,24 +1158,24 @@ function exibirPericiasInteligencia(pericias) {
         </div>
       </label>
     `;
-    gridElement.appendChild(periciaCard);
-  });
-
-  // Adicionar event listeners para limite de seleção
-  const checkboxes = gridElement.querySelectorAll('.intelligence-skill-checkbox');
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', function () {
-      const selecionados = Array.from(checkboxes).filter(cb => cb.checked);
-
-      if (selecionados.length > bonusPericiasPorInteligencia) {
-        this.checked = false;
-        alert(`Você pode escolher apenas ${bonusPericiasPorInteligencia} perícia(s) por bônus de Inteligência!`);
-      }
-
-      atualizarPreviewPericias();
+      gridElement.appendChild(periciaCard);
     });
-  });
-}
+
+    // Adicionar event listeners para limite de seleção
+    const checkboxes = gridElement.querySelectorAll('.intelligence-skill-checkbox');
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function () {
+        const selecionados = Array.from(checkboxes).filter(cb => cb.checked);
+
+        if (selecionados.length > bonusPericiasPorInteligencia) {
+          this.checked = false;
+          alert(`Você pode escolher apenas ${bonusPericiasPorInteligencia} perícia(s) por bônus de Inteligência!`);
+        }
+
+        atualizarPreviewPericias();
+      });
+    });
+  }
   // Função para obter ícone da perícia
   function getSkillIcon(nome) {
     const nomeL = nome.toLowerCase();
@@ -1341,23 +1341,23 @@ function exibirPericiasInteligencia(pericias) {
   }
 
   function exibirPericiasOpcionaisClasse(pericias) {
-  const classSkillsSection = document.getElementById('classSkillsSection');
-  const listaPericias = document.getElementById('classSkillsList');
+    const classSkillsSection = document.getElementById('classSkillsSection');
+    const listaPericias = document.getElementById('classSkillsList');
 
-  if (!classSkillsSection || !listaPericias) return;
+    if (!classSkillsSection || !listaPericias) return;
 
-  if (pericias && pericias.length > 0) {
-    // Separar perícias obrigatórias e opcionais
-    const obrigatorias = pericias.filter(p => p.obrigatoria);
-    const opcionais = pericias.filter(p => p.opcional && !p.obrigatoria);
+    if (pericias && pericias.length > 0) {
+      // Separar perícias obrigatórias e opcionais
+      const obrigatorias = pericias.filter(p => p.obrigatoria);
+      const opcionais = pericias.filter(p => p.opcional && !p.obrigatoria);
 
-    listaPericias.innerHTML = '';
+      listaPericias.innerHTML = '';
 
-    // Exibir perícias obrigatórias
-    if (obrigatorias.length > 0) {
-      const obrigatoriasSection = document.createElement('div');
-      obrigatoriasSection.className = 'mandatory-skills-section';
-      obrigatoriasSection.innerHTML = `
+      // Exibir perícias obrigatórias
+      if (obrigatorias.length > 0) {
+        const obrigatoriasSection = document.createElement('div');
+        obrigatoriasSection.className = 'mandatory-skills-section';
+        obrigatoriasSection.innerHTML = `
         <h5 class="mandatory-skills-title">
           <span>⚔️</span>
           Perícias Obrigatórias
@@ -1368,13 +1368,13 @@ function exibirPericiasInteligencia(pericias) {
         </p>
       `;
 
-      const obrigatoriasGrid = document.createElement('div');
-      obrigatoriasGrid.className = 'mandatory-skills-grid';
+        const obrigatoriasGrid = document.createElement('div');
+        obrigatoriasGrid.className = 'mandatory-skills-grid';
 
-      obrigatorias.forEach(pericia => {
-        const periciaCard = document.createElement('div');
-        periciaCard.className = 'mandatory-skill-card';
-        periciaCard.innerHTML = `
+        obrigatorias.forEach(pericia => {
+          const periciaCard = document.createElement('div');
+          periciaCard.className = 'mandatory-skill-card';
+          periciaCard.innerHTML = `
           <div class="mandatory-skill-header">
             <span class="skill-icon">${getSkillIcon(pericia.nome)}</span>
             <span class="skill-name">${pericia.nome}</span>
@@ -1385,18 +1385,18 @@ function exibirPericiasInteligencia(pericias) {
           </p>
           ${pericia.descricao ? `<p class="skill-description">${pericia.descricao}</p>` : ''}
         `;
-        obrigatoriasGrid.appendChild(periciaCard);
-      });
+          obrigatoriasGrid.appendChild(periciaCard);
+        });
 
-      obrigatoriasSection.appendChild(obrigatoriasGrid);
-      listaPericias.appendChild(obrigatoriasSection);
-    }
+        obrigatoriasSection.appendChild(obrigatoriasGrid);
+        listaPericias.appendChild(obrigatoriasSection);
+      }
 
-    // Exibir perícias opcionais com INPUTS CORRETOS
-    if (opcionais.length > 0) {
-      const opcionaisSection = document.createElement('div');
-      opcionaisSection.className = 'optional-skills-section';
-      opcionaisSection.innerHTML = `
+      // Exibir perícias opcionais com INPUTS CORRETOS
+      if (opcionais.length > 0) {
+        const opcionaisSection = document.createElement('div');
+        opcionaisSection.className = 'optional-skills-section';
+        opcionaisSection.innerHTML = `
         <h5 class="optional-skills-title">
           <span>📚</span>
           Perícias Opcionais da Classe
@@ -1407,13 +1407,13 @@ function exibirPericiasInteligencia(pericias) {
         </p>
       `;
 
-      const opcionaisGrid = document.createElement('div');
-      opcionaisGrid.className = 'optional-skills-grid';
+        const opcionaisGrid = document.createElement('div');
+        opcionaisGrid.className = 'optional-skills-grid';
 
-      opcionais.forEach(pericia => {
-        const periciaCard = document.createElement('div');
-        periciaCard.className = 'optional-skill-card';
-        periciaCard.innerHTML = `
+        opcionais.forEach(pericia => {
+          const periciaCard = document.createElement('div');
+          periciaCard.className = 'optional-skill-card';
+          periciaCard.innerHTML = `
           <label class="optional-skill-label">
             <input type="checkbox" name="pericias_selecionadas" value="${pericia.id}" class="optional-skill-checkbox">
             <div class="optional-skill-content">
@@ -1428,33 +1428,33 @@ function exibirPericiasInteligencia(pericias) {
             </div>
           </label>
         `;
-        opcionaisGrid.appendChild(periciaCard);
-      });
-
-      // Adicionar event listeners
-      const checkboxes = opcionaisGrid.querySelectorAll('.optional-skill-checkbox');
-      checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-          const card = this.closest('.optional-skill-label');
-          if (this.checked) {
-            card.classList.add('selected');
-          } else {
-            card.classList.remove('selected');
-          }
-          atualizarPreviewPericias();
+          opcionaisGrid.appendChild(periciaCard);
         });
-      });
 
-      opcionaisSection.appendChild(opcionaisGrid);
-      listaPericias.appendChild(opcionaisSection);
+        // Adicionar event listeners
+        const checkboxes = opcionaisGrid.querySelectorAll('.optional-skill-checkbox');
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', function () {
+            const card = this.closest('.optional-skill-label');
+            if (this.checked) {
+              card.classList.add('selected');
+            } else {
+              card.classList.remove('selected');
+            }
+            atualizarPreviewPericias();
+          });
+        });
+
+        opcionaisSection.appendChild(opcionaisGrid);
+        listaPericias.appendChild(opcionaisSection);
+      }
+
+      classSkillsSection.style.display = 'block';
+      atualizarPreviewPericias();
+    } else {
+      esconderPericiasClasse();
     }
-
-    classSkillsSection.style.display = 'block';
-    atualizarPreviewPericias();
-  } else {
-    esconderPericiasClasse();
   }
-}
 
 
   // Função para filtros rápidos por atributo
@@ -1541,6 +1541,925 @@ function exibirPericiasInteligencia(pericias) {
       atualizarPreviewPericias();
     }
   });
+
+  // Variáveis globais para magias
+  let magiasDisponiveis = {};
+  let magiasClasseCarregadas = [];
+  let classeMagica = false;
+
+  // Configurações de classes mágicas baseadas em magias.txt
+  const CLASSES_MAGICAS = {
+    'arcanista': {
+      tipos: ['Arcana', 'Universal'],
+      circulos: {
+        1: 1,   // 1º círculo: 1º nível
+        2: 5,   // 2º círculo: 5º nível
+        3: 9,   // 3º círculo: 9º nível
+        4: 13,  // 4º círculo: 13º nível
+        5: 17   // 5º círculo: 17º nível
+      }
+    },
+    'bardo': {
+      tipos: ['Arcana', 'Universal'],
+      circulos: {
+        1: 1,   // 1º círculo: 1º nível
+        2: 6,   // 2º círculo: 6º nível
+        3: 10,  // 3º círculo: 10º nível
+        4: 14   // 4º círculo: 14º nível (sem 5º círculo)
+      }
+    },
+    'clérigo': {
+      tipos: ['Divina', 'Universal'],
+      circulos: {
+        1: 1,   // 1º círculo: 1º nível
+        2: 5,   // 2º círculo: 5º nível
+        3: 9,   // 3º círculo: 9º nível
+        4: 13,  // 4º círculo: 13º nível
+        5: 17   // 5º círculo: 17º nível
+      }
+    },
+    'druida': {
+      tipos: ['Divina', 'Universal'],
+      circulos: {
+        1: 1,   // 1º círculo: 1º nível
+        2: 6,   // 2º círculo: 6º nível
+        3: 10,  // 3º círculo: 10º nível
+        4: 14   // 4º círculo: 14º nível (sem 5º círculo)
+      }
+    }
+  };
+
+  // Verificar se uma classe é mágica
+  function isClassMagical(classeNome) {
+    if (!classeNome) return false;
+    return Object.keys(CLASSES_MAGICAS).includes(classeNome.toLowerCase());
+  }
+
+  // Verificar se um círculo está disponível para a classe/nível
+  function isCircleAvailable(classeNome, circulo, nivel) {
+    if (!classeNome) return false;
+
+    const config = CLASSES_MAGICAS[classeNome.toLowerCase()];
+    if (!config) return false;
+
+    const nivelMinimo = config.circulos[circulo];
+    if (!nivelMinimo) return false;
+
+    return nivel >= nivelMinimo;
+  }
+
+  // Verificar se um tipo de magia está disponível para a classe
+  function isSpellTypeAllowed(classeNome, tipoMagia) {
+    if (!classeNome) return false;
+
+    const config = CLASSES_MAGICAS[classeNome.toLowerCase()];
+    if (!config) return false;
+
+    return config.tipos.includes(tipoMagia);
+  }
+
+  // Função principal para verificar capacidade mágica da classe
+  async function verificarCapacidadeMagica(classeId, classeNome, nivel) {
+    try {
+      console.log('🔮 Verificando capacidade mágica:', classeNome, 'nível', nivel);
+
+      const classMagicCheck = document.getElementById('classMagicCheck');
+      const magicCheckTitle = document.getElementById('magicCheckTitle');
+      const magicCheckDescription = document.getElementById('magicCheckDescription');
+
+      // Mostrar verificação
+      if (classMagicCheck) {
+        classMagicCheck.style.display = 'block';
+        magicCheckTitle.textContent = '🔮 Verificando Capacidade Mágica...';
+        magicCheckDescription.textContent = `Analisando se ${classeNome} pode lançar magias...`;
+      }
+
+      // Verificar se é classe mágica
+      classeMagica = isClassMagical(classeNome);
+
+      if (classeMagica) {
+        // Verificar com o servidor se é classe mágica
+        const response = await fetch(`/api/classes/${classeId}/magica`);
+        if (response.ok) {
+          const data = await response.json();
+
+          if (data.success && data.isMagical) {
+            // Atualizar interface para classe mágica
+            if (magicCheckTitle) {
+              magicCheckTitle.textContent = '🔮 Classe Mágica Detectada!';
+              magicCheckDescription.textContent = `${classeNome} pode lançar magias. Carregando magias disponíveis...`;
+            }
+
+            // Carregar magias da classe
+            await carregarMagiasClasse(classeId, classeNome, nivel);
+          } else {
+            // Classe não é mágica no servidor
+            classeMagica = false;
+            mostrarClasseNaoMagica(classeNome);
+          }
+        } else {
+          // Erro na verificação, mas continuar se cliente detectou como mágica
+          await carregarMagiasClasse(classeId, classeNome, nivel);
+        }
+      } else {
+        // Classe não é mágica
+        mostrarClasseNaoMagica(classeNome);
+      }
+
+      // Esconder verificação após um tempo
+      setTimeout(() => {
+        if (classMagicCheck) {
+          classMagicCheck.style.display = 'none';
+        }
+      }, 2000);
+
+    } catch (error) {
+      console.error('❌ Erro ao verificar capacidade mágica:', error);
+      mostrarClasseNaoMagica(classeNome);
+    }
+  }
+
+  // Carregar magias de uma classe específica
+  async function carregarMagiasClasse(classeId, classeNome, nivel) {
+    try {
+      console.log('📚 Carregando magias da classe:', classeNome, 'nível', nivel);
+
+      const response = await fetch(`/api/classes/${classeId}/magias?nivel=${nivel}`);
+      if (!response.ok) {
+        throw new Error('Erro ao carregar magias da classe');
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        magiasClasseCarregadas = data.poderes || data.magias || [];
+
+        // Carregar todas as magias disponíveis para seleção
+        await carregarTodasMagias();
+
+        // Exibir magias da classe e seleção
+        exibirMagiasClasse(magiasClasseCarregadas, classeNome, nivel);
+        exibirSelecaoMagias(classeNome, nivel);
+
+        console.log('✅ Magias carregadas:', magiasClasseCarregadas.length);
+      } else {
+        console.warn('⚠️ Nenhuma magia de classe encontrada');
+        magiasClasseCarregadas = [];
+        // Mesmo sem magias de classe, tentar carregar magias para seleção
+        await carregarTodasMagias();
+        exibirSelecaoMagias(classeNome, nivel);
+      }
+    } catch (error) {
+      console.error('❌ Erro ao carregar magias da classe:', error);
+      magiasClasseCarregadas = [];
+      esconderSecoesMagias();
+    }
+  }
+
+  // Carregar todas as magias disponíveis do sistema
+  async function carregarTodasMagias() {
+    try {
+      console.log('📖 Carregando todas as magias do sistema...');
+
+      const response = await fetch('/api/magias');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          magiasDisponiveis = data.magias || {};
+          console.log('✅ Magias do sistema carregadas');
+        }
+      }
+    } catch (error) {
+      console.error('❌ Erro ao carregar magias do sistema:', error);
+      magiasDisponiveis = {};
+    }
+  }
+
+  // Exibir magias automáticas de classe
+  function exibirMagiasClasse(magias, classeNome, nivel) {
+    const classSpellsSection = document.getElementById('classSpellsSection');
+    const classSpellsList = document.getElementById('classSpellsList');
+
+    if (!classSpellsSection || !classSpellsList) return;
+
+    if (magias && magias.length > 0) {
+      classSpellsList.innerHTML = '';
+
+      // Organizar por círculo
+      const magiasPorCirculo = {};
+      magias.forEach(magia => {
+        if (!magiasPorCirculo[magia.circulo]) {
+          magiasPorCirculo[magia.circulo] = [];
+        }
+        magiasPorCirculo[magia.circulo].push(magia);
+      });
+
+      // Criar seções por círculo
+      Object.entries(magiasPorCirculo)
+        .sort(([a], [b]) => parseInt(a) - parseInt(b))
+        .forEach(([circulo, magiasCirculo]) => {
+          const circleSection = document.createElement('div');
+          circleSection.className = 'class-spells-circle-section';
+
+          const nivelMinimo = CLASSES_MAGICAS[classeNome.toLowerCase()]?.circulos[circulo] || 1;
+          const podeAcessar = nivel >= nivelMinimo;
+
+          circleSection.innerHTML = `
+          <h5 class="class-spells-circle-title">
+            <span>🔘</span>
+            ${circulo}º Círculo
+            ${!podeAcessar ? `<span class="level-requirement">⚠️ Requer Nível ${nivelMinimo}</span>` : ''}
+            <span style="font-size: 0.8em; color: var(--text-muted);">(${magiasCirculo.length} magias)</span>
+          </h5>
+        `;
+
+          const spellsGrid = document.createElement('div');
+          spellsGrid.className = 'class-spells-grid';
+          if (!podeAcessar) {
+            spellsGrid.style.opacity = '0.5';
+          }
+
+          magiasCirculo.forEach(magia => {
+            const spellCard = document.createElement('div');
+            spellCard.className = 'class-spell-card';
+            spellCard.innerHTML = `
+            <div class="class-spell-header">
+              <span class="spell-icon">${getSpellIcon(magia.nome, magia.tipo)}</span>
+              <span class="spell-name">${magia.nome}</span>
+              <span class="spell-auto">🔧 Automática</span>
+            </div>
+            <p class="spell-type">${magia.escola} • ${magia.tipo}</p>
+            <p class="spell-description">${magia.descricao}</p>
+            ${magia.custo_pm && magia.custo_pm > 0 ? `<p class="spell-cost">💙 ${magia.custo_pm} PM</p>` : ''}
+          `;
+            spellsGrid.appendChild(spellCard);
+          });
+
+          circleSection.appendChild(spellsGrid);
+          classSpellsList.appendChild(circleSection);
+        });
+
+      classSpellsSection.style.display = 'block';
+    } else {
+      classSpellsSection.style.display = 'none';
+    }
+  }
+
+  // Exibir seção de seleção de magias
+  function exibirSelecaoMagias(classeNome, nivel) {
+    const spellSelectionSection = document.getElementById('spellSelectionSection');
+    const spellSelectionDescription = document.getElementById('spellSelectionDescription');
+    const spellCircleFilters = document.getElementById('spellCircleFilters');
+    const spellTypeFilters = document.getElementById('spellTypeFilters');
+    const spellsCirclesContainer = document.getElementById('spellsCirclesContainer');
+
+    if (!spellSelectionSection) return;
+
+    const classConfig = CLASSES_MAGICAS[classeNome.toLowerCase()];
+    if (!classConfig) {
+      spellSelectionSection.style.display = 'none';
+      return;
+    }
+
+    // Atualizar descrição
+    if (spellSelectionDescription) {
+      spellSelectionDescription.textContent = `Escolha magias ${classConfig.tipos.join(' e ')} para seu ${classeNome}`;
+    }
+
+    // Criar filtros de círculo
+    if (spellCircleFilters) {
+      spellCircleFilters.innerHTML = `
+      <button type="button" class="quick-filter-btn active" data-filter="all">
+        ✨ Todas
+      </button>
+    `;
+
+      Object.entries(classConfig.circulos).forEach(([circulo, nivelMinimo]) => {
+        const podeAcessar = nivel >= nivelMinimo;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `quick-filter-btn ${!podeAcessar ? 'disabled' : ''}`;
+        btn.dataset.filter = `circle-${circulo}`;
+        btn.innerHTML = `🔘 ${circulo}º Círculo ${!podeAcessar ? `(Nível ${nivelMinimo}+)` : ''}`;
+        if (!podeAcessar) {
+          btn.disabled = true;
+        }
+        spellCircleFilters.appendChild(btn);
+      });
+    }
+
+    // Criar filtros de tipo
+    if (spellTypeFilters) {
+      const typeFiltersHtml = classConfig.tipos.map(tipo => {
+        const icon = tipo === 'Arcana' ? '🔮' : tipo === 'Divina' ? '✨' : '🌟';
+        return `
+        <button type="button" class="quick-filter-btn" data-filter="type-${tipo.toLowerCase()}">
+          ${icon} ${tipo}
+        </button>
+      `;
+      }).join('');
+
+      spellTypeFilters.innerHTML = `
+      <button type="button" class="quick-filter-btn active" data-filter="all-types">
+        ✨ Todos os Tipos
+      </button>
+      ${typeFiltersHtml}
+    `;
+    }
+
+    // TODO: Carregar e exibir magias organizadas por círculo
+    // Esta parte seria implementada quando as magias estiverem no banco
+
+    spellSelectionSection.style.display = 'block';
+  }
+
+  // Mostrar que a classe não é mágica
+  function mostrarClasseNaoMagica(classeNome) {
+    const nonMagicalClass = document.getElementById('nonMagicalClass');
+    const spellsEmptyState = document.getElementById('spellsEmptyState');
+
+    esconderSecoesMagias();
+
+    if (nonMagicalClass) {
+      nonMagicalClass.style.display = 'block';
+      const description = nonMagicalClass.querySelector('.non-magical-description');
+      if (description && classeNome) {
+        description.innerHTML = `
+        A classe <strong>${classeNome}</strong> não possui acesso a magias.
+        <br>
+        <strong>Classes Mágicas:</strong> Arcanista, Bardo, Clérigo, Druida
+      `;
+      }
+    }
+
+    if (spellsEmptyState) {
+      spellsEmptyState.style.display = 'none';
+    }
+  }
+
+  // Esconder todas as seções de magias
+  function esconderSecoesMagias() {
+    const sections = [
+      'classMagicCheck',
+      'classSpellsSection',
+      'spellSelectionSection',
+      'nonMagicalClass'
+    ];
+
+    sections.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.style.display = 'none';
+      }
+    });
+  }
+
+  // Mostrar estado inicial (selecionar classe)
+  function mostrarEstadoInicialMagias() {
+    const spellsEmptyState = document.getElementById('spellsEmptyState');
+
+    esconderSecoesMagias();
+
+    if (spellsEmptyState) {
+      spellsEmptyState.style.display = 'block';
+    }
+  }
+
+  // Função para obter ícone de magia
+  function getSpellIcon(nome, tipo) {
+    const nomeL = nome.toLowerCase();
+
+    // Ícones específicos por nome
+    if (nomeL.includes('cura') || nomeL.includes('curar')) return '💚';
+    if (nomeL.includes('fogo') || nomeL.includes('chama')) return '🔥';
+    if (nomeL.includes('gelo') || nomeL.includes('frio')) return '❄️';
+    if (nomeL.includes('raio') || nomeL.includes('relâmpago')) return '⚡';
+    if (nomeL.includes('luz') || nomeL.includes('brilho')) return '☀️';
+    if (nomeL.includes('trevas') || nomeL.includes('sombra')) return '🌑';
+    if (nomeL.includes('proteção') || nomeL.includes('escudo')) return '🛡️';
+    if (nomeL.includes('ilusão') || nomeL.includes('invisibilidade')) return '👻';
+    if (nomeL.includes('voo') || nomeL.includes('voar')) return '🦅';
+    if (nomeL.includes('teleporte') || nomeL.includes('portal')) return '🌀';
+    if (nomeL.includes('invocação') || nomeL.includes('convocar')) return '👤';
+    if (nomeL.includes('detecção') || nomeL.includes('detectar')) return '👁️';
+    if (nomeL.includes('transformação') || nomeL.includes('forma')) return '🔄';
+    if (nomeL.includes('explosão') || nomeL.includes('área')) return '💥';
+    if (nomeL.includes('míssil') || nomeL.includes('projétil')) return '🎯';
+
+    // Ícones por tipo
+    switch (tipo) {
+      case 'Arcana': return '🔮';
+      case 'Divina': return '✨';
+      case 'Universal': return '🌟';
+      default: return '🔮';
+    }
+  }
+
+  // Função para atualizar preview de magias
+  function atualizarPreviewMagias() {
+    const previewMagias = document.getElementById('previewMagias');
+    const magiasPreview = document.getElementById('magiasPreview');
+
+    if (!previewMagias || !magiasPreview) return;
+
+    // Coletar magias de classe (automáticas)
+    const magiasClasse = [];
+    magiasClasseCarregadas.forEach(magia => {
+      magiasClasse.push(`🔧 ${magia.nome} (Classe)`);
+    });
+
+    // Coletar magias selecionadas
+    const magiasEscolhidas = [];
+    const checkboxes = document.querySelectorAll('input[name="magias_selecionadas"]:checked');
+    checkboxes.forEach(checkbox => {
+      const card = checkbox.closest('.spell-card');
+      if (card) {
+        const nome = card.querySelector('.spell-card-name').textContent;
+        magiasEscolhidas.push(`⚡ ${nome} (Escolhida)`);
+      }
+    });
+
+    // Combinar todas as magias
+    const todasMagias = [...magiasClasse, ...magiasEscolhidas];
+
+    if (todasMagias.length > 0) {
+      magiasPreview.innerHTML = todasMagias.map(magia =>
+        `<div class="magia-preview-item">${magia}</div>`
+      ).join('');
+      previewMagias.style.display = 'block';
+    } else {
+      previewMagias.style.display = 'none';
+    }
+  }
+
+  // Event listener para mudança de classe (para magias)
+  function initMagicSystem() {
+    console.log('🔮 Inicializando sistema de magias...');
+
+    const classeSelect = document.getElementById('classe_id');
+    const nivelInput = document.getElementById('nivel');
+
+    if (classeSelect) {
+      classeSelect.addEventListener('change', function () {
+        const classeId = this.value;
+        const classeNome = this.selectedOptions[0]?.textContent.trim();
+        const nivel = parseInt(nivelInput?.value || 1);
+
+        if (classeId && classeNome) {
+          verificarCapacidadeMagica(classeId, classeNome, nivel);
+        } else {
+          mostrarEstadoInicialMagias();
+        }
+      });
+    }
+
+    if (nivelInput) {
+      nivelInput.addEventListener('change', function () {
+        const classeSelect = document.getElementById('classe_id');
+        const classeId = classeSelect?.value;
+        const classeNome = classeSelect?.selectedOptions[0]?.textContent.trim();
+        const nivel = parseInt(this.value || 1);
+
+        if (classeId && classeNome && classeMagica) {
+          verificarCapacidadeMagica(classeId, classeNome, nivel);
+        }
+      });
+    }
+
+    // Event listeners para seleção de magias
+    document.addEventListener('change', function (e) {
+      if (e.target.classList.contains('spell-checkbox')) {
+        atualizarPreviewMagias();
+      }
+    });
+
+    // Inicializar estado
+    mostrarEstadoInicialMagias();
+
+    console.log('✅ Sistema de magias inicializado');
+  }
+
+  // Inicializar quando o DOM estiver pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMagicSystem);
+  } else {
+    initMagicSystem();
+  }
+
+  // ========================================
+  // PREVIEW DE MAGIAS - ADICIONAR AOS SCRIPTS
+  // Adicionar estas funções aos character-create.js e character-edit.js
+  // ========================================
+
+  // Função para atualizar preview de magias no formulário
+  function atualizarPreviewMagias() {
+    const previewMagias = document.getElementById('previewMagias');
+    const magiasPreview = document.getElementById('magiasPreview');
+
+    if (!previewMagias || !magiasPreview) return;
+
+    console.log('🔮 Atualizando preview de magias...');
+
+    // Coletar magias de classe (automáticas)
+    const magiasClasse = [];
+    if (magiasClasseCarregadas && magiasClasseCarregadas.length > 0) {
+      magiasClasseCarregadas.forEach(magia => {
+        magiasClasse.push(`🔧 ${magia.nome} (${magia.circulo}º - Classe)`);
+      });
+    }
+
+    // Coletar magias selecionadas pelo usuário
+    const magiasEscolhidas = [];
+    const checkboxes = document.querySelectorAll('input[name="magias_selecionadas"]:checked');
+    checkboxes.forEach(checkbox => {
+      const card = checkbox.closest('.spell-card, .spell-checkbox-label');
+      if (card) {
+        const nomeElement = card.querySelector('.spell-card-name, .spell-name');
+        const circuloElement = card.querySelector('.spell-tag.circle');
+        const nome = nomeElement ? nomeElement.textContent.trim() : 'Magia';
+        const circulo = circuloElement ? circuloElement.textContent.trim() : '';
+        magiasEscolhidas.push(`⚡ ${nome} ${circulo ? `(${circulo})` : ''} (Escolhida)`);
+      }
+    });
+
+    // Coletar magias já existentes no personagem (para edição)
+    const magiasExistentes = [];
+    const existingCards = document.querySelectorAll('.character-spell-card');
+    existingCards.forEach(card => {
+      const nomeElement = card.querySelector('.character-spell-name, .spell-name');
+      const fonteElement = card.querySelector('.spell-badge.source-class, .spell-badge.source-choice');
+      if (nomeElement) {
+        const nome = nomeElement.textContent.trim();
+        const fonte = fonteElement ? (fonteElement.textContent.includes('Classe') ? '⚔️' : '⚡') : '📝';
+        magiasExistentes.push(`${fonte} ${nome} (Atual)`);
+      }
+    });
+
+    // Combinar todas as magias
+    const todasMagias = [...magiasExistentes, ...magiasClasse, ...magiasEscolhidas];
+
+    if (todasMagias.length > 0) {
+      // Organizar por círculo se possível
+      const magiasPorCirculo = {};
+      todasMagias.forEach(magia => {
+        const circuloMatch = magia.match(/(\d+)º/);
+        const circulo = circuloMatch ? circuloMatch[1] : 'Outros';
+
+        if (!magiasPorCirculo[circulo]) {
+          magiasPorCirculo[circulo] = [];
+        }
+        magiasPorCirculo[circulo].push(magia);
+      });
+
+      let html = '';
+
+      // Organizar por círculo
+      const circulos = Object.keys(magiasPorCirculo).sort((a, b) => {
+        if (a === 'Outros') return 1;
+        if (b === 'Outros') return -1;
+        return parseInt(a) - parseInt(b);
+      });
+
+      circulos.forEach(circulo => {
+        if (magiasPorCirculo[circulo].length > 0) {
+          html += `
+          <div class="preview-spell-circle">
+            <h6 style="color: var(--accent-gold); margin: 0.8rem 0 0.5rem 0; font-size: 0.9rem;">
+              ${circulo !== 'Outros' ? `🔘 ${circulo}º Círculo` : '📝 Outras Magias'}
+            </h6>
+            <div class="preview-spells-list">
+              ${magiasPorCirculo[circulo].map(magia =>
+            `<div class="magia-preview-item">${magia}</div>`
+          ).join('')}
+            </div>
+          </div>
+        `;
+        }
+      });
+
+      magiasPreview.innerHTML = html;
+      previewMagias.style.display = 'block';
+    } else {
+      previewMagias.style.display = 'none';
+    }
+
+    console.log(`✅ Preview atualizado: ${todasMagias.length} magias`);
+  }
+
+  // Função para contar magias por tipo no preview
+  function contarMagiasPorTipo() {
+    const magiasCards = document.querySelectorAll('input[name="magias_selecionadas"]:checked');
+    const contadores = {
+      arcana: 0,
+      divina: 0,
+      universal: 0,
+      total: magiasClasseCarregadas.length + magiasCards.length
+    };
+
+    // Contar magias de classe
+    if (magiasClasseCarregadas) {
+      magiasClasseCarregadas.forEach(magia => {
+        const tipo = (magia.tipo || '').toLowerCase();
+        if (contadores.hasOwnProperty(tipo)) {
+          contadores[tipo]++;
+        }
+      });
+    }
+
+    // Contar magias selecionadas
+    magiasCards.forEach(checkbox => {
+      const tipo = checkbox.dataset.type || '';
+      if (contadores.hasOwnProperty(tipo)) {
+        contadores[tipo]++;
+      }
+    });
+
+    return contadores;
+  }
+
+  // Função para validar seleção de magias
+  function validarSelecaoMagias() {
+    console.log('🔍 Validando seleção de magias...');
+
+    const classeSelect = document.getElementById('classe_id');
+    const nivelInput = document.getElementById('nivel');
+
+    if (!classeSelect || !nivelInput) {
+      console.log('⚠️ Elementos de classe ou nível não encontrados');
+      return true;
+    }
+
+    const classeNome = classeSelect.selectedOptions[0]?.textContent.trim().toLowerCase();
+    const nivel = parseInt(nivelInput.value || 1);
+
+    if (!classeMagica || !classeNome) {
+      console.log('✅ Validação dispensada - classe não-mágica');
+      return true;
+    }
+
+    const classConfig = CLASSES_MAGICAS[classeNome];
+    if (!classConfig) {
+      console.log('✅ Validação dispensada - configuração de classe não encontrada');
+      return true;
+    }
+
+    // Verificar magias selecionadas por círculo
+    const magiasChecked = document.querySelectorAll('input[name="magias_selecionadas"]:checked');
+    let erros = [];
+
+    magiasChecked.forEach(checkbox => {
+      const circulo = parseInt(checkbox.dataset.circle || 1);
+      const tipo = checkbox.dataset.type || '';
+      const nomeCard = checkbox.closest('.spell-card, .spell-checkbox-label');
+      const nomeMagia = nomeCard ? nomeCard.querySelector('.spell-card-name, .spell-name')?.textContent : 'Magia';
+
+      // Verificar se o círculo está disponível
+      const nivelMinimo = classConfig.circulos[circulo];
+      if (!nivelMinimo || nivel < nivelMinimo) {
+        erros.push(`${nomeMagia}: Requer nível ${nivelMinimo} para ${circulo}º círculo`);
+      }
+
+      // Verificar se o tipo está permitido
+      if (!classConfig.tipos.includes(tipo)) {
+        erros.push(`${nomeMagia}: Tipo ${tipo} não permitido para ${classeNome}`);
+      }
+    });
+
+    if (erros.length > 0) {
+      console.error('❌ Erros na validação:', erros);
+      showSpellNotification(
+        `Erros encontrados:\n${erros.join('\n')}`,
+        'error'
+      );
+      return false;
+    }
+
+    console.log('✅ Validação de magias passou');
+    return true;
+  }
+
+  // Função para mostrar notificações sobre magias
+  function showSpellNotification(message, type = 'info') {
+    console.log(`🔔 Notificação de Magia (${type}): ${message}`);
+
+    // Remover notificação anterior se existir
+    const existingNotification = document.querySelector('.spell-notification');
+    if (existingNotification) {
+      existingNotification.remove();
+    }
+
+    const notification = document.createElement('div');
+    notification.className = `spell-notification ${type}`;
+    notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    z-index: 1001;
+    animation: slideInRight 0.3s ease-out;
+    max-width: 350px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#2196f3'};
+  `;
+
+    // Para mensagens longas, usar textarea
+    if (message.length > 100) {
+      const textarea = document.createElement('div');
+      textarea.style.cssText = `
+      white-space: pre-line;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    `;
+      textarea.textContent = message;
+      notification.appendChild(textarea);
+    } else {
+      notification.textContent = message;
+    }
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.3s ease-out';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 300);
+    }, 5000);
+  }
+
+  // Função para calcular custo total de PM das magias selecionadas
+  function calcularCustoTotalMagias() {
+    let custoTotal = 0;
+
+    // Somar magias de classe
+    if (magiasClasseCarregadas) {
+      magiasClasseCarregadas.forEach(magia => {
+        custoTotal += parseInt(magia.custo_pm || 0);
+      });
+    }
+
+    // Somar magias selecionadas
+    const magiasChecked = document.querySelectorAll('input[name="magias_selecionadas"]:checked');
+    magiasChecked.forEach(checkbox => {
+      const card = checkbox.closest('.spell-card, .spell-checkbox-label');
+      if (card) {
+        const custoElement = card.querySelector('.spell-detail-value');
+        if (custoElement) {
+          const custoText = custoElement.textContent;
+          const custoMatch = custoText.match(/(\d+)\s*PM/);
+          if (custoMatch) {
+            custoTotal += parseInt(custoMatch[1]);
+          }
+        }
+      }
+    });
+
+    return custoTotal;
+  }
+
+  // Função para exibir estatísticas de magias no preview
+  function exibirEstatisticasMagias() {
+    const statsContainer = document.getElementById('spellsStats');
+    if (!statsContainer) return;
+
+    const contadores = contarMagiasPorTipo();
+    const custoTotal = calcularCustoTotalMagias();
+    const pmDisponiveis = parseInt(document.getElementById('pontos_mana')?.value || 0);
+
+    const html = `
+    <div class="spells-stats-grid">
+      <div class="spell-stat">
+        <div class="stat-icon">🔮</div>
+        <div class="stat-value">${contadores.total}</div>
+        <div class="stat-label">Total</div>
+      </div>
+      
+      ${contadores.arcana > 0 ? `
+        <div class="spell-stat">
+          <div class="stat-icon">🌟</div>
+          <div class="stat-value">${contadores.arcana}</div>
+          <div class="stat-label">Arcanas</div>
+        </div>
+      ` : ''}
+      
+      ${contadores.divina > 0 ? `
+        <div class="spell-stat">
+          <div class="stat-icon">✨</div>
+          <div class="stat-value">${contadores.divina}</div>
+          <div class="stat-label">Divinas</div>
+        </div>
+      ` : ''}
+      
+      ${contadores.universal > 0 ? `
+        <div class="spell-stat">
+          <div class="stat-icon">🌈</div>
+          <div class="stat-value">${contadores.universal}</div>
+          <div class="stat-label">Universais</div>
+        </div>
+      ` : ''}
+      
+      <div class="spell-stat ${custoTotal > pmDisponiveis ? 'insufficient' : 'sufficient'}">
+        <div class="stat-icon">💙</div>
+        <div class="stat-value">${custoTotal}</div>
+        <div class="stat-label">Custo Total PM</div>
+      </div>
+      
+      <div class="spell-stat">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value">${pmDisponiveis}</div>
+        <div class="stat-label">PM Disponíveis</div>
+      </div>
+    </div>
+  `;
+
+    statsContainer.innerHTML = html;
+  }
+
+  // Event listener para atualizar preview quando magias forem selecionadas
+  document.addEventListener('change', function (e) {
+    if (e.target.classList.contains('spell-checkbox') ||
+      e.target.name === 'magias_selecionadas') {
+
+      // Atualizar visual do card
+      const card = e.target.closest('.spell-card, .spell-checkbox-label');
+      if (card) {
+        const spellCard = card.querySelector('.spell-card') || card;
+        if (e.target.checked) {
+          spellCard.classList.add('selected');
+
+          // Adicionar badge de selecionada se não existir
+          if (!spellCard.querySelector('.spell-card-source')) {
+            const badge = document.createElement('div');
+            badge.className = 'spell-card-source';
+            badge.textContent = '✅ Selecionada';
+            spellCard.querySelector('.spell-card-header').appendChild(badge);
+          }
+        } else {
+          spellCard.classList.remove('selected');
+
+          // Remover badge
+          const badge = spellCard.querySelector('.spell-card-source');
+          if (badge) {
+            badge.remove();
+          }
+        }
+      }
+
+      // Atualizar preview
+      atualizarPreviewMagias();
+
+      // Atualizar estatísticas se a função existir
+      if (typeof exibirEstatisticasMagias === 'function') {
+        exibirEstatisticasMagias();
+      }
+    }
+  });
+
+  // Validação no submit do formulário
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('characterForm');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        if (!validarSelecaoMagias()) {
+          e.preventDefault();
+          return false;
+        }
+      });
+    }
+  });
+
+  // Adicionar seção de estatísticas ao preview se não existir
+  function adicionarSecaoEstatisticasMagias() {
+    const previewMagias = document.getElementById('previewMagias');
+    if (previewMagias && !document.getElementById('spellsStats')) {
+      const statsSection = document.createElement('div');
+      statsSection.id = 'spellsStats';
+      statsSection.style.cssText = 'margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(212, 175, 55, 0.3);';
+      previewMagias.appendChild(statsSection);
+    }
+  }
+
+  // Inicializar sistema de preview de magias
+  function initMagicPreviewSystem() {
+    console.log('🔮 Inicializando sistema de preview de magias...');
+
+    adicionarSecaoEstatisticasMagias();
+
+    // Atualizar preview inicial
+    atualizarPreviewMagias();
+
+    console.log('✅ Sistema de preview de magias inicializado');
+  }
+
+  // Auto-inicializar quando DOM estiver pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMagicPreviewSystem);
+  } else {
+    initMagicPreviewSystem();
+  }
 
 
   // Inicializar todas as funcionalidades

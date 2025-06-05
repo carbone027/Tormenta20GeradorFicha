@@ -12,7 +12,8 @@ const ClassAbilitiesController = require('../controllers/ClassAbilitiesControlle
 const godsController = require('../controllers/GodsController');
 const equipmentController = require('../controllers/EquipmentController');
 const PowerController = require('../controllers/PowerController');
-const PericiaController = require('../controllers/PericiaController'); // NOVO
+const PericiaController = require('../controllers/PericiaController');
+const MagiaController = require('../controllers/MagiaController');
 
 // Middleware para verificar autenticação
 const checkAuth = (req, res, next) => {
@@ -116,6 +117,40 @@ router.put('/api/pericias/personagem/:characterId/:skillId', PericiaController.u
 router.delete('/api/pericias/personagem/:characterId/:skillId', PericiaController.removeFromCharacter);
 router.get('/api/pericias/personagem/:characterId/:skillId/bonus', PericiaController.calculateBonus);
 router.post('/api/pericias/personagem/:characterId/aplicar-classe', PericiaController.applyClassSkills);
+
+// Rotas principais de magias
+router.get('/magias', MagiaController.index);
+router.get('/magias/comparar', MagiaController.compare);
+router.get('/magias/estatisticas', MagiaController.statistics);
+router.get('/magias/buscar', MagiaController.search);
+router.get('/magias/:id', MagiaController.view);
+
+// API routes para magias
+router.get('/api/magias/search', MagiaController.search);
+router.get('/api/magias/statistics', MagiaController.statistics);
+router.get('/api/magias/classe/:classId', MagiaController.getByClass);
+router.get('/api/magias/personagem/:characterId', MagiaController.getCharacterSpells);
+router.get('/api/magias/disponiveis/:characterId', MagiaController.getAvailableForCharacter);
+
+// Rotas para gerenciar magias de personagem
+router.post('/api/magias/personagem/:characterId/adicionar', MagiaController.addToCharacter);
+router.delete('/api/magias/personagem/:characterId/:spellId', MagiaController.removeFromCharacter);
+router.get('/api/magias/classe/:classId/verificar/:spellId/:level', MagiaController.canClassCast);
+router.post('/api/magias/personagem/:characterId/aplicar-classe', MagiaController.applyClassSpells);
+
+// NOVAS ROTAS ESPECÍFICAS PARA MAGIAS POR CLASSE
+
+// Buscar magias de uma classe específica com filtros
+router.get('/api/classes/:classId/magias', characterController.getClassSpells);
+
+// Verificar se uma classe é mágica
+router.get('/api/classes/:classId/magica', characterController.isClassMagical);
+
+// Rota para configurar sistema de magias (admin)
+router.post('/api/magias/sistema/configurar', MagiaController.setupSpellSystem);
+
+// Rota para buscar aprimoramentos de magias
+router.get('/api/magias/:spellId/aprimoramentos', MagiaController.getEnhancements);
 
 // ========================================
 // ROTAS DE API PARA PODERES
