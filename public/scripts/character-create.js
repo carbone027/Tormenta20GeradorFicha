@@ -1630,23 +1630,28 @@ document.addEventListener('DOMContentLoaded', function () {
       // Mostrar verificação
       if (classMagicCheck) {
         classMagicCheck.style.display = 'block';
-        magicCheckTitle.textContent = '🔮 Verificando Capacidade Mágica...';
-        magicCheckDescription.textContent = `Analisando se ${classeNome} pode lançar magias...`;
+        if (magicCheckTitle) magicCheckTitle.textContent = '🔮 Verificando Capacidade Mágica...';
+        if (magicCheckDescription) magicCheckDescription.textContent = `Analisando se ${classeNome} pode lançar magias...`;
       }
 
-      // Verificar se é classe mágica
+      // Verificar se é classe mágica localmente primeiro
       classeMagica = isClassMagical(classeNome);
 
       if (classeMagica) {
-        // Verificar com o servidor se é classe mágica
+        console.log(`✨ ${classeNome} identificada como classe mágica localmente`);
+
+        // Verificar com o servidor
         const response = await fetch(`/api/classes/${classeId}/magica`);
         if (response.ok) {
           const data = await response.json();
+          console.log('📡 Resposta do servidor:', data);
 
           if (data.success && data.isMagical) {
             // Atualizar interface para classe mágica
             if (magicCheckTitle) {
               magicCheckTitle.textContent = '🔮 Classe Mágica Detectada!';
+            }
+            if (magicCheckDescription) {
               magicCheckDescription.textContent = `${classeNome} pode lançar magias. Carregando magias disponíveis...`;
             }
 
@@ -1654,15 +1659,18 @@ document.addEventListener('DOMContentLoaded', function () {
             await carregarMagiasClasse(classeId, classeNome, nivel);
           } else {
             // Classe não é mágica no servidor
+            console.warn(`⚠️ Classe ${classeNome} não é mágica segundo o servidor`);
             classeMagica = false;
             mostrarClasseNaoMagica(classeNome);
           }
         } else {
-          // Erro na verificação, mas continuar se cliente detectou como mágica
+          console.error('❌ Erro na requisição ao servidor:', response.status);
+          // Em caso de erro, tentar carregar mesmo assim
           await carregarMagiasClasse(classeId, classeNome, nivel);
         }
       } else {
         // Classe não é mágica
+        console.log(`⚔️ ${classeNome} identificada como classe não-mágica`);
         mostrarClasseNaoMagica(classeNome);
       }
 
@@ -1679,84 +1687,43 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Carregar magias de uma classe específica
-  async function carregarMagiasClasse(classeId, classeNome, nivel) {
-    try {
-      console.log('📚 Carregando magias da classe:', classeNome, 'nível', nivel);
-
-      const response = await fetch(`/api/classes/${classeId}/magias?nivel=${nivel}`);
-      if (!response.ok) {
-        throw new Error('Erro ao carregar magias da classe');
-      }
-
-      const data = await response.json();
-      if (data.success) {
-        magiasClasseCarregadas = data.poderes || data.magias || [];
-
-        // Carregar todas as magias disponíveis para seleção
-        await carregarTodasMagias();
-
-        // Exibir magias da classe e seleção
-        exibirMagiasClasse(magiasClasseCarregadas, classeNome, nivel);
-        exibirSelecaoMagias(classeNome, nivel);
-
-        console.log('✅ Magias carregadas:', magiasClasseCarregadas.length);
-      } else {
-        console.warn('⚠️ Nenhuma magia de classe encontrada');
-        magiasClasseCarregadas = [];
-        // Mesmo sem magias de classe, tentar carregar magias para seleção
-        await carregarTodasMagias();
-        exibirSelecaoMagias(classeNome, nivel);
-      }
-    } catch (error) {
-      console.error('❌ Erro ao carregar magias da classe:', error);
-      magiasClasseCarregadas = [];
-      esconderSecoesMagias();
-    }
-  }
-
-  // Carregar todas as magias disponíveis do sistema
-  async function carregarTodasMagias() {
-    try {
-      console.log('📖 Carregando todas as magias do sistema...');
-
-      const response = await fetch('/api/magias');
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          magiasDisponiveis = data.magias || {};
-          console.log('✅ Magias do sistema carregadas');
-        }
-      }
-    } catch (error) {
-      console.error('❌ Erro ao carregar magias do sistema:', error);
-      magiasDisponiveis = {};
-    }
-  }
-
-  // Exibir magias automáticas de classe
+  // Exibir magias automáticas de classe - VERSÃO CORRIGIDA
   function exibirMagiasClasse(magias, classeNome, nivel) {
+    console.log('🏛️ Exibindo magias de classe:', magias.length, 'magias para', classeNome);
+
     const classSpellsSection = document.getElementById('classSpellsSection');
     const classSpellsList = document.getElementById('classSpellsList');
 
-    if (!classSpellsSection || !classSpellsList) return;
+    if (!classSpellsSection || !classSpellsList) {
+      console.error('❌ Elementos de exibição de magias de classe não encontrados');
+      console.log('- classSpellsSection:', !!classSpellsSection);
+      console.log('- classSpellsList:', !!classSpellsList);
+      return;
+    }
 
     if (magias && magias.length > 0) {
+      console.log('📋 Organizando', magias.length, 'magias por círculo...');
+
       classSpellsList.innerHTML = '';
 
       // Organizar por círculo
       const magiasPorCirculo = {};
       magias.forEach(magia => {
-        if (!magiasPorCirculo[magia.circulo]) {
-          magiasPorCirculo[magia.circulo] = [];
+        const circulo = magia.circulo || 1;
+        if (!magiasPorCirculo[circulo]) {
+          magiasPorCirculo[circulo] = [];
         }
-        magiasPorCirculo[magia.circulo].push(magia);
+        magiasPorCirculo[circulo].push(magia);
       });
+
+      console.log('🔘 Círculos encontrados:', Object.keys(magiasPorCirculo));
 
       // Criar seções por círculo
       Object.entries(magiasPorCirculo)
         .sort(([a], [b]) => parseInt(a) - parseInt(b))
         .forEach(([circulo, magiasCirculo]) => {
+          console.log(`📚 Criando seção para ${circulo}º círculo com ${magiasCirculo.length} magias`);
+
           const circleSection = document.createElement('div');
           circleSection.className = 'class-spells-circle-section';
 
@@ -1774,22 +1741,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
           const spellsGrid = document.createElement('div');
           spellsGrid.className = 'class-spells-grid';
-          if (!podeAcessar) {
-            spellsGrid.style.opacity = '0.5';
-          }
+          spellsGrid.style.cssText = `
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 1rem;
+          margin-top: 1rem;
+          ${!podeAcessar ? 'opacity: 0.5;' : ''}
+        `;
 
           magiasCirculo.forEach(magia => {
             const spellCard = document.createElement('div');
             spellCard.className = 'class-spell-card';
+            spellCard.style.cssText = `
+            background: var(--card-bg);
+            border: 2px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+          `;
+
             spellCard.innerHTML = `
-            <div class="class-spell-header">
-              <span class="spell-icon">${getSpellIcon(magia.nome, magia.tipo)}</span>
-              <span class="spell-name">${magia.nome}</span>
-              <span class="spell-auto">🔧 Automática</span>
+            <div class="class-spell-header" style="margin-bottom: 0.8rem;">
+              <span class="spell-icon" style="font-size: 1.5rem; margin-right: 0.5rem;">${getSpellIcon(magia.nome, magia.tipo)}</span>
+              <span class="spell-name" style="font-weight: bold; color: var(--accent-gold);">${magia.nome}</span>
+              <span class="spell-auto" style="float: right; background: var(--accent-gold); color: var(--primary-bg); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">🔧 Automática</span>
             </div>
-            <p class="spell-type">${magia.escola} • ${magia.tipo}</p>
-            <p class="spell-description">${magia.descricao}</p>
-            ${magia.custo_pm && magia.custo_pm > 0 ? `<p class="spell-cost">💙 ${magia.custo_pm} PM</p>` : ''}
+            <p class="spell-type" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">${magia.escola || 'N/A'} • ${magia.tipo || 'N/A'}</p>
+            <p class="spell-description" style="color: var(--text-light); line-height: 1.4; margin-bottom: 0.8rem;">${magia.descricao || 'Sem descrição disponível'}</p>
+            ${magia.custo_pm && magia.custo_pm > 0 ? `<p class="spell-cost" style="color: var(--accent-blue); font-weight: bold;">💙 ${magia.custo_pm} PM</p>` : ''}
           `;
             spellsGrid.appendChild(spellCard);
           });
@@ -1799,26 +1778,35 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
       classSpellsSection.style.display = 'block';
+      console.log('✅ Seção de magias de classe exibida com sucesso');
     } else {
+      console.log('⚠️ Nenhuma magia de classe para exibir');
       classSpellsSection.style.display = 'none';
     }
   }
 
-  // Exibir seção de seleção de magias
+  // Exibir seção de seleção de magias - VERSÃO CORRIGIDA
   function exibirSelecaoMagias(classeNome, nivel) {
+    console.log('⚡ Exibindo seleção de magias para:', classeNome, 'nível', nivel);
+
     const spellSelectionSection = document.getElementById('spellSelectionSection');
     const spellSelectionDescription = document.getElementById('spellSelectionDescription');
     const spellCircleFilters = document.getElementById('spellCircleFilters');
     const spellTypeFilters = document.getElementById('spellTypeFilters');
-    const spellsCirclesContainer = document.getElementById('spellsCirclesContainer');
 
-    if (!spellSelectionSection) return;
+    if (!spellSelectionSection) {
+      console.error('❌ Elemento spellSelectionSection não encontrado');
+      return;
+    }
 
     const classConfig = CLASSES_MAGICAS[classeNome.toLowerCase()];
     if (!classConfig) {
+      console.warn('⚠️ Configuração não encontrada para classe:', classeNome);
       spellSelectionSection.style.display = 'none';
       return;
     }
+
+    console.log('📋 Configuração da classe:', classConfig);
 
     // Atualizar descrição
     if (spellSelectionDescription) {
@@ -1827,7 +1815,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Criar filtros de círculo
     if (spellCircleFilters) {
-      spellCircleFilters.innerHTML = `
+      let filtersHTML = `
       <button type="button" class="quick-filter-btn active" data-filter="all">
         ✨ Todas
       </button>
@@ -1835,16 +1823,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
       Object.entries(classConfig.circulos).forEach(([circulo, nivelMinimo]) => {
         const podeAcessar = nivel >= nivelMinimo;
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = `quick-filter-btn ${!podeAcessar ? 'disabled' : ''}`;
-        btn.dataset.filter = `circle-${circulo}`;
-        btn.innerHTML = `🔘 ${circulo}º Círculo ${!podeAcessar ? `(Nível ${nivelMinimo}+)` : ''}`;
-        if (!podeAcessar) {
-          btn.disabled = true;
-        }
-        spellCircleFilters.appendChild(btn);
+        filtersHTML += `
+        <button type="button" class="quick-filter-btn ${!podeAcessar ? 'disabled' : ''}" data-filter="circle-${circulo}" ${!podeAcessar ? 'disabled' : ''}>
+          🔘 ${circulo}º Círculo ${!podeAcessar ? `(Nível ${nivelMinimo}+)` : ''}
+        </button>
+      `;
       });
+
+      spellCircleFilters.innerHTML = filtersHTML;
     }
 
     // Criar filtros de tipo
@@ -1866,14 +1852,25 @@ document.addEventListener('DOMContentLoaded', function () {
     `;
     }
 
-    // TODO: Carregar e exibir magias organizadas por círculo
-    // Esta parte seria implementada quando as magias estiverem no banco
+    // Exibir seção vazia por enquanto (magias serão carregadas via AJAX posteriormente)
+    const spellsContainer = document.getElementById('spellsCirclesContainer');
+    if (spellsContainer) {
+      spellsContainer.innerHTML = `
+      <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+        <p>🔮 Sistema de seleção de magias será implementado em breve</p>
+        <p>Magias de classe automáticas estão funcionando!</p>
+      </div>
+    `;
+    }
 
     spellSelectionSection.style.display = 'block';
+    console.log('✅ Seção de seleção de magias exibida');
   }
 
-  // Mostrar que a classe não é mágica
+  // Mostrar que a classe não é mágica - VERSÃO CORRIGIDA
   function mostrarClasseNaoMagica(classeNome) {
+    console.log('⚔️ Exibindo classe não-mágica:', classeNome);
+
     const nonMagicalClass = document.getElementById('nonMagicalClass');
     const spellsEmptyState = document.getElementById('spellsEmptyState');
 
@@ -1889,6 +1886,9 @@ document.addEventListener('DOMContentLoaded', function () {
         <strong>Classes Mágicas:</strong> Arcanista, Bardo, Clérigo, Druida
       `;
       }
+      console.log('✅ Seção de classe não-mágica exibida');
+    } else {
+      console.error('❌ Elemento nonMagicalClass não encontrado');
     }
 
     if (spellsEmptyState) {
@@ -1896,8 +1896,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Esconder todas as seções de magias
+  // Esconder todas as seções de magias - VERSÃO CORRIGIDA
   function esconderSecoesMagias() {
+    console.log('🙈 Escondendo todas as seções de magias...');
+
     const sections = [
       'classMagicCheck',
       'classSpellsSection',
@@ -1909,23 +1911,33 @@ document.addEventListener('DOMContentLoaded', function () {
       const element = document.getElementById(id);
       if (element) {
         element.style.display = 'none';
+        console.log(`- ${id}: escondido`);
+      } else {
+        console.warn(`- ${id}: elemento não encontrado`);
       }
     });
   }
 
-  // Mostrar estado inicial (selecionar classe)
+  // Mostrar estado inicial (selecionar classe) - VERSÃO CORRIGIDA
   function mostrarEstadoInicialMagias() {
+    console.log('🎬 Mostrando estado inicial de magias...');
+
     const spellsEmptyState = document.getElementById('spellsEmptyState');
 
     esconderSecoesMagias();
 
     if (spellsEmptyState) {
       spellsEmptyState.style.display = 'block';
+      console.log('✅ Estado inicial exibido');
+    } else {
+      console.error('❌ Elemento spellsEmptyState não encontrado');
     }
   }
 
-  // Função para obter ícone de magia
+  // Função para obter ícone de magia - VERSÃO MELHORADA
   function getSpellIcon(nome, tipo) {
+    if (!nome) return '✨';
+
     const nomeL = nome.toLowerCase();
 
     // Ícones específicos por nome
@@ -1954,44 +1966,202 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Função para atualizar preview de magias
-  function atualizarPreviewMagias() {
-    const previewMagias = document.getElementById('previewMagias');
-    const magiasPreview = document.getElementById('magiasPreview');
+  // FUNÇÃO DE DEBUG MELHORADA
+  function debugMagicElements() {
+    console.log('🔧 === DEBUG DOS ELEMENTOS DE MAGIA ===');
 
-    if (!previewMagias || !magiasPreview) return;
+    const elementos = {
+      'classMagicCheck': document.getElementById('classMagicCheck'),
+      'magicCheckTitle': document.getElementById('magicCheckTitle'),
+      'magicCheckDescription': document.getElementById('magicCheckDescription'),
+      'classSpellsSection': document.getElementById('classSpellsSection'),
+      'classSpellsList': document.getElementById('classSpellsList'),
+      'spellSelectionSection': document.getElementById('spellSelectionSection'),
+      'spellSelectionDescription': document.getElementById('spellSelectionDescription'),
+      'spellCircleFilters': document.getElementById('spellCircleFilters'),
+      'spellTypeFilters': document.getElementById('spellTypeFilters'),
+      'spellsCirclesContainer': document.getElementById('spellsCirclesContainer'),
+      'nonMagicalClass': document.getElementById('nonMagicalClass'),
+      'spellsEmptyState': document.getElementById('spellsEmptyState')
+    };
 
-    // Coletar magias de classe (automáticas)
-    const magiasClasse = [];
-    magiasClasseCarregadas.forEach(magia => {
-      magiasClasse.push(`🔧 ${magia.nome} (Classe)`);
-    });
-
-    // Coletar magias selecionadas
-    const magiasEscolhidas = [];
-    const checkboxes = document.querySelectorAll('input[name="magias_selecionadas"]:checked');
-    checkboxes.forEach(checkbox => {
-      const card = checkbox.closest('.spell-card');
-      if (card) {
-        const nome = card.querySelector('.spell-card-name').textContent;
-        magiasEscolhidas.push(`⚡ ${nome} (Escolhida)`);
+    console.log('📋 Elementos encontrados:');
+    Object.entries(elementos).forEach(([nome, elemento]) => {
+      console.log(`- ${nome}: ${elemento ? '✅ Existe' : '❌ NÃO EXISTE'}`);
+      if (elemento) {
+        console.log(`  - Visível: ${elemento.style.display !== 'none'}`);
+        console.log(`  - Classes: ${elemento.className}`);
       }
     });
 
-    // Combinar todas as magias
-    const todasMagias = [...magiasClasse, ...magiasEscolhidas];
-
-    if (todasMagias.length > 0) {
-      magiasPreview.innerHTML = todasMagias.map(magia =>
-        `<div class="magia-preview-item">${magia}</div>`
-      ).join('');
-      previewMagias.style.display = 'block';
+    // Verificar estrutura do HTML
+    const magiasSection = document.querySelector('.spells-main-container');
+    if (magiasSection) {
+      console.log('📄 Estrutura da seção de magias encontrada');
+      console.log('- Filhos diretos:', magiasSection.children.length);
     } else {
-      previewMagias.style.display = 'none';
+      console.error('❌ Seção principal de magias (.spells-main-container) NÃO ENCONTRADA!');
+    }
+
+    return elementos;
+  }
+
+  // Adicionar ao objeto window para debug
+  if (typeof window !== 'undefined') {
+    window.debugMagicElements = debugMagicElements;
+    window.exibirMagiasClasse = exibirMagiasClasse;
+    window.mostrarClasseNaoMagica = mostrarClasseNaoMagica;
+    window.esconderSecoesMagias = esconderSecoesMagias;
+  }
+
+  // Carregar magias de uma classe específica
+  async function carregarMagiasClasse(classeId, classeNome, nivel) {
+    try {
+      console.log('📚 Carregando magias disponíveis para a classe:', classeNome, 'nível', nivel);
+
+      const response = await fetch(`/api/classes/${classeId}/magias?nivel=${nivel}`);
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('📡 Dados de magias recebidos:', data);
+
+      if (data.success) {
+        magiasClasseCarregadas = data.magias || [];
+
+        // IMPORTANTE: Em Tormenta20, classes NÃO têm magias automáticas
+        // Todas as magias devem ser escolhidas pelo jogador
+        console.log(`✅ ${magiasClasseCarregadas.length} magias DISPONÍVEIS para escolha`);
+
+        // Exibir magias disponíveis para seleção (não automáticas)
+        exibirMagiasDisponiveis(magiasClasseCarregadas, classeNome, nivel);
+
+      } else {
+        console.warn('⚠️ Nenhuma magia disponível encontrada:', data.error || 'Sem detalhes');
+        magiasClasseCarregadas = [];
+        mostrarSemMagiasDisponiveis(classeNome, nivel);
+      }
+    } catch (error) {
+      console.error('❌ Erro ao carregar magias da classe:', error);
+      magiasClasseCarregadas = [];
+      esconderSecoesMagias();
     }
   }
 
-  // Event listener para mudança de classe (para magias)
+  // NOVA FUNÇÃO: Exibir magias disponíveis para seleção (não automáticas)
+  function exibirMagiasDisponiveis(magias, classeNome, nivel) {
+    console.log('📋 Exibindo magias disponíveis para seleção:', magias.length, 'magias');
+
+    const spellSelectionSection = document.getElementById('spellSelectionSection');
+    const spellSelectionDescription = document.getElementById('spellSelectionDescription');
+    const spellsCirclesContainer = document.getElementById('spellsCirclesContainer');
+
+    if (!spellSelectionSection || !spellsCirclesContainer) {
+      console.error('❌ Elementos de seleção de magias não encontrados');
+      return;
+    }
+
+    const classConfig = CLASSES_MAGICAS[classeNome.toLowerCase()];
+    if (!classConfig) {
+      console.warn('⚠️ Configuração não encontrada para classe:', classeNome);
+      spellSelectionSection.style.display = 'none';
+      return;
+    }
+
+    // Esconder seção de magias automáticas (não existe em T20)
+    const classSpellsSection = document.getElementById('classSpellsSection');
+    if (classSpellsSection) {
+      classSpellsSection.style.display = 'none';
+    }
+
+    // Atualizar descrição
+    if (spellSelectionDescription) {
+      spellSelectionDescription.innerHTML = `
+      <strong>Escolha as magias que seu ${classeNome} conhece</strong><br>
+      <small>Tipos permitidos: ${classConfig.tipos.join(' e ')} • Nível atual: ${nivel}</small>
+    `;
+    }
+
+    // Configurar filtros
+    configurarFiltrosMagias(classeNome, nivel);
+
+    // Organizar magias por círculo
+    const magiasPorCirculo = {};
+    magias.forEach(magia => {
+      const circulo = magia.circulo || 1;
+      if (!magiasPorCirculo[circulo]) {
+        magiasPorCirculo[circulo] = [];
+      }
+      magiasPorCirculo[circulo].push(magia);
+    });
+
+    console.log('🔘 Círculos de magias organizados:', Object.keys(magiasPorCirculo));
+
+    // Criar HTML das magias por círculo
+    let htmlCirculos = '';
+
+    Object.entries(magiasPorCirculo)
+      .sort(([a], [b]) => parseInt(a) - parseInt(b))
+      .forEach(([circulo, magiasCirculo]) => {
+        const nivelMinimo = classConfig.circulos[circulo] || 1;
+        const podeAcessar = nivel >= nivelMinimo;
+
+        htmlCirculos += `
+        <div class="spell-circle-section" data-circle="${circulo}">
+          <div class="spell-circle-header">
+            <h5 class="spell-circle-title">
+              <span>🔘</span>
+              ${circulo}º Círculo
+              ${!podeAcessar ? `<span class="level-requirement">⚠️ Requer Nível ${nivelMinimo}</span>` : ''}
+              <span class="circle-count">(${magiasCirculo.length} disponíveis)</span>
+            </h5>
+            <button type="button" class="spell-circle-toggle" data-target="${circulo}">
+              <span class="toggle-icon">📂</span>
+            </button>
+          </div>
+
+          <div class="spells-selection-grid" id="spellsGrid-${circulo}" ${!podeAcessar ? 'style="opacity: 0.5; pointer-events: none;"' : ''}>
+            ${criarCardsSelecaoMagias(magiasCirculo, podeAcessar)}
+          </div>
+        </div>
+      `;
+      });
+
+    spellsCirclesContainer.innerHTML = htmlCirculos;
+
+    // Adicionar event listeners para seleção
+    adicionarEventListenersMagias();
+
+    spellSelectionSection.style.display = 'block';
+    console.log('✅ Magias disponíveis exibidas para seleção');
+  }
+
+
+  // Carregar todas as magias disponíveis do sistema
+  async function carregarTodasMagias() {
+    try {
+      console.log('📖 Carregando todas as magias do sistema...');
+
+      const response = await fetch('/api/magias');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          magiasDisponiveis = data.magias || {};
+          console.log('✅ Magias do sistema carregadas');
+        } else {
+          console.warn('⚠️ Falha ao carregar magias do sistema:', data.error);
+        }
+      } else {
+        console.error('❌ Erro na requisição de magias:', response.status);
+      }
+    } catch (error) {
+      console.error('❌ Erro ao carregar magias do sistema:', error);
+      magiasDisponiveis = {};
+    }
+  }
+
+  // Event listener para mudança de classe (para magias) - VERSÃO CORRIGIDA
   function initMagicSystem() {
     console.log('🔮 Inicializando sistema de magias...');
 
@@ -1999,35 +2169,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const nivelInput = document.getElementById('nivel');
 
     if (classeSelect) {
-      classeSelect.addEventListener('change', function () {
-        const classeId = this.value;
-        const classeNome = this.selectedOptions[0]?.textContent.trim();
-        const nivel = parseInt(nivelInput?.value || 1);
-
-        if (classeId && classeNome) {
-          verificarCapacidadeMagica(classeId, classeNome, nivel);
-        } else {
-          mostrarEstadoInicialMagias();
-        }
-      });
+      // Remover listeners existentes para evitar duplicação
+      classeSelect.removeEventListener('change', handleClassChange);
+      classeSelect.addEventListener('change', handleClassChange);
     }
 
     if (nivelInput) {
-      nivelInput.addEventListener('change', function () {
-        const classeSelect = document.getElementById('classe_id');
-        const classeId = classeSelect?.value;
-        const classeNome = classeSelect?.selectedOptions[0]?.textContent.trim();
-        const nivel = parseInt(this.value || 1);
-
-        if (classeId && classeNome && classeMagica) {
-          verificarCapacidadeMagica(classeId, classeNome, nivel);
-        }
-      });
+      // Remover listeners existentes para evitar duplicação
+      nivelInput.removeEventListener('change', handleLevelChange);
+      nivelInput.addEventListener('change', handleLevelChange);
     }
 
     // Event listeners para seleção de magias
     document.addEventListener('change', function (e) {
-      if (e.target.classList.contains('spell-checkbox')) {
+      if (e.target.classList.contains('spell-checkbox') ||
+        e.target.name === 'magias_selecionadas') {
         atualizarPreviewMagias();
       }
     });
@@ -2038,11 +2194,52 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('✅ Sistema de magias inicializado');
   }
 
+  // Função separada para handle de mudança de classe
+  function handleClassChange() {
+    const classeId = this.value;
+    const classeNome = this.selectedOptions[0]?.textContent.trim();
+    const nivelInput = document.getElementById('nivel');
+    const nivel = parseInt(nivelInput?.value || 1);
+
+    console.log('🔄 Classe alterada:', classeNome, 'ID:', classeId, 'Nível:', nivel);
+
+    if (classeId && classeNome) {
+      verificarCapacidadeMagica(classeId, classeNome, nivel);
+    } else {
+      mostrarEstadoInicialMagias();
+    }
+  }
+
+  // Função separada para handle de mudança de nível
+  function handleLevelChange() {
+    const classeSelect = document.getElementById('classe_id');
+    const classeId = classeSelect?.value;
+    const classeNome = classeSelect?.selectedOptions[0]?.textContent.trim();
+    const nivel = parseInt(this.value || 1);
+
+    console.log('📊 Nível alterado:', nivel, 'Classe:', classeNome);
+
+    if (classeId && classeNome && classeMagica) {
+      verificarCapacidadeMagica(classeId, classeNome, nivel);
+    }
+  }
+
+  // Garantir inicialização única
+  let magicSystemInitialized = false;
+
   // Inicializar quando o DOM estiver pronto
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMagicSystem);
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!magicSystemInitialized) {
+        initMagicSystem();
+        magicSystemInitialized = true;
+      }
+    });
   } else {
-    initMagicSystem();
+    if (!magicSystemInitialized) {
+      initMagicSystem();
+      magicSystemInitialized = true;
+    }
   }
 
   // ========================================
@@ -2459,6 +2656,405 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('DOMContentLoaded', initMagicPreviewSystem);
   } else {
     initMagicPreviewSystem();
+  }
+
+  // Função de debug para magias (ADICIONAR antes do final do arquivo)
+  function debugMagicSystem() {
+    console.log('🔧 === DEBUG DO SISTEMA DE MAGIAS ===');
+
+    // Verificar elementos do DOM
+    const classeSelect = document.getElementById('classe_id');
+    const nivelInput = document.getElementById('nivel');
+    const magicSections = {
+      classMagicCheck: document.getElementById('classMagicCheck'),
+      classSpellsSection: document.getElementById('classSpellsSection'),
+      spellSelectionSection: document.getElementById('spellSelectionSection'),
+      nonMagicalClass: document.getElementById('nonMagicalClass'),
+      spellsEmptyState: document.getElementById('spellsEmptyState')
+    };
+
+    console.log('📋 Elementos encontrados:');
+    console.log('- Classe Select:', !!classeSelect);
+    console.log('- Nível Input:', !!nivelInput);
+    console.log('- Seções de Magia:', Object.entries(magicSections).map(([key, el]) => `${key}: ${!!el}`).join(', '));
+
+    if (classeSelect) {
+      console.log('🎯 Classe atual:', classeSelect.value, classeSelect.selectedOptions[0]?.textContent);
+    }
+
+    if (nivelInput) {
+      console.log('📊 Nível atual:', nivelInput.value);
+    }
+
+    console.log('🔮 Estado das variáveis:');
+    console.log('- classeMagica:', typeof classeMagica !== 'undefined' ? classeMagica : 'undefined');
+    console.log('- magiasClasseCarregadas:', typeof magiasClasseCarregadas !== 'undefined' ? magiasClasseCarregadas.length : 'undefined');
+    console.log('- magiasDisponiveis:', typeof magiasDisponiveis !== 'undefined' ? Object.keys(magiasDisponiveis).length : 'undefined');
+    console.log('- magicSystemInitialized:', typeof magicSystemInitialized !== 'undefined' ? magicSystemInitialized : 'undefined');
+
+    console.log('⚙️ Configurações de classes mágicas:', CLASSES_MAGICAS);
+
+    // Testar conectividade com API
+    testMagicAPI();
+  }
+
+  // Função para testar conectividade com API
+  async function testMagicAPI() {
+    console.log('🌐 === TESTE DE CONECTIVIDADE COM API ===');
+
+    try {
+      // Testar rota de magias gerais
+      console.log('📡 Testando /api/magias...');
+      const magiasResponse = await fetch('/api/magias');
+      console.log('- Status:', magiasResponse.status);
+      if (magiasResponse.ok) {
+        const magiasData = await magiasResponse.json();
+        console.log('- Sucesso:', magiasData.success);
+        console.log('- Total de magias:', magiasData.total || 'N/A');
+      } else {
+        console.error('- Erro na resposta:', await magiasResponse.text());
+      }
+
+      // Testar com uma classe específica (se houver classe selecionada)
+      const classeSelect = document.getElementById('classe_id');
+      if (classeSelect && classeSelect.value) {
+        console.log(`📡 Testando /api/classes/${classeSelect.value}/magica...`);
+        const classMagicResponse = await fetch(`/api/classes/${classeSelect.value}/magica`);
+        console.log('- Status:', classMagicResponse.status);
+        if (classMagicResponse.ok) {
+          const classMagicData = await classMagicResponse.json();
+          console.log('- Classe é mágica:', classMagicData.isMagical);
+          console.log('- Total de magias da classe:', classMagicData.totalMagias);
+        }
+
+        console.log(`📡 Testando /api/classes/${classeSelect.value}/magias...`);
+        const classSpellsResponse = await fetch(`/api/classes/${classeSelect.value}/magias`);
+        console.log('- Status:', classSpellsResponse.status);
+        if (classSpellsResponse.ok) {
+          const classSpellsData = await classSpellsResponse.json();
+          console.log('- Magias da classe encontradas:', classSpellsData.total || 0);
+        }
+      }
+
+    } catch (error) {
+      console.error('❌ Erro nos testes de API:', error);
+    }
+  }
+
+  // Função para forçar recarga do sistema de magias
+  function reloadMagicSystem() {
+    console.log('🔄 Forçando recarga do sistema de magias...');
+
+    // Reset das variáveis
+    if (typeof classeMagica !== 'undefined') classeMagica = false;
+    if (typeof magiasClasseCarregadas !== 'undefined') magiasClasseCarregadas = [];
+    if (typeof magiasDisponiveis !== 'undefined') magiasDisponiveis = {};
+
+    // Esconder todas as seções
+    esconderSecoesMagias();
+
+    // Mostrar estado inicial
+    mostrarEstadoInicialMagias();
+
+    // Reexecutar verificação se há classe selecionada
+    const classeSelect = document.getElementById('classe_id');
+    if (classeSelect && classeSelect.value) {
+      handleClassChange.call(classeSelect);
+    }
+
+    console.log('✅ Sistema de magias recarregado');
+  }
+
+  // Adicionar funções ao objeto window para debug no console
+  if (typeof window !== 'undefined') {
+    window.debugMagicSystem = debugMagicSystem;
+    window.testMagicAPI = testMagicAPI;
+    window.reloadMagicSystem = reloadMagicSystem;
+
+    // Auto-executar debug em modo desenvolvimento
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      setTimeout(() => {
+        console.log('🔧 Debug automático ativado. Use debugMagicSystem(), testMagicAPI(), ou reloadMagicSystem() no console.');
+      }, 2000);
+    }
+  }
+
+  // NOVA FUNÇÃO: Criar cards de seleção de magias
+  function criarCardsSelecaoMagias(magias, podeAcessar) {
+    return magias.map(magia => `
+    <label class="spell-selection-label ${!podeAcessar ? 'disabled' : ''}">
+      <input type="checkbox" name="magias_selecionadas" value="${magia.id}" 
+             class="spell-selection-checkbox" 
+             ${!podeAcessar ? 'disabled' : ''}>
+      
+      <div class="spell-selection-card" data-spell-id="${magia.id}">
+        <div class="spell-card-header">
+          <div class="spell-card-icon">${getSpellIcon(magia.nome, magia.tipo)}</div>
+          <h6 class="spell-card-name">${magia.nome}</h6>
+          <div class="spell-selection-badge">📝 Escolher</div>
+        </div>
+
+        <div class="spell-card-content">
+          <p class="spell-card-type">${magia.escola || 'N/A'} • ${magia.tipo || 'N/A'}</p>
+          <p class="spell-card-description">${magia.descricao || 'Sem descrição disponível'}</p>
+          
+          <div class="spell-card-details">
+            ${magia.custo_pm && magia.custo_pm > 0 ? `
+              <div class="spell-detail-item">
+                <span class="spell-detail-label">💙</span>
+                <span class="spell-detail-value"><strong>Custo:</strong> ${magia.custo_pm} PM</span>
+              </div>
+            ` : ''}
+            
+            ${magia.execucao ? `
+              <div class="spell-detail-item">
+                <span class="spell-detail-label">⏰</span>
+                <span class="spell-detail-value"><strong>Execução:</strong> ${magia.execucao}</span>
+              </div>
+            ` : ''}
+            
+            ${magia.alcance && magia.alcance !== 'Pessoal' ? `
+              <div class="spell-detail-item">
+                <span class="spell-detail-label">🎯</span>
+                <span class="spell-detail-value"><strong>Alcance:</strong> ${magia.alcance}</span>
+              </div>
+            ` : ''}
+            
+            ${magia.duracao && magia.duracao !== 'Instantâneo' ? `
+              <div class="spell-detail-item">
+                <span class="spell-detail-label">⏱️</span>
+                <span class="spell-detail-value"><strong>Duração:</strong> ${magia.duracao}</span>
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="spell-tags">
+            <span class="spell-tag circle">${magia.circulo}º Círculo</span>
+            <span class="spell-tag type">${magia.tipo}</span>
+            ${magia.custo_pm && magia.custo_pm > 0 ? `<span class="spell-tag cost">${magia.custo_pm} PM</span>` : ''}
+          </div>
+        </div>
+      </div>
+    </label>
+  `).join('');
+  }
+
+  // NOVA FUNÇÃO: Configurar filtros de magias
+  function configurarFiltrosMagias(classeNome, nivel) {
+    const spellCircleFilters = document.getElementById('spellCircleFilters');
+    const spellTypeFilters = document.getElementById('spellTypeFilters');
+
+    const classConfig = CLASSES_MAGICAS[classeNome.toLowerCase()];
+    if (!classConfig) return;
+
+    // Filtros por círculo
+    if (spellCircleFilters) {
+      let filtersHTML = `
+      <button type="button" class="quick-filter-btn active" data-filter="all">
+        ✨ Todas
+      </button>
+    `;
+
+      Object.entries(classConfig.circulos).forEach(([circulo, nivelMinimo]) => {
+        const podeAcessar = nivel >= nivelMinimo;
+        filtersHTML += `
+        <button type="button" class="quick-filter-btn ${!podeAcessar ? 'disabled' : ''}" 
+                data-filter="circle-${circulo}" ${!podeAcessar ? 'disabled' : ''}>
+          🔘 ${circulo}º Círculo ${!podeAcessar ? `(Nível ${nivelMinimo}+)` : ''}
+        </button>
+      `;
+      });
+
+      spellCircleFilters.innerHTML = filtersHTML;
+    }
+
+    // Filtros por tipo
+    if (spellTypeFilters) {
+      const typeFiltersHtml = classConfig.tipos.map(tipo => {
+        const icon = tipo === 'Arcana' ? '🔮' : tipo === 'Divina' ? '✨' : '🌟';
+        return `
+        <button type="button" class="quick-filter-btn" data-filter="type-${tipo.toLowerCase()}">
+          ${icon} ${tipo}
+        </button>
+      `;
+      }).join('');
+
+      spellTypeFilters.innerHTML = `
+      <button type="button" class="quick-filter-btn active" data-filter="all-types">
+        ✨ Todos os Tipos
+      </button>
+      ${typeFiltersHtml}
+    `;
+    }
+  }
+
+  // NOVA FUNÇÃO: Adicionar event listeners para seleção de magias
+  function adicionarEventListenersMagias() {
+    // Event listeners para checkboxes de seleção
+    document.addEventListener('change', function (e) {
+      if (e.target.classList.contains('spell-selection-checkbox')) {
+        const card = e.target.closest('.spell-selection-card');
+        const badge = card.querySelector('.spell-selection-badge');
+
+        if (e.target.checked) {
+          card.classList.add('selected');
+          badge.textContent = '✅ Selecionada';
+          badge.style.background = 'var(--success-green)';
+        } else {
+          card.classList.remove('selected');
+          badge.textContent = '📝 Escolher';
+          badge.style.background = '';
+        }
+
+        atualizarPreviewMagias();
+        atualizarContadorMagias();
+      }
+    });
+
+    // Event listeners para toggles de círculo
+    document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('spell-circle-toggle')) {
+        const targetCircle = e.target.dataset.target;
+        const grid = document.getElementById(`spellsGrid-${targetCircle}`);
+        const icon = e.target.querySelector('.toggle-icon');
+
+        if (grid) {
+          if (grid.style.display === 'none') {
+            grid.style.display = 'grid';
+            icon.textContent = '📂';
+          } else {
+            grid.style.display = 'none';
+            icon.textContent = '📁';
+          }
+        }
+      }
+    });
+
+    // Event listeners para filtros
+    document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('quick-filter-btn') && !e.target.disabled) {
+        // Remover active dos irmãos
+        const parent = e.target.parentElement;
+        parent.querySelectorAll('.quick-filter-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+
+        // Adicionar active ao clicado
+        e.target.classList.add('active');
+
+        // Aplicar filtro (implementar depois se necessário)
+        const filter = e.target.dataset.filter;
+        console.log('🎯 Filtro aplicado:', filter);
+      }
+    });
+  }
+
+  // NOVA FUNÇÃO: Atualizar contador de magias selecionadas
+  function atualizarContadorMagias() {
+    const checkboxes = document.querySelectorAll('.spell-selection-checkbox:checked');
+    const totalSelecionadas = checkboxes.length;
+
+    // Atualizar contadores nos títulos de círculo
+    document.querySelectorAll('.spell-circle-section').forEach(section => {
+      const circulo = section.dataset.circle;
+      const checkboxesCirculo = section.querySelectorAll('.spell-selection-checkbox:checked');
+      const counter = section.querySelector('.circle-count');
+      const total = section.querySelectorAll('.spell-selection-checkbox').length;
+
+      if (counter) {
+        counter.textContent = `(${checkboxesCirculo.length}/${total} selecionadas)`;
+      }
+    });
+
+    console.log(`📊 Total de magias selecionadas: ${totalSelecionadas}`);
+  }
+
+  // NOVA FUNÇÃO: Mostrar quando não há magias disponíveis
+  function mostrarSemMagiasDisponiveis(classeNome, nivel) {
+    const spellSelectionSection = document.getElementById('spellSelectionSection');
+    const spellsCirclesContainer = document.getElementById('spellsCirclesContainer');
+
+    if (spellSelectionSection && spellsCirclesContainer) {
+      spellsCirclesContainer.innerHTML = `
+      <div class="no-spells-available">
+        <div class="no-spells-icon">🔮</div>
+        <h4 class="no-spells-title">Nenhuma Magia Disponível</h4>
+        <p class="no-spells-description">
+          Não há magias disponíveis para ${classeNome} no nível ${nivel}.
+          <br>
+          <small>Magias podem ficar disponíveis em níveis superiores.</small>
+        </p>
+      </div>
+    `;
+      spellSelectionSection.style.display = 'block';
+    }
+  }
+
+  // FUNÇÃO ATUALIZADA: Preview de magias
+  function atualizarPreviewMagias() {
+    const previewMagias = document.getElementById('previewMagias');
+    const magiasPreview = document.getElementById('magiasPreview');
+
+    if (!previewMagias || !magiasPreview) return;
+
+    console.log('🔮 Atualizando preview de magias...');
+
+    // Coletar apenas magias SELECIONADAS pelo usuário
+    const magiasEscolhidas = [];
+    const checkboxes = document.querySelectorAll('input[name="magias_selecionadas"]:checked');
+
+    checkboxes.forEach(checkbox => {
+      const card = checkbox.closest('.spell-selection-card');
+      if (card) {
+        const nomeElement = card.querySelector('.spell-card-name');
+        const circuloElement = card.querySelector('.spell-tag.circle');
+        const nome = nomeElement ? nomeElement.textContent.trim() : 'Magia';
+        const circulo = circuloElement ? circuloElement.textContent.trim() : '';
+        magiasEscolhidas.push(`⚡ ${nome} ${circulo ? `(${circulo})` : ''}`);
+      }
+    });
+
+    if (magiasEscolhidas.length > 0) {
+      // Organizar por círculo se possível
+      const magiasPorCirculo = {};
+      magiasEscolhidas.forEach(magia => {
+        const circuloMatch = magia.match(/(\d+)º/);
+        const circulo = circuloMatch ? `${circuloMatch[1]}º Círculo` : 'Outras';
+
+        if (!magiasPorCirculo[circulo]) {
+          magiasPorCirculo[circulo] = [];
+        }
+        magiasPorCirculo[circulo].push(magia);
+      });
+
+      let html = `
+      <div class="preview-spells-summary">
+        <strong>${magiasEscolhidas.length} magia${magiasEscolhidas.length !== 1 ? 's' : ''} selecionada${magiasEscolhidas.length !== 1 ? 's' : ''}</strong>
+      </div>
+    `;
+
+      Object.entries(magiasPorCirculo).forEach(([circulo, magias]) => {
+        html += `
+        <div class="preview-spell-circle">
+          <h6 style="color: var(--accent-gold); margin: 0.8rem 0 0.5rem 0; font-size: 0.9rem;">
+            🔘 ${circulo}
+          </h6>
+          <div class="preview-spells-list">
+            ${magias.map(magia =>
+          `<div class="magia-preview-item">${magia}</div>`
+        ).join('')}
+          </div>
+        </div>
+      `;
+      });
+
+      magiasPreview.innerHTML = html;
+      previewMagias.style.display = 'block';
+    } else {
+      previewMagias.style.display = 'none';
+    }
+
+    console.log(`✅ Preview atualizado: ${magiasEscolhidas.length} magias selecionadas`);
   }
 
 

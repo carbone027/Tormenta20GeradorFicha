@@ -119,6 +119,7 @@ router.get('/api/pericias/personagem/:characterId/:skillId/bonus', PericiaContro
 router.post('/api/pericias/personagem/:characterId/aplicar-classe', PericiaController.applyClassSkills);
 
 // Rotas principais de magias
+router.get('/api/magias', MagiaController.index);
 router.get('/magias', MagiaController.index);
 router.get('/magias/comparar', MagiaController.compare);
 router.get('/magias/estatisticas', MagiaController.statistics);
@@ -129,6 +130,8 @@ router.get('/magias/:id', MagiaController.view);
 router.get('/api/magias/search', MagiaController.search);
 router.get('/api/magias/statistics', MagiaController.statistics);
 router.get('/api/magias/classe/:classId', MagiaController.getByClass);
+router.get('/api/classes/:classe_id/magias', characterController.getClassSpells);
+router.get('/api/classes/:classe_id/magica', characterController.isClassMagical);
 router.get('/api/magias/personagem/:characterId', MagiaController.getCharacterSpells);
 router.get('/api/magias/disponiveis/:characterId', MagiaController.getAvailableForCharacter);
 
@@ -152,6 +155,15 @@ router.post('/api/magias/sistema/configurar', MagiaController.setupSpellSystem);
 // Rota para buscar aprimoramentos de magias
 router.get('/api/magias/:spellId/aprimoramentos', MagiaController.getEnhancements);
 
+router.get('/api/classes/:classId/magias', async (req, res) => {
+  req.params.classe_id = req.params.classId;
+  return characterController.getClassSpells(req, res);
+});
+
+router.get('/api/classes/:classId/magica', async (req, res) => {
+  req.params.classe_id = req.params.classId;
+  return characterController.isClassMagical(req, res);
+});
 // ========================================
 // ROTAS DE API PARA PODERES
 // ========================================

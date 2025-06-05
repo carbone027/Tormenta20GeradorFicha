@@ -11050,3 +11050,304 @@ footer > * {
     background: rgba(15, 18, 40, 0.8);
   }
 }
+
+/* ========================================
+   CSS PARA SISTEMA DE MAGIAS
+   Adicionar ao final do style.css
+   ======================================== */
+
+/* Container principal de magias */
+.spells-main-container {
+  margin: 1rem 0;
+}
+
+.spells-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.spells-header h3 {
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+/* Verificação de classe mágica */
+.class-magic-check {
+  background: rgba(212, 175, 55, 0.1);
+  border: 2px solid var(--accent-gold);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.magic-check-card h4 {
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+/* Magias de classe */
+.class-spells-section {
+  background: var(--card-bg);
+  border: 2px solid var(--accent-gold);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.class-spells-header {
+  margin-bottom: 1.5rem;
+}
+
+.class-spells-title {
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.class-spells-description {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.class-spells-list {
+  margin-top: 1rem;
+}
+
+/* Seções por círculo */
+.class-spells-circle-section {
+  margin-bottom: 2rem;
+}
+
+.class-spells-circle-title {
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.level-requirement {
+  background: rgba(255, 165, 0, 0.2);
+  color: orange;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-left: auto;
+}
+
+/* Grid de magias */
+.class-spells-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Cards de magia */
+.class-spell-card {
+  background: var(--secondary-bg);
+  border: 2px solid var(--accent-gold);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.class-spell-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+.class-spell-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.spell-icon {
+  font-size: 1.5rem;
+}
+
+.spell-name {
+  font-weight: bold;
+  color: var(--accent-gold);
+  flex: 1;
+}
+
+.spell-auto {
+  background: var(--accent-gold);
+  color: var(--primary-bg);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.spell-type {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.spell-description {
+  color: var(--text-light);
+  line-height: 1.4;
+  margin-bottom: 0.8rem;
+}
+
+.spell-cost {
+  color: var(--accent-blue);
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Seleção de magias */
+.spell-selection-section {
+  background: var(--card-bg);
+  border: 2px solid var(--accent-blue);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.spell-selection-header {
+  margin-bottom: 1.5rem;
+}
+
+.spell-selection-title {
+  color: var(--accent-blue);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Estados especiais */
+.non-magical-class {
+  background: var(--card-bg);
+  border: 2px solid var(--text-muted);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.non-magical-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.non-magical-icon {
+  font-size: 3rem;
+}
+
+.non-magical-title {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.non-magical-description {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.spells-empty-state {
+  background: var(--secondary-bg);
+  border: 2px dashed var(--text-muted);
+  border-radius: 12px;
+  padding: 3rem;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.spells-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.spells-empty-title {
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.spells-empty-description {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Filtros */
+.spells-filters {
+  margin-bottom: 2rem;
+}
+
+.spells-quick-filters,
+.spells-type-filters {
+  margin-bottom: 1rem;
+}
+
+.quick-filters-title {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.quick-filters-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.quick-filter-btn {
+  background: var(--secondary-bg);
+  border: 2px solid var(--accent-gold);
+  color: var(--text-light);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.quick-filter-btn:hover {
+  background: var(--accent-gold);
+  color: var(--primary-bg);
+}
+
+.quick-filter-btn.active {
+  background: var(--accent-gold);
+  color: var(--primary-bg);
+}
+
+.quick-filter-btn.disabled,
+.quick-filter-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--secondary-bg);
+  color: var(--text-muted);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .class-spells-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-filters-buttons {
+    flex-direction: column;
+  }
+  
+  .quick-filter-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+

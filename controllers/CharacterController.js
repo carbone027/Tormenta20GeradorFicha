@@ -898,3 +898,105 @@ exports.isClassMagical = async (req, res) => {
     res.status(500).json({ error: 'Erro ao verificar se classe é mágica' });
   }
 };
+
+exports.getClassSpells = async (req, res) => {
+  try {
+    const { classe_id } = req.params; // Mudança aqui: usar classe_id consistentemente
+    const { nivel = 20, circulo } = req.query;
+    
+    console.log(`🔮 Buscando magias para classe ${classe_id}, nível ${nivel}`);
+    
+    if (!classe_id || isNaN(classe_id)) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'ID da classe inválido' 
+      });
+    }
+
+    let magias;
+    if (circulo) {
+      // Buscar magias de um círculo específico
+      const result = await pool.query(`
+        SELECT 
+          m.*,
+          cm.nivel_minimo
+        FROM magias m
+        INNER JOIN classe_magias cm ON m.id = cm.magia_id
+        WHERE cm.classe_id = $1 AND cm.nivel_minimo <= $2 AND m.circulo = $3
+        ORDER BY m.nome
+      `, [classe_id, nivel, circulo]);
+      magias = result.rows;
+    } else {
+      // Buscar todas as magias da classe
+      const result = await pool.query(`
+        SELECT 
+          m.*,
+          cm.nivel_minimo
+        FROM magias m
+        INNER JOIN classe_magias cm ON m.id = cm.magia_id
+        WHERE cm.classe_id = $1 AND cm.nivel_minimo <= $2
+        ORDER BY m.circulo, m.nome
+      `, [classe_id, nivel]);
+      magias = result.rows;
+    }
+
+    console.log(`✅ Encontradas ${magias.length} magias para a classe`);
+
+    res.json({
+      success: true,
+      magias: magias,
+      total: magias.length
+    });
+
+  } catch (error) {
+    console.error('❌ Erro ao buscar magias da classe:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      magias: []
+    });
+  }
+};
+
+// NOVA FUNÇÃO: Verificar se classe é mágica
+exports.isClassMagical = async (req, res) => {
+  try {
+    const { classe_id } = req.params; // Mudança aqui: usar classe_id consistentemente
+    
+    if (!classe_id || isNaN(classe_id)) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'ID da classe inválido' 
+      });
+    }
+
+    // Verificar se a classe tem acesso a alguma magia
+    const result = await pool.query(`
+      SELECT COUNT(*) as total_magias
+      FROM classe_magias
+      WHERE classe_id = $1
+    `, [classe_id]);
+
+    const isMagical = parseInt(result.rows[0].total_magias) > 0;
+
+    // Buscar nome da classe para log
+    const classeResult = await pool.query('SELECT nome FROM classes WHERE id = $1', [classe_id]);
+    const nomeClasse = classeResult.rows[0]?.nome || 'Desconhecida';
+    
+    console.log(`🔍 Verificação de classe mágica: ${nomeClasse} (ID: ${classe_id}) = ${isMagical ? 'MÁGICA' : 'NÃO-MÁGICA'}`);
+
+    res.json({ 
+      success: true, 
+      isMagical,
+      totalMagias: parseInt(result.rows[0].total_magias),
+      classe: nomeClasse
+    });
+
+  } catch (error) {
+    console.error('❌ Erro ao verificar se classe é mágica:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+};
