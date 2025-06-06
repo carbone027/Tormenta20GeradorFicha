@@ -1761,15 +1761,20 @@ document.addEventListener('DOMContentLoaded', function () {
           `;
 
             spellCard.innerHTML = `
-            <div class="class-spell-header" style="margin-bottom: 0.8rem;">
-              <span class="spell-icon" style="font-size: 1.5rem; margin-right: 0.5rem;">${getSpellIcon(magia.nome, magia.tipo)}</span>
-              <span class="spell-name" style="font-weight: bold; color: var(--accent-gold);">${magia.nome}</span>
-              <span class="spell-auto" style="float: right; background: var(--accent-gold); color: var(--primary-bg); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">🔧 Automática</span>
+            <div class="power-card-header" style="margin-bottom: 0.8rem;">
+              <span class="power-card-icon" style="font-size: 1.5rem; margin-right: 0.5rem;">${getSpellIcon(magia.nome, magia.tipo)}</span>
+              <span class="power-card-name" style="font-weight: bold; color: var(--accent-gold);">${magia.nome}</span>
+              <span class="power-card-source" style="float: right; background: var(--accent-gold); color: var(--primary-bg); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">🔧 Automática</span>
             </div>
-            <p class="spell-type" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">${magia.escola || 'N/A'} • ${magia.tipo || 'N/A'}</p>
-            <p class="spell-description" style="color: var(--text-light); line-height: 1.4; margin-bottom: 0.8rem;">${magia.descricao || 'Sem descrição disponível'}</p>
-            ${magia.custo_pm && magia.custo_pm > 0 ? `<p class="spell-cost" style="color: var(--accent-blue); font-weight: bold;">💙 ${magia.custo_pm} PM</p>` : ''}
-          `;
+            <div class="power-card-content">
+              <p class="power-card-type" >${magia.escola || 'N/A'} • ${magia.tipo || 'N/A'}</p>
+              <p class="power-card-description" >${magia.descricao || 'Sem descrição disponível'}</p>
+              ${magia.custo_pm && magia.custo_pm > 0 ? 
+              `<span class="power-detail-label" >💙 </span>
+              <span class="power-detail-value">${magia.custo_pm} PM</span>` 
+               : ''}
+            <div>
+              `;
             spellsGrid.appendChild(spellCard);
           });
 
@@ -2779,51 +2784,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // NOVA FUNÇÃO: Criar cards de seleção de magias
+  // Criar cards de seleção de magias
   function criarCardsSelecaoMagias(magias, podeAcessar) {
     return magias.map(magia => `
-    <label class="spell-selection-label ${!podeAcessar ? 'disabled' : ''}">
+    <label class="spell-selection-label power-card class-power-card ${!podeAcessar ? 'disabled' : ''}">
       <input type="checkbox" name="magias_selecionadas" value="${magia.id}" 
              class="spell-selection-checkbox" 
              ${!podeAcessar ? 'disabled' : ''}>
       
-      <div class="spell-selection-card" data-spell-id="${magia.id}">
-        <div class="spell-card-header">
-          <div class="spell-card-icon">${getSpellIcon(magia.nome, magia.tipo)}</div>
-          <h6 class="spell-card-name">${magia.nome}</h6>
-          <div class="spell-selection-badge">📝 Escolher</div>
+      <div class="power-card class-power-card" data-spell-id="${magia.id}">
+        <div class="power-card-header">
+          <div class="power-card-icon">${getSpellIcon(magia.nome, magia.tipo)}</div>
+          <h6 class="power-card-name">${magia.nome}</h6>
+          <div class="power-card-sourc">📝 Escolher</div>
         </div>
 
-        <div class="spell-card-content">
-          <p class="spell-card-type">${magia.escola || 'N/A'} • ${magia.tipo || 'N/A'}</p>
-          <p class="spell-card-description">${magia.descricao || 'Sem descrição disponível'}</p>
+        <div class="power-card-content">
+          <p class="power-card-type">${magia.escola || 'N/A'} • ${magia.tipo || 'N/A'}</p>
+          <p class="power-card-description">${magia.descricao || 'Sem descrição disponível'}</p>
           
           <div class="spell-card-details">
             ${magia.custo_pm && magia.custo_pm > 0 ? `
-              <div class="spell-detail-item">
-                <span class="spell-detail-label">💙</span>
-                <span class="spell-detail-value"><strong>Custo:</strong> ${magia.custo_pm} PM</span>
+              <div class="power-detail-item">
+                <span class="power-detail-label">💙</span>
+                <span class="power-detail-value"><strong>Custo:</strong> ${magia.custo_pm} PM</span>
               </div>
             ` : ''}
             
             ${magia.execucao ? `
-              <div class="spell-detail-item">
-                <span class="spell-detail-label">⏰</span>
-                <span class="spell-detail-value"><strong>Execução:</strong> ${magia.execucao}</span>
+              <div class="power-detail-item">
+                <span class="power-detail-label">⏰</span>
+                <span class="power-detail-value"><strong>Execução:</strong> ${magia.execucao}</span>
               </div>
             ` : ''}
             
             ${magia.alcance && magia.alcance !== 'Pessoal' ? `
-              <div class="spell-detail-item">
-                <span class="spell-detail-label">🎯</span>
-                <span class="spell-detail-value"><strong>Alcance:</strong> ${magia.alcance}</span>
+              <div class="power-detail-item">
+                <span class="power-detail-label">🎯</span>
+                <span class="power-detail-value"><strong>Alcance:</strong> ${magia.alcance}</span>
               </div>
             ` : ''}
             
             ${magia.duracao && magia.duracao !== 'Instantâneo' ? `
-              <div class="spell-detail-item">
-                <span class="spell-detail-label">⏱️</span>
-                <span class="spell-detail-value"><strong>Duração:</strong> ${magia.duracao}</span>
+              <div class="power-detail-item">
+                <span class="power-detail-label">⏱️</span>
+                <span class="power-detail-value"><strong>Duração:</strong> ${magia.duracao}</span>
               </div>
             ` : ''}
           </div>

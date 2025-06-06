@@ -1436,15 +1436,17 @@ function getPowerIcon(poder, tipo) {
           </div>
 
           <div class="form-group">
-            <label for="personalidade">🎭 Personalidade</label>
-            <textarea id="personalidade" name="personalidade" rows="3" placeholder="Corajoso, sarcástico, tímido, arrogante... Como seu personagem se comporta?"><%= character.personalidade || '' %></textarea>
-            <small>Traços de personalidade, maneirismos, medos, vícios...</small>
+            <label for="personalidade">🔨 Equipamentos</label>
+            <textarea id="personalidade" name="personalidade" rows="3" placeholder="Adicione seus equipamentos."><%= character.personalidade || '' %></textarea>
+            <small>Armas: Preço, Dano, Crítico (Margem de Ameaça, Multiplicador), Alcance, Tipo de Dano, Espaço, Habilidades Especiais.</small>
+            <small>Armaduras e Escudos: Preço, Bônus na Defesa, Penalidade de Armadura, Espaço.</small>
+            <small>Itens Gerais: Preço, Efeito (Bônus, Ação ou Utilidade), Espaço.</small>
           </div>
 
           <div class="form-group">
-            <label for="objetivos">🎯 Objetivos e Motivações</label>
-            <textarea id="objetivos" name="objetivos" rows="3" placeholder="O que seu personagem busca? Vingança? Conhecimento? Riqueza? Justiça?"><%= character.objetivos || '' %></textarea>
-            <small>O que move seu personagem? Quais são seus sonhos e ambições?</small>
+            <label for="objetivos">🚩 Origem</label>
+            <textarea id="objetivos" name="objetivos" rows="3" placeholder="Adicione sua Origem."><%= character.objetivos || '' %></textarea>
+            <small>Origens: Nome, Itens Iniciais, Lista de Benefícios (Perícias e Poderes).</small>
           </div>
         </div>
       </div>

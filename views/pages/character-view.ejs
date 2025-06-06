@@ -161,39 +161,64 @@ function getPowerIcon(poder, tipo) {
       </div>
     </div>
 
-    <!-- Características Principais -->
-    <div class="main-characteristics">
-      <div class="characteristic-card vital-stats">
-        <h3>💙 Características Vitais</h3>
+    <!-- Características Vitais INTERATIVAS -->
+    <section class="main-characteristics">
+      <div class="characteristic-card">
+        <h3>💖 Características Vitais Interativas</h3>
+        
         <div class="vital-grid">
-          <div class="vital-item pv">
-            <div class="vital-icon">❤️</div>
+          
+          <!-- Pontos de Vida Interativo -->
+          <div class="vital-item" data-type="health">
             <div class="vital-info">
-              <span class="vital-value"><%= character.pontos_vida || 0 %></span>
-              <span class="vital-label">Pontos de Vida</span>
+              <div class="vital-icon">❤️</div>
+              <div class="vital-label">Pontos de Vida</div>
+              <div class="vital-value"><%= character.pontos_vida %></div>
             </div>
           </div>
-          
+
+          <!-- Pontos de Mana Interativo (se aplicável) -->
           <% if (character.pontos_mana && character.pontos_mana > 0) { %>
-            <div class="vital-item pm">
-              <div class="vital-icon">🔵</div>
-              <div class="vital-info">
-                <span class="vital-value"><%= character.pontos_mana %></span>
-                <span class="vital-label">Pontos de Mana</span>
-              </div>
-            </div>
-          <% } %>
-          
-          <div class="vital-item ca">
-            <div class="vital-icon">🛡️</div>
+          <div class="vital-item" data-type="mana">
             <div class="vital-info">
-              <span class="vital-value"><%= character.ca || 10 %></span>
-              <span class="vital-label">Classe de Armadura</span>
+              <div class="vital-icon">🔵</div><br>
+              <div class="vital-label">Pontos de Mana</div><br>
+              <div class="vital-value"><%= character.pontos_mana %></div><br>
             </div>
           </div>
+          <% } %>
+
+          <!-- Classe de Armadura (não interativo) -->
+          <div class="vital-item ca">
+            <div class="vital-interactive-header">
+              <div class="vital-label-icon">
+                <div class="vital-icon" style="border-color: #ffd700; background: rgba(255, 215, 0, 0.2); color: #ffd700;">🛡️</div>
+                <h4 class="vital-label">Classe de Armadura</h4>
+              </div>
+              <div class="vital-status" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; border: 1px solid #ffd700;">Proteção</div>
+            </div>
+            
+            <div class="vital-value-display">
+              <div class="vital-current-value" style="color: #ffd700;"><%= character.ca %></div>
+              <div class="vital-max-value">base</div>
+            </div>
+
+            <div class="vital-progress">
+              <div class="vital-progress-bar" style="width: 100%; background: linear-gradient(90deg, #ffd700, #ffed4e);"></div>
+            </div>
+
+            <div class="ca-details" style="margin-top: 1rem;">
+              <small style="color: var(--text-muted); text-align: center; display: block;">
+                10 + DEX (<%= Math.floor((character.destreza - 10) / 2) >= 0 ? '+' : '' %><%= Math.floor((character.destreza - 10) / 2) %>) + Equipamentos
+              </small>
+            </div>
+          </div>
+
         </div>
+
+
       </div>
-    </div>
+    </section>
 
     <!-- Atributos -->
     <div class="attributes-section">
@@ -1373,7 +1398,7 @@ function getPowerIcon(poder, tipo) {
           
           <% if (character.personalidade) { %>
             <div class="background-card">
-              <h4>🎭 Personalidade</h4>
+              <h4>🔨 Equipamentos</h4>
               <div class="background-content">
                 <p><%= character.personalidade %></p>
               </div>
@@ -1382,7 +1407,7 @@ function getPowerIcon(poder, tipo) {
           
           <% if (character.objetivos) { %>
             <div class="background-card">
-              <h4>🎯 Objetivos e Motivações</h4>
+              <h4>🚩 Origem</h4>
               <div class="background-content">
                 <p><%= character.objetivos %></p>
               </div>

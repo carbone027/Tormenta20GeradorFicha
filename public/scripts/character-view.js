@@ -813,6 +813,644 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // ========================================
+  // SISTEMA INTERATIVO DE VIDA E MANA
+  // Arquivo: public/scripts/interactive-vitals.js
+  // ========================================
+
+  class InteractiveVitals {
+    constructor() {
+      this.initialized = false;
+      this.vitals = new Map(); // Armazenar estado dos vitais
+      this.init();
+    }
+
+    init() {
+      if (this.initialized) return;
+
+      console.log('❤️ Inicializando sistema interativo de vida e mana...');
+
+      // Aguardar DOM estar pronto
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.setup());
+      } else {
+        this.setup();
+      }
+
+      this.initialized = true;
+    }
+
+    setup() {
+      this.convertExistingVitals();
+      this.createQuickActionModal();
+      console.log('✅ Sistema interativo de vida e mana inicializado');
+    }
+
+    // Converter elementos vitais existentes
+    convertExistingVitals() {
+      const vitalItems = document.querySelectorAll('.vital-item');
+
+      vitalItems.forEach(item => {
+        const label = item.querySelector('.vital-label, .vital-item h4, .vital-item p')?.textContent?.toLowerCase() || '';
+
+        if (label.includes('vida') || label.includes('pv') || label.includes('pontos de vida')) {
+          this.convertToInteractiveHealth(item);
+        } else if (label.includes('mana') || label.includes('pm') || label.includes('pontos de mana')) {
+          this.convertToInteractiveMana(item);
+        }
+      });
+    }
+
+    // Converter elemento de vida em interativo
+    convertToInteractiveHealth(vitalItem) {
+      const valueElement = vitalItem.querySelector('.vital-value, .stat-value');
+      if (!valueElement) return;
+
+      const maxHealth = parseInt(valueElement.textContent) || 20;
+      const vitalId = 'health_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      const vitalData = {
+        id: vitalId,
+        type: 'health',
+        current: maxHealth,
+        max: maxHealth,
+        min: Math.floor(-maxHealth / 2)
+      };
+
+      this.vitals.set(vitalId, vitalData);
+
+      // Adicionar classes e data attributes
+      vitalItem.classList.add('interactive', 'pv');
+      vitalItem.dataset.vitalId = vitalId;
+
+      // Criar nova estrutura
+      vitalItem.innerHTML = this.createHealthStructure(vitalData);
+
+      // Configurar controles
+      this.setupHealthControls(vitalItem, vitalData);
+      this.updateHealthDisplay(vitalItem, vitalData);
+    }
+
+    // Converter elemento de mana em interativo
+    convertToInteractiveMana(vitalItem) {
+      const valueElement = vitalItem.querySelector('.vital-value, .stat-value');
+      if (!valueElement) return;
+
+      const maxMana = parseInt(valueElement.textContent) || 10;
+      const vitalId = 'mana_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+      const vitalData = {
+        id: vitalId,
+        type: 'mana',
+        current: maxMana,
+        max: maxMana,
+        min: 0
+      };
+
+      this.vitals.set(vitalId, vitalData);
+
+      // Adicionar classes e data attributes
+      vitalItem.classList.add('interactive', 'pm');
+      vitalItem.dataset.vitalId = vitalId;
+
+      // Criar nova estrutura
+      vitalItem.innerHTML = this.createManaStructure(vitalData);
+
+      // Configurar controles
+      this.setupManaControls(vitalItem, vitalData);
+      this.updateManaDisplay(vitalItem, vitalData);
+    }
+
+    // Criar estrutura HTML para vida
+    createHealthStructure(vitalData) {
+      const { current, max } = vitalData;
+      const status = this.getHealthStatus(current, max);
+
+      return `
+      <div class="vital-interactive-header">
+        <div class="vital-label-icon">
+          <div class="vital-icon">❤️</div>
+          <h4 class="vital-label">Pontos de Vida</h4>
+        </div>
+        <div class="vital-status">${status}</div>
+      </div>
+
+      <div class="vital-controls">
+        <button type="button" class="vital-btn decrease" data-action="decrease" title="Diminuir vida">
+          <span>−</span>
+        </button>
+
+        <div class="vital-value-display">
+          <div class="vital-current-value">${current}</div>
+          <div class="vital-max-value">/ ${max}</div>
+        </div>
+
+        <button type="button" class="vital-btn increase" data-action="increase" title="Aumentar vida">
+          <span>+</span>
+        </button>
+      </div>
+
+      <div class="vital-progress">
+        <div class="vital-progress-bar"></div>
+      </div>
+
+      <div class="vital-quick-actions">
+        <button type="button" class="quick-action-btn heal" data-action="heal" title="Curar quantidade específica">
+          💚 Curar
+        </button>
+        <button type="button" class="quick-action-btn damage" data-action="damage" title="Causar dano específico">
+          💔 Dano
+        </button>
+        <button type="button" class="quick-action-btn" data-action="full-heal" title="Restaurar vida completamente">
+          ✨ Cura Total
+        </button>
+        <button type="button" class="quick-action-btn" data-action="reset" title="Voltar ao máximo">
+          🔄 Reset
+        </button>
+      </div>
+
+      <div class="vital-change-notification"></div>
+    `;
+    }
+
+    // Criar estrutura HTML para mana
+    createManaStructure(vitalData) {
+      const { current, max } = vitalData;
+      const status = this.getManaStatus(current, max);
+
+      return `
+      <div class="vital-interactive-header">
+        <div class="vital-label-icon">
+          <div class="vital-icon">🔵</div>
+          <h4 class="vital-label">Pontos de Mana</h4>
+        </div>
+        <div class="vital-status">${status}</div>
+      </div>
+
+      <div class="vital-controls">
+        <button type="button" class="vital-btn decrease" data-action="decrease" title="Diminuir mana">
+          <span>−</span>
+        </button>
+
+        <div class="vital-value-display">
+          <div class="vital-current-value">${current}</div>
+          <div class="vital-max-value">/ ${max}</div>
+        </div>
+
+        <button type="button" class="vital-btn increase" data-action="increase" title="Aumentar mana">
+          <span>+</span>
+        </button>
+      </div>
+
+      <div class="vital-progress">
+        <div class="vital-progress-bar"></div>
+      </div>
+
+      <div class="vital-quick-actions">
+        <button type="button" class="quick-action-btn restore" data-action="restore" title="Restaurar quantidade específica">
+          💙 Restaurar
+        </button>
+        <button type="button" class="quick-action-btn drain" data-action="drain" title="Gastar quantidade específica">
+          🟣 Gastar
+        </button>
+        <button type="button" class="quick-action-btn" data-action="full-restore" title="Restaurar mana completamente">
+          ✨ Restaurar Total
+        </button>
+        <button type="button" class="quick-action-btn" data-action="reset" title="Voltar ao máximo">
+          🔄 Reset
+        </button>
+      </div>
+
+      <div class="vital-change-notification"></div>
+    `;
+    }
+
+    // Configurar controles de vida
+    setupHealthControls(vitalItem, vitalData) {
+      const decreaseBtn = vitalItem.querySelector('.vital-btn.decrease');
+      const increaseBtn = vitalItem.querySelector('.vital-btn.increase');
+      const quickActionBtns = vitalItem.querySelectorAll('.quick-action-btn');
+
+      // Botão de diminuir
+      decreaseBtn?.addEventListener('click', () => {
+        this.changeHealth(vitalData.id, -1);
+        this.updateHealthDisplay(vitalItem, vitalData);
+        this.showChangeNotification(vitalItem, -1);
+      });
+
+      // Botão de aumentar
+      increaseBtn?.addEventListener('click', () => {
+        this.changeHealth(vitalData.id, 1);
+        this.updateHealthDisplay(vitalItem, vitalData);
+        this.showChangeNotification(vitalItem, 1);
+      });
+
+      // Quick actions
+      quickActionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.handleHealthQuickAction(btn.dataset.action, vitalData, vitalItem);
+        });
+      });
+    }
+
+    // Configurar controles de mana
+    setupManaControls(vitalItem, vitalData) {
+      const decreaseBtn = vitalItem.querySelector('.vital-btn.decrease');
+      const increaseBtn = vitalItem.querySelector('.vital-btn.increase');
+      const quickActionBtns = vitalItem.querySelectorAll('.quick-action-btn');
+
+      // Botão de diminuir
+      decreaseBtn?.addEventListener('click', () => {
+        this.changeMana(vitalData.id, -1);
+        this.updateManaDisplay(vitalItem, vitalData);
+        this.showChangeNotification(vitalItem, -1);
+      });
+
+      // Botão de aumentar
+      increaseBtn?.addEventListener('click', () => {
+        this.changeMana(vitalData.id, 1);
+        this.updateManaDisplay(vitalItem, vitalData);
+        this.showChangeNotification(vitalItem, 1);
+      });
+
+      // Quick actions
+      quickActionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.handleManaQuickAction(btn.dataset.action, vitalData, vitalItem);
+        });
+      });
+    }
+
+    // Gerenciar quick actions de vida
+    handleHealthQuickAction(action, vitalData, vitalItem) {
+      switch (action) {
+        case 'heal':
+          this.showQuickActionModal('Quantidade de Cura', 'Quanto de vida deseja restaurar?', (amount) => {
+            const change = this.changeHealth(vitalData.id, amount);
+            this.updateHealthDisplay(vitalItem, vitalData);
+            if (change > 0) this.showChangeNotification(vitalItem, change);
+          });
+          break;
+
+        case 'damage':
+          this.showQuickActionModal('Quantidade de Dano', 'Quanto de dano foi recebido?', (amount) => {
+            const change = this.changeHealth(vitalData.id, -amount);
+            this.updateHealthDisplay(vitalItem, vitalData);
+            if (change < 0) this.showChangeNotification(vitalItem, change);
+          });
+          break;
+
+        case 'full-heal':
+          const healChange = vitalData.max - vitalData.current;
+          this.setHealth(vitalData.id, vitalData.max);
+          this.updateHealthDisplay(vitalItem, vitalData);
+          if (healChange > 0) this.showChangeNotification(vitalItem, healChange);
+          break;
+
+        case 'reset':
+          const resetChange = vitalData.max - vitalData.current;
+          this.setHealth(vitalData.id, vitalData.max);
+          this.updateHealthDisplay(vitalItem, vitalData);
+          if (resetChange !== 0) this.showChangeNotification(vitalItem, resetChange);
+          break;
+      }
+    }
+
+    // Gerenciar quick actions de mana
+    handleManaQuickAction(action, vitalData, vitalItem) {
+      switch (action) {
+        case 'restore':
+          this.showQuickActionModal('Restaurar Mana', 'Quanto de mana deseja restaurar?', (amount) => {
+            const change = this.changeMana(vitalData.id, amount);
+            this.updateManaDisplay(vitalItem, vitalData);
+            if (change > 0) this.showChangeNotification(vitalItem, change);
+          });
+          break;
+
+        case 'drain':
+          this.showQuickActionModal('Gastar Mana', 'Quanto de mana foi gasta?', (amount) => {
+            const change = this.changeMana(vitalData.id, -amount);
+            this.updateManaDisplay(vitalItem, vitalData);
+            if (change < 0) this.showChangeNotification(vitalItem, change);
+          });
+          break;
+
+        case 'full-restore':
+          const restoreChange = vitalData.max - vitalData.current;
+          this.setMana(vitalData.id, vitalData.max);
+          this.updateManaDisplay(vitalItem, vitalData);
+          if (restoreChange > 0) this.showChangeNotification(vitalItem, restoreChange);
+          break;
+
+        case 'reset':
+          const resetChange = vitalData.max - vitalData.current;
+          this.setMana(vitalData.id, vitalData.max);
+          this.updateManaDisplay(vitalItem, vitalData);
+          if (resetChange !== 0) this.showChangeNotification(vitalItem, resetChange);
+          break;
+      }
+    }
+
+    // Alterar vida
+    changeHealth(vitalId, amount) {
+      const vitalData = this.vitals.get(vitalId);
+      if (!vitalData) return 0;
+
+      const oldValue = vitalData.current;
+      vitalData.current = Math.max(vitalData.min, Math.min(vitalData.max, vitalData.current + amount));
+
+      return vitalData.current - oldValue;
+    }
+
+    // Definir vida
+    setHealth(vitalId, value) {
+      const vitalData = this.vitals.get(vitalId);
+      if (!vitalData) return;
+
+      vitalData.current = Math.max(vitalData.min, Math.min(vitalData.max, value));
+    }
+
+    // Alterar mana
+    changeMana(vitalId, amount) {
+      const vitalData = this.vitals.get(vitalId);
+      if (!vitalData) return 0;
+
+      const oldValue = vitalData.current;
+      vitalData.current = Math.max(vitalData.min, Math.min(vitalData.max, vitalData.current + amount));
+
+      return vitalData.current - oldValue;
+    }
+
+    // Definir mana
+    setMana(vitalId, value) {
+      const vitalData = this.vitals.get(vitalId);
+      if (!vitalData) return;
+
+      vitalData.current = Math.max(vitalData.min, Math.min(vitalData.max, value));
+    }
+
+    // Atualizar display da vida
+    updateHealthDisplay(vitalItem, vitalData) {
+      const { current, max } = vitalData;
+
+      // Atualizar valores
+      const currentValueEl = vitalItem.querySelector('.vital-current-value');
+      const statusEl = vitalItem.querySelector('.vital-status');
+      const progressBar = vitalItem.querySelector('.vital-progress-bar');
+
+      if (currentValueEl) currentValueEl.textContent = current;
+
+      const status = this.getHealthStatus(current, max);
+      if (statusEl) statusEl.textContent = status;
+
+      // Atualizar classes de estado
+      vitalItem.classList.remove('healthy', 'injured', 'critical', 'unconscious');
+      if (current >= max * 0.75) {
+        vitalItem.classList.add('healthy');
+      } else if (current >= max * 0.25) {
+        vitalItem.classList.add('injured');
+      } else if (current > 0) {
+        vitalItem.classList.add('critical');
+      } else {
+        vitalItem.classList.add('unconscious');
+      }
+
+      // Atualizar barra de progresso
+      if (progressBar) {
+        progressBar.style.width = this.getProgressWidth(current, max, vitalData.min) + '%';
+      }
+
+      // Atualizar botões
+      this.updateVitalButtons(vitalItem, vitalData);
+    }
+
+    // Atualizar display da mana
+    updateManaDisplay(vitalItem, vitalData) {
+      const { current, max } = vitalData;
+
+      // Atualizar valores
+      const currentValueEl = vitalItem.querySelector('.vital-current-value');
+      const statusEl = vitalItem.querySelector('.vital-status');
+      const progressBar = vitalItem.querySelector('.vital-progress-bar');
+
+      if (currentValueEl) currentValueEl.textContent = current;
+
+      const status = this.getManaStatus(current, max);
+      if (statusEl) statusEl.textContent = status;
+
+      // Atualizar classes de estado
+      vitalItem.classList.remove('full', 'medium', 'low', 'empty');
+      if (current >= max * 0.75) {
+        vitalItem.classList.add('full');
+      } else if (current >= max * 0.25) {
+        vitalItem.classList.add('medium');
+      } else if (current > 0) {
+        vitalItem.classList.add('low');
+      } else {
+        vitalItem.classList.add('empty');
+      }
+
+      // Atualizar barra de progresso
+      if (progressBar) {
+        progressBar.style.width = this.getProgressWidth(current, max, 0) + '%';
+      }
+
+      // Atualizar botões
+      this.updateVitalButtons(vitalItem, vitalData);
+    }
+
+    // Atualizar estado dos botões
+    updateVitalButtons(vitalItem, vitalData) {
+      const decreaseBtn = vitalItem.querySelector('.vital-btn.decrease');
+      const increaseBtn = vitalItem.querySelector('.vital-btn.increase');
+
+      if (decreaseBtn) {
+        decreaseBtn.disabled = vitalData.current <= vitalData.min;
+      }
+      if (increaseBtn) {
+        increaseBtn.disabled = vitalData.current >= vitalData.max;
+      }
+    }
+
+    // Obter status da vida
+    getHealthStatus(current, max) {
+      if (current <= 0) return 'Inconsciente';
+
+      const percentage = (current / max) * 100;
+      if (percentage >= 75) return 'Saudável';
+      if (percentage >= 50) return 'Ferido Leve';
+      if (percentage >= 25) return 'Ferido';
+      return 'Crítico';
+    }
+
+    // Obter status da mana
+    getManaStatus(current, max) {
+      if (current === 0) return 'Esgotado';
+      if (max === 0) return 'Sem Mana';
+
+      const percentage = (current / max) * 100;
+      if (percentage >= 75) return 'Pleno';
+      if (percentage >= 50) return 'Moderado';
+      if (percentage >= 25) return 'Baixo';
+      return 'Crítico';
+    }
+
+    // Calcular largura da barra de progresso
+    getProgressWidth(current, max, min) {
+      if (max === 0) return 0;
+
+      if (current < 0) {
+        // Para valores negativos, mostrar proporção do negativo
+        const totalRange = max - min;
+        const currentFromMin = current - min;
+        return Math.max(0, Math.min(100, (currentFromMin / totalRange) * 100));
+      } else {
+        // Para valores positivos, proporção normal
+        return Math.min(100, (current / max) * 100);
+      }
+    }
+
+    // Mostrar notificação de mudança
+    showChangeNotification(vitalItem, change) {
+      if (change === 0) return;
+
+      const notification = vitalItem.querySelector('.vital-change-notification');
+      if (!notification) return;
+
+      const prefix = change > 0 ? '+' : '';
+      notification.textContent = `${prefix}${change}`;
+      notification.className = `vital-change-notification show ${change > 0 ? 'positive' : 'negative'}`;
+
+      // Remover após animação
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 2000);
+    }
+
+    // Criar modal para quick actions
+    createQuickActionModal() {
+      if (document.getElementById('quickActionModal')) return;
+
+      const modal = document.createElement('div');
+      modal.id = 'quickActionModal';
+      modal.className = 'quick-action-modal';
+      modal.innerHTML = `
+      <div class="quick-action-content">
+        <h4 id="quickActionTitle">Ação Rápida</h4>
+        <p id="quickActionDescription">Digite o valor:</p>
+        <input type="number" id="quickActionInput" class="quick-action-input" 
+               placeholder="Digite o valor..." min="1" value="1">
+        <div class="quick-action-buttons">
+          <button type="button" class="btn btn-secondary" id="quickActionCancel">Cancelar</button>
+          <button type="button" class="btn" id="quickActionConfirm">Aplicar</button>
+        </div>
+      </div>
+    `;
+      document.body.appendChild(modal);
+
+      // Event listeners globais do modal
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+
+      document.getElementById('quickActionCancel').addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+
+      // ESC para fechar
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          modal.classList.remove('active');
+        }
+      });
+    }
+
+    // Mostrar modal de quick action
+    showQuickActionModal(title, description, callback) {
+      const modal = document.getElementById('quickActionModal');
+      if (!modal) return;
+
+      // Configurar conteúdo
+      document.getElementById('quickActionTitle').textContent = title;
+      document.getElementById('quickActionDescription').textContent = description;
+
+      const input = document.getElementById('quickActionInput');
+      input.value = 1;
+      input.focus();
+      input.select();
+
+      // Remover listeners antigos do botão confirmar
+      const confirmBtn = document.getElementById('quickActionConfirm');
+      const newConfirmBtn = confirmBtn.cloneNode(true);
+      confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+      // Função para processar
+      const processAction = () => {
+        const value = parseInt(input.value) || 0;
+        if (value > 0) {
+          callback(value);
+          modal.classList.remove('active');
+        }
+      };
+
+      // Novo listener do botão confirmar
+      newConfirmBtn.addEventListener('click', processAction);
+
+      // Enter para confirmar
+      const inputKeyHandler = (e) => {
+        if (e.key === 'Enter') {
+          processAction();
+          input.removeEventListener('keypress', inputKeyHandler);
+        }
+      };
+      input.addEventListener('keypress', inputKeyHandler);
+
+      // Mostrar modal
+      modal.classList.add('active');
+    }
+
+    // Método público para obter estado de um vital
+    getVitalState(vitalId) {
+      return this.vitals.get(vitalId);
+    }
+
+    // Método público para obter todos os vitais
+    getAllVitals() {
+      return Array.from(this.vitals.values());
+    }
+
+    // Método público para resetar todos os vitais
+    resetAllVitals() {
+      this.vitals.forEach((vitalData, vitalId) => {
+        if (vitalData.type === 'health') {
+          this.setHealth(vitalId, vitalData.max);
+        } else if (vitalData.type === 'mana') {
+          this.setMana(vitalId, vitalData.max);
+        }
+
+        const vitalItem = document.querySelector(`[data-vital-id="${vitalId}"]`);
+        if (vitalItem) {
+          if (vitalData.type === 'health') {
+            this.updateHealthDisplay(vitalItem, vitalData);
+          } else {
+            this.updateManaDisplay(vitalItem, vitalData);
+          }
+        }
+      });
+
+      console.log('🔄 Todos os vitais foram resetados');
+    }
+  }
+
+  // Inicializar automaticamente
+  const interactiveVitals = new InteractiveVitals();
+
+  // Disponibilizar globalmente para debug
+  window.InteractiveVitals = InteractiveVitals;
+  window.interactiveVitals = interactiveVitals;
+
   // Adicionar ao sistema principal de character-view
   document.addEventListener('DOMContentLoaded', function () {
     // ... código existente ...
